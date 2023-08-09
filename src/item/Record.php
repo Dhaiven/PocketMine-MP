@@ -28,14 +28,21 @@ use pocketmine\block\utils\RecordType;
 class Record extends Item{
 	private RecordType $recordType;
 
-	//TODO: inconsistent parameter order
-	public function __construct(ItemIdentifier $identifier, RecordType $recordType, string $name){
-		$this->recordType = $recordType;
+	public function __construct(ItemIdentifier $identifier, string $name){
+		$this->recordType = RecordType::DISK_11();
 		parent::__construct($identifier, $name);
 	}
 
 	public function getRecordType() : RecordType{
 		return $this->recordType;
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function setRecordType(RecordType $recordType) : self{
+		$this->recordType = $recordType;
+		return $this;
 	}
 
 	public function getMaxStackSize() : int{
