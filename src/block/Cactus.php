@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
+use pocketmine\block\utils\AgeInterface;
 use pocketmine\block\utils\AgeTrait;
 use pocketmine\block\utils\BlockEventHelper;
 use pocketmine\block\utils\SupportType;
@@ -36,7 +37,7 @@ use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 use pocketmine\world\BlockTransaction;
 
-class Cactus extends Transparent{
+class Cactus extends Transparent implements AgeInterface{
 	use AgeTrait;
 
 	public const MAX_AGE = 15;

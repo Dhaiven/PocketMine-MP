@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
+use pocketmine\block\utils\AgeInterface;
 use pocketmine\block\utils\AgeTrait;
 use pocketmine\block\utils\FortuneDropHelper;
 use pocketmine\block\utils\SupportType;
@@ -40,7 +41,7 @@ use function mt_rand;
 /**
  * This class is used for Weeping & Twisting vines, because they have same behaviour
  */
-class NetherVines extends Flowable{
+class NetherVines extends Flowable implements AgeInterface{
 	use AgeTrait;
 
 	public const MAX_AGE = 25;

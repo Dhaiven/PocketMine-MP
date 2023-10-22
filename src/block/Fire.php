@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
+use pocketmine\block\utils\AgeInterface;
 use pocketmine\block\utils\AgeTrait;
 use pocketmine\block\utils\BlockEventHelper;
 use pocketmine\block\utils\SupportType;
@@ -35,7 +36,7 @@ use function max;
 use function min;
 use function mt_rand;
 
-class Fire extends BaseFire{
+class Fire extends BaseFire implements AgeInterface{
 	use AgeTrait;
 
 	public const MAX_AGE = 15;

@@ -23,28 +23,16 @@ declare(strict_types=1);
 
 namespace pocketmine\block\utils;
 
-use pocketmine\data\runtime\RuntimeDataDescriber;
-use function decbin;
-use function strlen;
+/**
+ * When pmmp accept php8.2, remove this class and put all constants in @see AgeTrait
+ */
+interface AgeInterface{
 
-trait AgeTrait{
+	public const MIN_AGE = 0;
+	public const MAX_AGE = 5;
 
-	protected int $age = static::MIN_AGE;
-
-	protected function describeBlockOnlyState(RuntimeDataDescriber $w) : void{
-		$w->boundedInt(strlen(decbin($this->age)), static::MIN_AGE, static::MAX_AGE, $this->age);
-	}
-
-	public function getAge() : int{
-		return $this->age;
-	}
+	public function getAge() : int;
 
 	/** @return $this */
-	public function setAge(int $age) : self{
-		if($age < static::MIN_AGE || $age > static::MAX_AGE){
-			throw new \InvalidArgumentException("Age must be in the range " . static::MIN_AGE . " ... " . static::MAX_AGE);
-		}
-		$this->age = $age;
-		return $this;
-	}
+	public function setAge(int $age) : self;
 }

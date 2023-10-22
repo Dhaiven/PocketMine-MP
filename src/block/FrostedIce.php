@@ -23,11 +23,12 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
+use pocketmine\block\utils\AgeInterface;
 use pocketmine\block\utils\AgeTrait;
 use pocketmine\block\utils\BlockEventHelper;
 use function mt_rand;
 
-class FrostedIce extends Ice{
+class FrostedIce extends Ice implements AgeInterface{
 	use AgeTrait;
 
 	public const MAX_AGE = 3;

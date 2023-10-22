@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
+use pocketmine\block\utils\AgeInterface;
 use pocketmine\block\utils\AgeTrait;
 use pocketmine\block\utils\BlockEventHelper;
 use pocketmine\block\utils\SupportType;
@@ -38,7 +39,7 @@ use pocketmine\world\BlockTransaction;
 use pocketmine\world\sound\GlowBerriesPickSound;
 use function mt_rand;
 
-class CaveVines extends Flowable{
+class CaveVines extends Flowable implements AgeInterface{
 	use AgeTrait;
 
 	public const MAX_AGE = 25;

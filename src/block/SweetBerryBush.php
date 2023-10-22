@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
+use pocketmine\block\utils\AgeInterface;
 use pocketmine\block\utils\AgeTrait;
 use pocketmine\block\utils\BlockEventHelper;
 use pocketmine\block\utils\FortuneDropHelper;
@@ -38,7 +39,7 @@ use pocketmine\player\Player;
 use pocketmine\world\BlockTransaction;
 use function mt_rand;
 
-class SweetBerryBush extends Flowable{
+class SweetBerryBush extends Flowable implements AgeInterface{
 	use AgeTrait;
 
 	public const STAGE_SAPLING = 0;

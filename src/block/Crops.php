@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
+use pocketmine\block\utils\AgeInterface;
 use pocketmine\block\utils\AgeTrait;
 use pocketmine\block\utils\BlockEventHelper;
 use pocketmine\item\Fertilizer;
@@ -33,7 +34,7 @@ use pocketmine\player\Player;
 use pocketmine\world\BlockTransaction;
 use function mt_rand;
 
-abstract class Crops extends Flowable{
+abstract class Crops extends Flowable implements AgeInterface{
 	use AgeTrait;
 
 	public const MAX_AGE = 7;

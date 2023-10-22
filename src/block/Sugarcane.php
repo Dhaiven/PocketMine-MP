@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
+use pocketmine\block\utils\AgeInterface;
 use pocketmine\block\utils\AgeTrait;
 use pocketmine\block\utils\BlockEventHelper;
 use pocketmine\item\Fertilizer;
@@ -33,7 +34,7 @@ use pocketmine\player\Player;
 use pocketmine\world\BlockTransaction;
 use pocketmine\world\Position;
 
-class Sugarcane extends Flowable{
+class Sugarcane extends Flowable implements AgeInterface{
 	use AgeTrait;
 
 	public const MAX_AGE = 15;

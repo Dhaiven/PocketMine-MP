@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
+use pocketmine\block\utils\AgeInterface;
 use pocketmine\block\utils\AgeTrait;
 use pocketmine\entity\projectile\Projectile;
 use pocketmine\event\block\StructureGrowEvent;
@@ -41,7 +42,7 @@ use pocketmine\world\World;
 use function array_rand;
 use function mt_rand;
 
-final class ChorusFlower extends Flowable{
+final class ChorusFlower extends Flowable implements AgeInterface{
 	use AgeTrait;
 
 	public const MIN_AGE = 0;
