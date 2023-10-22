@@ -29,10 +29,10 @@ use function strlen;
 
 trait AgeTrait{
 
-	protected int $age = static::MIN_AGE;
+	protected int $age = self::MIN_AGE;
 
 	protected function describeBlockOnlyState(RuntimeDataDescriber $w) : void{
-		$w->boundedInt(strlen(decbin($this->age)), static::MIN_AGE, static::MAX_AGE, $this->age);
+		$w->boundedInt(strlen(decbin($this->age)), self::MIN_AGE, self::MAX_AGE, $this->age);
 	}
 
 	public function getAge() : int{
@@ -41,8 +41,8 @@ trait AgeTrait{
 
 	/** @return $this */
 	public function setAge(int $age) : self{
-		if($age < static::MIN_AGE || $age > static::MAX_AGE){
-			throw new \InvalidArgumentException("Age must be in the range " . static::MIN_AGE . " ... " . static::MAX_AGE);
+		if($age < self::MIN_AGE || $age > self::MAX_AGE){
+			throw new \InvalidArgumentException("Age must be in the range " . self::MIN_AGE . " ... " . self::MAX_AGE);
 		}
 		$this->age = $age;
 		return $this;
