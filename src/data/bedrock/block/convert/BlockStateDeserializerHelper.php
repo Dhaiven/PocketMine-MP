@@ -87,7 +87,7 @@ final class BlockStateDeserializerHelper{
 	 * @throws BlockStateDeserializeException
 	 */
 	public static function decodeCrops(Crops $block, BlockStateReader $in) : Crops{
-		return $block->setAge($in->readBoundedInt(BlockStateNames::GROWTH, 0, 7));
+		return $block->setAge($in->readBoundedInt(BlockStateNames::GROWTH, Crops::MIN_AGE, Crops::MAX_AGE));
 	}
 
 	/** @throws BlockStateDeserializeException */

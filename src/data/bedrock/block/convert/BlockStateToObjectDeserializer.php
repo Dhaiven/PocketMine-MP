@@ -25,12 +25,19 @@ namespace pocketmine\data\bedrock\block\convert;
 
 use pocketmine\block\Bamboo;
 use pocketmine\block\Block;
+use pocketmine\block\Cactus;
 use pocketmine\block\CaveVines;
 use pocketmine\block\ChorusFlower;
+use pocketmine\block\CocoaBlock;
+use pocketmine\block\Fire;
+use pocketmine\block\FrostedIce;
 use pocketmine\block\Light;
+use pocketmine\block\NetherVines;
+use pocketmine\block\NetherWartPlant;
 use pocketmine\block\PinkPetals;
 use pocketmine\block\Slab;
 use pocketmine\block\Stair;
+use pocketmine\block\Sugarcane;
 use pocketmine\block\SweetBerryBush;
 use pocketmine\block\utils\BrewingStandSlot;
 use pocketmine\block\utils\CopperOxidation;
@@ -950,7 +957,7 @@ final class BlockStateToObjectDeserializer implements BlockStateDeserializer{
 		$this->map(Ids::BROWN_MUSHROOM_BLOCK, fn(Reader $in) => Helper::decodeMushroomBlock(Blocks::BROWN_MUSHROOM_BLOCK(), $in));
 		$this->map(Ids::CACTUS, function(Reader $in) : Block{
 			return Blocks::CACTUS()
-				->setAge($in->readBoundedInt(StateNames::AGE, 0, 15));
+				->setAge($in->readBoundedInt(StateNames::AGE, Cactus::MIN_AGE, Cactus::MAX_AGE));
 		});
 		$this->map(Ids::CAKE, function(Reader $in) : Block{
 			return Blocks::CAKE()
@@ -965,7 +972,7 @@ final class BlockStateToObjectDeserializer implements BlockStateDeserializer{
 			return Blocks::CAVE_VINES()
 				->setBerries(false)
 				->setHead(false)
-				->setAge($in->readBoundedInt(StateNames::GROWING_PLANT_AGE, 0, 25));
+				->setAge($in->readBoundedInt(StateNames::GROWING_PLANT_AGE, CaveVines::MIN_AGE, CaveVines::MAX_AGE));
 		});
 		$this->map(Ids::CAVE_VINES_BODY_WITH_BERRIES, function(Reader $in) : CaveVines{
 			return Blocks::CAVE_VINES()
@@ -1006,7 +1013,7 @@ final class BlockStateToObjectDeserializer implements BlockStateDeserializer{
 		$this->map(Ids::COBBLESTONE_WALL, fn(Reader $in) => Helper::mapLegacyWallType($in));
 		$this->map(Ids::COCOA, function(Reader $in) : Block{
 			return Blocks::COCOA_POD()
-				->setAge($in->readBoundedInt(StateNames::AGE, 0, 2))
+				->setAge($in->readBoundedInt(StateNames::AGE, CocoaBlock::MIN_AGE, CocoaBlock::MAX_AGE))
 				->setFacing(Facing::opposite($in->readLegacyHorizontalFacing()));
 		});
 		$this->map(Ids::COLORED_TORCH_BP, function(Reader $in) : Block{
@@ -1107,7 +1114,7 @@ final class BlockStateToObjectDeserializer implements BlockStateDeserializer{
 		});
 		$this->map(Ids::FIRE, function(Reader $in) : Block{
 			return Blocks::FIRE()
-				->setAge($in->readBoundedInt(StateNames::AGE, 0, 15));
+				->setAge($in->readBoundedInt(StateNames::AGE, Fire::MIN_AGE, Fire::MAX_AGE));
 		});
 		$this->map(Ids::FLOWER_POT, function(Reader $in) : Block{
 			$in->ignored(StateNames::UPDATE_BIT);
@@ -1118,7 +1125,7 @@ final class BlockStateToObjectDeserializer implements BlockStateDeserializer{
 		$this->map(Ids::FRAME, fn(Reader $in) => Helper::decodeItemFrame(Blocks::ITEM_FRAME(), $in));
 		$this->map(Ids::FROSTED_ICE, function(Reader $in) : Block{
 			return Blocks::FROSTED_ICE()
-				->setAge($in->readBoundedInt(StateNames::AGE, 0, 3));
+				->setAge($in->readBoundedInt(StateNames::AGE, FrostedIce::MIN_AGE, FrostedIce::MAX_AGE));
 		});
 		$this->map(Ids::FURNACE, function(Reader $in) : Block{
 			return Blocks::FURNACE()
@@ -1247,7 +1254,7 @@ final class BlockStateToObjectDeserializer implements BlockStateDeserializer{
 		$this->mapStairs(Ids::NETHER_BRICK_STAIRS, fn() => Blocks::NETHER_BRICK_STAIRS());
 		$this->map(Ids::NETHER_WART, function(Reader $in) : Block{
 			return Blocks::NETHER_WART()
-				->setAge($in->readBoundedInt(StateNames::AGE, 0, 3));
+				->setAge($in->readBoundedInt(StateNames::AGE, NetherWartPlant::MIN_AGE, NetherWartPlant::MAX_AGE));
 		});
 		$this->mapStairs(Ids::NORMAL_STONE_STAIRS, fn() => Blocks::STONE_STAIRS());
 		$this->map(Ids::OCHRE_FROGLIGHT, fn(Reader $in) => Blocks::FROGLIGHT()->setFroglightType(FroglightType::OCHRE())->setAxis($in->readPillarAxis()));
@@ -1392,7 +1399,7 @@ final class BlockStateToObjectDeserializer implements BlockStateDeserializer{
 		});
 		$this->map(Ids::REEDS, function(Reader $in) : Block{
 			return Blocks::SUGARCANE()
-				->setAge($in->readBoundedInt(StateNames::AGE, 0, 15));
+				->setAge($in->readBoundedInt(StateNames::AGE, Sugarcane::MIN_AGE, Sugarcane::MAX_AGE));
 		});
 		$this->map(Ids::SAND, function(Reader $in) : Block{
 			return match($value = $in->readString(StateNames::SAND_TYPE)){
@@ -1547,7 +1554,7 @@ final class BlockStateToObjectDeserializer implements BlockStateDeserializer{
 		});
 		$this->map(Ids::TWISTING_VINES, function(Reader $in) : Block{
 			return Blocks::TWISTING_VINES()
-				->setAge($in->readBoundedInt(StateNames::TWISTING_VINES_AGE, 0, 25));
+				->setAge($in->readBoundedInt(StateNames::TWISTING_VINES_AGE, NetherVines::MIN_AGE, NetherVines::MAX_AGE));
 		});
 		$this->map(Ids::UNDERWATER_TORCH, function(Reader $in) : Block{
 			return Blocks::UNDERWATER_TORCH()
