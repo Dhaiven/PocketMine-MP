@@ -638,21 +638,21 @@ final class VanillaItems{
 		self::register("diamond_boots", new Armor(new IID(Ids::DIAMOND_BOOTS), "Diamond Boots", new ArmorTypeInfo(3, 430, ArmorInventory::SLOT_FEET, 2, material: ArmorMaterials::DIAMOND()), [EnchantmentTags::BOOTS]));
 		self::register("golden_boots", new Armor(new IID(Ids::GOLDEN_BOOTS), "Golden Boots", new ArmorTypeInfo(1, 92, ArmorInventory::SLOT_FEET, material: ArmorMaterials::GOLD()), [EnchantmentTags::BOOTS]));
 		self::register("iron_boots", new Armor(new IID(Ids::IRON_BOOTS), "Iron Boots", new ArmorTypeInfo(2, 196, ArmorInventory::SLOT_FEET, material: ArmorMaterials::IRON()), [EnchantmentTags::BOOTS]));
-		self::register("leather_boots", new Armor(new IID(Ids::LEATHER_BOOTS), "Leather Boots", new ArmorTypeInfo(1, 66, ArmorInventory::SLOT_FEET, material: ArmorMaterials::LEATHER()), [EnchantmentTags::BOOTS]));
+		self::register("leather_boots", new ColoredArmor(new IID(Ids::LEATHER_BOOTS), "Leather Boots", new ArmorTypeInfo(1, 66, ArmorInventory::SLOT_FEET, material: ArmorMaterials::LEATHER()), [EnchantmentTags::BOOTS]));
 		self::register("netherite_boots", new Armor(new IID(Ids::NETHERITE_BOOTS), "Netherite Boots", new ArmorTypeInfo(3, 482, ArmorInventory::SLOT_FEET, 3, true, material: ArmorMaterials::NETHERITE()), [EnchantmentTags::BOOTS]));
 
 		self::register("chainmail_chestplate", new Armor(new IID(Ids::CHAINMAIL_CHESTPLATE), "Chainmail Chestplate", new ArmorTypeInfo(5, 241, ArmorInventory::SLOT_CHEST, material: ArmorMaterials::CHAINMAIL()), [EnchantmentTags::CHESTPLATE]));
 		self::register("diamond_chestplate", new Armor(new IID(Ids::DIAMOND_CHESTPLATE), "Diamond Chestplate", new ArmorTypeInfo(8, 529, ArmorInventory::SLOT_CHEST, 2, material: ArmorMaterials::DIAMOND()), [EnchantmentTags::CHESTPLATE]));
 		self::register("golden_chestplate", new Armor(new IID(Ids::GOLDEN_CHESTPLATE), "Golden Chestplate", new ArmorTypeInfo(5, 113, ArmorInventory::SLOT_CHEST, material: ArmorMaterials::GOLD()), [EnchantmentTags::CHESTPLATE]));
 		self::register("iron_chestplate", new Armor(new IID(Ids::IRON_CHESTPLATE), "Iron Chestplate", new ArmorTypeInfo(6, 241, ArmorInventory::SLOT_CHEST, material: ArmorMaterials::IRON()), [EnchantmentTags::CHESTPLATE]));
-		self::register("leather_tunic", new Armor(new IID(Ids::LEATHER_TUNIC), "Leather Tunic", new ArmorTypeInfo(3, 81, ArmorInventory::SLOT_CHEST, material: ArmorMaterials::LEATHER()), [EnchantmentTags::CHESTPLATE]));
+		self::register("leather_tunic", new ColoredArmor(new IID(Ids::LEATHER_TUNIC), "Leather Tunic", new ArmorTypeInfo(3, 81, ArmorInventory::SLOT_CHEST, material: ArmorMaterials::LEATHER()), [EnchantmentTags::CHESTPLATE]));
 		self::register("netherite_chestplate", new Armor(new IID(Ids::NETHERITE_CHESTPLATE), "Netherite Chestplate", new ArmorTypeInfo(8, 593, ArmorInventory::SLOT_CHEST, 3, true, material: ArmorMaterials::NETHERITE()), [EnchantmentTags::CHESTPLATE]));
 
 		self::register("chainmail_helmet", new Armor(new IID(Ids::CHAINMAIL_HELMET), "Chainmail Helmet", new ArmorTypeInfo(2, 166, ArmorInventory::SLOT_HEAD, material: ArmorMaterials::CHAINMAIL()), [EnchantmentTags::HELMET]));
 		self::register("diamond_helmet", new Armor(new IID(Ids::DIAMOND_HELMET), "Diamond Helmet", new ArmorTypeInfo(3, 364, ArmorInventory::SLOT_HEAD, 2, material: ArmorMaterials::DIAMOND()), [EnchantmentTags::HELMET]));
 		self::register("golden_helmet", new Armor(new IID(Ids::GOLDEN_HELMET), "Golden Helmet", new ArmorTypeInfo(2, 78, ArmorInventory::SLOT_HEAD, material: ArmorMaterials::GOLD()), [EnchantmentTags::HELMET]));
 		self::register("iron_helmet", new Armor(new IID(Ids::IRON_HELMET), "Iron Helmet", new ArmorTypeInfo(2, 166, ArmorInventory::SLOT_HEAD, material: ArmorMaterials::IRON()), [EnchantmentTags::HELMET]));
-		self::register("leather_cap", new Armor(new IID(Ids::LEATHER_CAP), "Leather Cap", new ArmorTypeInfo(1, 56, ArmorInventory::SLOT_HEAD, material: ArmorMaterials::LEATHER()), [EnchantmentTags::HELMET]));
+		self::register("leather_cap", new ColoredArmor(new IID(Ids::LEATHER_CAP), "Leather Cap", new ArmorTypeInfo(1, 56, ArmorInventory::SLOT_HEAD, material: ArmorMaterials::LEATHER()), [EnchantmentTags::HELMET]));
 		self::register("netherite_helmet", new Armor(new IID(Ids::NETHERITE_HELMET), "Netherite Helmet", new ArmorTypeInfo(3, 408, ArmorInventory::SLOT_HEAD, 3, true, material: ArmorMaterials::NETHERITE()), [EnchantmentTags::HELMET]));
 		self::register("turtle_helmet", new TurtleHelmet(new IID(Ids::TURTLE_HELMET), "Turtle Shell", new ArmorTypeInfo(2, 276, ArmorInventory::SLOT_HEAD, material: ArmorMaterials::TURTLE()), [EnchantmentTags::HELMET]));
 
@@ -660,7 +660,7 @@ final class VanillaItems{
 		self::register("diamond_leggings", new Armor(new IID(Ids::DIAMOND_LEGGINGS), "Diamond Leggings", new ArmorTypeInfo(6, 496, ArmorInventory::SLOT_LEGS, 2, material: ArmorMaterials::DIAMOND()), [EnchantmentTags::LEGGINGS]));
 		self::register("golden_leggings", new Armor(new IID(Ids::GOLDEN_LEGGINGS), "Golden Leggings", new ArmorTypeInfo(3, 106, ArmorInventory::SLOT_LEGS, material: ArmorMaterials::GOLD()), [EnchantmentTags::LEGGINGS]));
 		self::register("iron_leggings", new Armor(new IID(Ids::IRON_LEGGINGS), "Iron Leggings", new ArmorTypeInfo(5, 226, ArmorInventory::SLOT_LEGS, material: ArmorMaterials::IRON()), [EnchantmentTags::LEGGINGS]));
-		self::register("leather_pants", new Armor(new IID(Ids::LEATHER_PANTS), "Leather Pants", new ArmorTypeInfo(2, 76, ArmorInventory::SLOT_LEGS, material: ArmorMaterials::LEATHER()), [EnchantmentTags::LEGGINGS]));
+		self::register("leather_pants", new ColoredArmor(new IID(Ids::LEATHER_PANTS), "Leather Pants", new ArmorTypeInfo(2, 76, ArmorInventory::SLOT_LEGS, material: ArmorMaterials::LEATHER()), [EnchantmentTags::LEGGINGS]));
 		self::register("netherite_leggings", new Armor(new IID(Ids::NETHERITE_LEGGINGS), "Netherite Leggings", new ArmorTypeInfo(6, 556, ArmorInventory::SLOT_LEGS, 3, true, material: ArmorMaterials::NETHERITE()), [EnchantmentTags::LEGGINGS]));
 	}
 
