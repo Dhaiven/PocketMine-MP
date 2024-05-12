@@ -23,53 +23,54 @@ declare(strict_types=1);
 
 namespace pocketmine\item;
 
+use pocketmine\utils\CloningRegistryTrait;
+
 /**
- * @phpstan-type TMetadata array{0: int, 1: int, 2: int, 3: int, 4: int}
+ * @method static ToolTier WOOD()
+ * @method static ToolTier GOLD()
+ * @method static ToolTier STONE()
+ * @method static ToolTier IRON()
+ * @method static ToolTier DIAMOND()
+ * @method static ToolTier NETHERITE()
  */
-enum ToolTier{
-	case WOOD;
-	case GOLD;
-	case STONE;
-	case IRON;
-	case DIAMOND;
-	case NETHERITE;
+class ToolTier{
+	use CloningRegistryTrait;
 
-	/**
-	 * This function exists only to permit the use of named arguments and to make the code easier to read in PhpStorm.
-	 * @phpstan-return TMetadata
-	 */
-	private static function meta(int $harvestLevel, int $maxDurability, int $baseAttackPoints, int $baseEfficiency, int $enchantability) : array{
-		return [$harvestLevel, $maxDurability, $baseAttackPoints, $baseEfficiency, $enchantability];
+	public static function register(string $name, ToolTier $member) : void{
+		self::_registryRegister($name, $member);
 	}
 
-	/**
-	 * @phpstan-return TMetadata
-	 */
-	private function getMetadata() : array{
-		return match($this){
-			self::WOOD => self::meta(1, 60, 5, 2, 15),
-			self::GOLD => self::meta(2, 33, 5, 12, 22),
-			self::STONE => self::meta(3, 132, 6, 4, 5),
-			self::IRON => self::meta(4, 251, 7, 6, 14),
-			self::DIAMOND => self::meta(5, 1562, 8, 8, 10),
-			self::NETHERITE => self::meta(6, 2032, 9, 9, 15)
-		};
+	protected static function setup() : void{
+		self::register("wood", new ToolTier(1, 60, 5, 2, 15));
+		self::register("gold", new ToolTier(2, 33, 5, 12, 22));
+		self::register("stone", new ToolTier(3, 132, 6, 4, 5));
+		self::register("iron", new ToolTier(4, 251, 7, 6, 14));
+		self::register("diamond", new ToolTier(5, 1562, 8, 8, 10));
+		self::register("netherite", new ToolTier(6, 2032, 9, 9, 15));
 	}
+
+	public function __construct(
+		private int $harvestLevel,
+		private int $maxDurability,
+		private int $baseAttackPoints,
+		private int $baseEfficiency,
+		private int $enchantability
+	) { }
 
 	public function getHarvestLevel() : int{
-		return $this->getMetadata()[0];
+		return $this->harvestLevel;
 	}
 
 	public function getMaxDurability() : int{
-		return $this->getMetadata()[1];
+		return $this->maxDurability;
 	}
 
 	public function getBaseAttackPoints() : int{
-		return $this->getMetadata()[2];
+		return $this->baseAttackPoints;
 	}
 
 	public function getBaseEfficiency() : int{
-		return $this->getMetadata()[3];
+		return $this->baseEfficiency;
 	}
 
 	/**
@@ -79,6 +80,6 @@ enum ToolTier{
 	 * or multiple enchantments upon being enchanted in an enchanting table.
 	 */
 	public function getEnchantability() : int{
-		return $this->getMetadata()[4];
+		return $this->enchantability;
 	}
 }

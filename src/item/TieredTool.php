@@ -51,7 +51,7 @@ abstract class TieredTool extends Tool{
 	}
 
 	public function getFuelTime() : int{
-		if($this->tier === ToolTier::WOOD){
+		if($this->tier === ToolTier::WOOD()){
 			return 200;
 		}
 
@@ -59,6 +59,6 @@ abstract class TieredTool extends Tool{
 	}
 
 	public function isFireProof() : bool{
-		return $this->tier === ToolTier::NETHERITE;
+		return $this->tier === ToolTier::NETHERITE();
 	}
 }
