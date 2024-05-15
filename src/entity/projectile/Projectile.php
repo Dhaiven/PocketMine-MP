@@ -96,7 +96,7 @@ abstract class Projectile extends Entity{
 	}
 
 	public function canCollideWith(Entity $entity) : bool{
-		return $entity instanceof Living && !$this->onGround;
+		return !$this->onGround;
 	}
 
 	public function canBeCollidedWith() : bool{

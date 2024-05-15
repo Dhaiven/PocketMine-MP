@@ -27,6 +27,7 @@ use pocketmine\block\VanillaBlocks;
 use pocketmine\entity\Entity;
 use pocketmine\entity\EntitySizeInfo;
 use pocketmine\entity\Location;
+use pocketmine\entity\projectile\Projectile;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\item\VanillaItems;
 use pocketmine\math\AxisAlignedBB;
@@ -147,8 +148,8 @@ class Painting extends Entity{
 
 	}
 
-	public function canBeCollidedWith() : bool{
-		return false;
+	public function canCollideWith(Entity $entity) : bool{
+		return $entity instanceof Projectile && parent::canCollideWith($entity);
 	}
 
 	protected function sendSpawnPacket(Player $player) : void{
