@@ -35,14 +35,14 @@ class ColoredArmor extends Armor{
 	protected ?Color $customColor = null;
 
 	/**
-	 * Returns the dyed colour of this armour piece. This generally only applies to leather armour.
+	 * Returns the colour of this armour piece.
 	 */
 	public function getCustomColor() : ?Color{
 		return $this->customColor;
 	}
 
 	/**
-	 * Sets the dyed colour of this armour piece. This generally only applies to leather armour.
+	 * Sets the colour of this armour piece.
 	 *
 	 * @return $this
 	 */
