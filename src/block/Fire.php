@@ -48,13 +48,14 @@ class Fire extends BaseFire{
 		return $block->getSupportType(Facing::UP) === SupportType::FULL;
 	}
 
-	public function onNearbyBlockChange() : void{
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
 		$world = $this->position->getWorld();
-		$down = $this->getSide(Facing::DOWN);
-		if(SoulFire::canBeSupportedBy($down)){
-			$world->setBlock($this->position, VanillaBlocks::SOUL_FIRE());
-		}elseif(!$this->canBeSupportedBy($this->getSide(Facing::DOWN)) && !$this->hasAdjacentFlammableBlocks()){
-			$world->setBlock($this->position, VanillaBlocks::AIR());
+		if ($face === Facing::DOWN) {
+			if(SoulFire::canBeSupportedBy($block)){
+				$world->setBlock($this->position, VanillaBlocks::SOUL_FIRE());
+			}elseif(!$this->canBeSupportedBy($block) && !$this->hasAdjacentFlammableBlocks()){
+				$world->setBlock($this->position, VanillaBlocks::AIR());
+			}
 		}else{
 			$world->scheduleDelayedBlockUpdate($this->position, mt_rand(30, 40));
 		}

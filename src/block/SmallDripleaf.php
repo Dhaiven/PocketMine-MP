@@ -63,13 +63,13 @@ class SmallDripleaf extends Transparent{
 		return $block->getTypeId() === BlockTypeIds::CLAY;
 	}
 
-	public function onNearbyBlockChange() : void{
-		if(!$this->top && !$this->canBeSupportedBy($this->getSide(Facing::DOWN))){
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
+		if($face === Facing::DOWN && !$this->top && !$this->canBeSupportedBy($block)){
 			$this->position->getWorld()->useBreakOn($this->position);
 			return;
 		}
-		$face = $this->top ? Facing::DOWN : Facing::UP;
-		if(!$this->getSide($face)->hasSameTypeId($this)){
+		$dripleafFace = $this->top ? Facing::DOWN : Facing::UP;
+		if($face === $dripleafFace && !$block->hasSameTypeId($this)){
 			$this->position->getWorld()->useBreakOn($this->position);
 		}
 	}

@@ -108,8 +108,8 @@ abstract class BaseSign extends Transparent{
 
 	abstract protected function getSupportingFace() : int;
 
-	public function onNearbyBlockChange() : void{
-		if($this->getSide($this->getSupportingFace())->getTypeId() === BlockTypeIds::AIR){
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
+		if($face === $this->getSupportingFace() && $block->getTypeId() === BlockTypeIds::AIR){
 			$this->position->getWorld()->useBreakOn($this->position);
 		}
 	}

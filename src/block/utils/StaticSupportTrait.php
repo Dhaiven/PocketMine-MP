@@ -47,11 +47,11 @@ trait StaticSupportTrait{
 	/**
 	 * @see Block::onNearbyBlockChange()
 	 */
-	public function onNearbyBlockChange() : void{
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
 		if(!$this->canBeSupportedAt($this)){
 			$this->position->getWorld()->useBreakOn($this->position);
 		}else{
-			parent::onNearbyBlockChange();
+			parent::onNearbyBlockChange($block, $face);
 		}
 	}
 }

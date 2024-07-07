@@ -104,7 +104,7 @@ class Leaves extends Transparent{
 		return false;
 	}
 
-	public function onNearbyBlockChange() : void{
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
 		if(!$this->noDecay && !$this->checkDecay){
 			$this->checkDecay = true;
 			$this->position->getWorld()->setBlock($this->position, $this, false);

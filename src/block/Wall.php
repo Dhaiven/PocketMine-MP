@@ -88,34 +88,45 @@ class Wall extends Transparent{
 		return $this;
 	}
 
-	public function onNearbyBlockChange() : void{
-		if($this->recalculateConnections()){
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
+		if($face != null && $this->recalculateConnection($block, $face) > 0){
 			$this->position->getWorld()->setBlock($this->position, $this);
 		}
 	}
 
-	protected function recalculateConnections() : bool{
+	protected function recalculateConnection(Block $block, int $face) : int{
 		$changed = 0;
 
 		//TODO: implement tall/short connections - right now we only support short as per pre-1.16
 
-		foreach(Facing::HORIZONTAL as $facing){
-			$block = $this->getSide($facing);
-			if($block instanceof static || $block instanceof FenceGate || $block instanceof Thin || $block->getSupportType(Facing::opposite($facing)) === SupportType::FULL){
-				if(!isset($this->connections[$facing])){
-					$this->connections[$facing] = WallConnectionType::SHORT;
+		if (in_array($face, Facing::HORIZONTAL, true)) {
+			if($block instanceof static || $block instanceof FenceGate || $block instanceof Thin || $block->getSupportType(Facing::opposite($face)) === SupportType::FULL){
+				if(!isset($this->connections[$face])){
+					$this->connections[$face] = WallConnectionType::SHORT;
 					$changed++;
 				}
-			}elseif(isset($this->connections[$facing])){
-				unset($this->connections[$facing]);
+			}elseif(isset($this->connections[$face])){
+				unset($this->connections[$face]);
+				$changed++;
+			}
+		} elseif ($face === Facing::UP) {
+			$up = $block->getTypeId() !== BlockTypeIds::AIR;
+			if($up !== $this->post){
+				$this->post = $up;
 				$changed++;
 			}
 		}
 
-		$up = $this->getSide(Facing::UP)->getTypeId() !== BlockTypeIds::AIR;
-		if($up !== $this->post){
-			$this->post = $up;
-			$changed++;
+		return $changed;
+	}
+
+	protected function recalculateConnections() : bool{
+		$changed = 0;
+		foreach(Facing::ALL as $facing){
+			if($facing === Facing::DOWN){
+				continue;
+			}
+			$changed += $this->recalculateConnection($this->getSide($facing), $facing);
 		}
 
 		return $changed > 0;

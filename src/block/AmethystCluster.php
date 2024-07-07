@@ -105,8 +105,8 @@ final class AmethystCluster extends Transparent{
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}
 
-	public function onNearbyBlockChange() : void{
-		if(!$this->canBeSupportedAt($this, Facing::opposite($this->facing))){
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
+		if($face === Facing::opposite($this->facing) && $block->getSupportType($this->facing) !== SupportType::FULL){
 			$this->position->getWorld()->useBreakOn($this->position);
 		}
 	}

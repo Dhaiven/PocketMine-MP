@@ -36,8 +36,8 @@ class GrassPath extends Transparent{
 		return [AxisAlignedBB::one()->trim(Facing::UP, 1 / 16)];
 	}
 
-	public function onNearbyBlockChange() : void{
-		if($this->getSide(Facing::UP)->isSolid()){
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
+		if($face === Facing::UP && $block->isSolid()){
 			$this->position->getWorld()->setBlock($this->position, VanillaBlocks::DIRT());
 		}
 	}

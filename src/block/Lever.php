@@ -84,8 +84,8 @@ class Lever extends Flowable{
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}
 
-	public function onNearbyBlockChange() : void{
-		if(!$this->canBeSupportedAt($this, Facing::opposite($this->facing->getFacing()))){
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
+		if($face === Facing::opposite($this->facing->getFacing()) && !$block->getSupportType($this->facing->getFacing())->hasCenterSupport()){
 			$this->position->getWorld()->useBreakOn($this->position);
 		}
 	}

@@ -36,6 +36,7 @@ use pocketmine\item\Potion;
 use pocketmine\item\PotionType;
 use pocketmine\item\SplashPotion;
 use pocketmine\item\VanillaItems;
+use pocketmine\math\Facing;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 use pocketmine\world\sound\CauldronAddDyeSound;
@@ -192,11 +193,11 @@ final class WaterCauldron extends FillableCauldron{
 		return true;
 	}
 
-	public function onNearbyBlockChange() : void{
-		$hasCustomWaterColor = $this->customWaterColor !== null;
-		if($this->getFillLevel() < self::MAX_FILL_LEVEL || $hasCustomWaterColor){
-			$world = $this->position->getWorld();
-			if($world->getBlock($this->position->up())->getTypeId() === BlockTypeIds::WATER){
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
+		if ($face === Facing::UP && $block->getTypeId() === BlockTypeIds::WATER) {
+			$hasCustomWaterColor = $this->customWaterColor !== null;
+			if($this->getFillLevel() < self::MAX_FILL_LEVEL || $hasCustomWaterColor){
+				$world = $this->position->getWorld();
 				if($hasCustomWaterColor){
 					//TODO: particles
 				}

@@ -41,8 +41,8 @@ final class SoulFire extends BaseFire{
 		return $id === BlockTypeIds::SOUL_SAND || $id === BlockTypeIds::SOUL_SOIL;
 	}
 
-	public function onNearbyBlockChange() : void{
-		if(!self::canBeSupportedBy($this->getSide(Facing::DOWN))){
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
+		if($face === Facing::DOWN && !self::canBeSupportedBy($block)){
 			$this->position->getWorld()->setBlock($this->position, VanillaBlocks::AIR());
 		}
 	}

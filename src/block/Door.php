@@ -107,8 +107,8 @@ class Door extends Transparent{
 		return SupportType::NONE;
 	}
 
-	public function onNearbyBlockChange() : void{
-		if(!$this->canBeSupportedAt($this) && !$this->getSide(Facing::DOWN) instanceof Door){ //Replace with common break method
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
+		if($face === Facing::DOWN && !$block instanceof Door && !$block->getSupportType(Facing::UP)->hasEdgeSupport()){ //Replace with common break method
 			$this->position->getWorld()->useBreakOn($this->position); //this will delete both halves if they exist
 		}
 	}

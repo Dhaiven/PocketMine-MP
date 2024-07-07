@@ -108,14 +108,14 @@ final class Bell extends Transparent{
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}
 
-	public function onNearbyBlockChange() : void{
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
 		foreach(match($this->attachmentType){
 			BellAttachmentType::CEILING => [Facing::UP],
 			BellAttachmentType::FLOOR => [Facing::DOWN],
 			BellAttachmentType::ONE_WALL => [Facing::opposite($this->facing)],
 			BellAttachmentType::TWO_WALLS => [$this->facing, Facing::opposite($this->facing)]
 		} as $supportBlockDirection){
-			if(!$this->canBeSupportedAt($this, $supportBlockDirection)){
+			if($face === $supportBlockDirection && !$block->getSupportType(Facing::opposite($face)) !== SupportType::NONE){
 				$this->position->getWorld()->useBreakOn($this->position);
 				break;
 			}

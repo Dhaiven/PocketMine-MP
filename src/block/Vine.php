@@ -112,21 +112,13 @@ class Vine extends Flowable{
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}
 
-	public function onNearbyBlockChange() : void{
-		$changed = false;
-
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
 		$up = $this->getSide(Facing::UP);
 		//check which faces have corresponding vines in the block above
 		$supportedFaces = $up instanceof Vine ? array_intersect_key($this->faces, $up->faces) : [];
 
-		foreach($this->faces as $face){
-			if(!isset($supportedFaces[$face]) && !$this->getSide($face)->isSolid()){
-				unset($this->faces[$face]);
-				$changed = true;
-			}
-		}
-
-		if($changed){
+		if(!isset($supportedFaces[$face]) && !$block->isSolid()){
+			unset($this->faces[$face]);
 			$world = $this->position->getWorld();
 			if(count($this->faces) === 0){
 				$world->useBreakOn($this->position);

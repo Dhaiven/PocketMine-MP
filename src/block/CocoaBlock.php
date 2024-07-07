@@ -87,8 +87,8 @@ class CocoaBlock extends Flowable{
 		return false;
 	}
 
-	public function onNearbyBlockChange() : void{
-		if(!$this->canAttachTo($this->getSide(Facing::opposite($this->facing)))){
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
+		if($face === Facing::opposite($this->facing) && !$this->canAttachTo($block)){
 			$this->position->getWorld()->useBreakOn($this->position);
 		}
 	}

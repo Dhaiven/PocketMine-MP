@@ -47,10 +47,10 @@ abstract class BaseBigDripleaf extends Transparent{
 			$block->hasTypeTag(BlockTypeTags::MUD);
 	}
 
-	public function onNearbyBlockChange() : void{
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
 		if(
-			(!$this->isHead() && !$this->getSide(Facing::UP) instanceof BaseBigDripleaf) ||
-			!$this->canBeSupportedBy($this->getSide(Facing::DOWN), false)
+			($face === Facing::UP && !$this->isHead() && !$block instanceof BaseBigDripleaf) ||
+			($face === Facing::DOWN && !$this->canBeSupportedBy($block, false))
 		){
 			$this->position->getWorld()->useBreakOn($this->position);
 		}

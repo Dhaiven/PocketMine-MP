@@ -487,7 +487,7 @@ class Block{
 	/**
 	 * Called when this block or a block immediately adjacent to it changes state.
 	 */
-	public function onNearbyBlockChange() : void{
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
 
 	}
 

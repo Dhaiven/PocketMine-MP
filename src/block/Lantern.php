@@ -86,9 +86,9 @@ class Lantern extends Transparent{
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}
 
-	public function onNearbyBlockChange() : void{
-		$face = $this->hanging ? Facing::UP : Facing::DOWN;
-		if(!$this->canBeSupportedAt($this, $face)){
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
+		$lanternFace = $this->hanging ? Facing::UP : Facing::DOWN;
+		if($face === $lanternFace && !$block->getSupportType(Facing::opposite($lanternFace))->hasCenterSupport()){
 			$this->position->getWorld()->useBreakOn($this->position);
 		}
 	}

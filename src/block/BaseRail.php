@@ -220,11 +220,12 @@ abstract class BaseRail extends Flowable{
 		$this->setShapeFromConnections($connections);
 	}
 
-	public function onNearbyBlockChange() : void{
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
 		$world = $this->position->getWorld();
-		if(!$this->getAdjacentSupportType(Facing::DOWN)->hasEdgeSupport()){
+		if($face === Facing::DOWN && $block->getSupportType(Facing::UP)->hasEdgeSupport()){
 			$world->useBreakOn($this->position);
 		}else{
+			//TODO: opti this
 			foreach($this->getCurrentShapeConnections() as $connection){
 				if(($connection & RailConnectionInfo::FLAG_ASCEND) !== 0 && !$this->getSide($connection & ~RailConnectionInfo::FLAG_ASCEND)->getSupportType(Facing::UP)->hasEdgeSupport()){
 					$world->useBreakOn($this->position);

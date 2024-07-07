@@ -78,8 +78,8 @@ class Ladder extends Transparent{
 		return false;
 	}
 
-	public function onNearbyBlockChange() : void{
-		if(!$this->canBeSupportedAt($this, Facing::opposite($this->facing))){ //Replace with common break method
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
+		if($face === Facing::opposite($this->facing) && $block->getSupportType($this->facing) !== SupportType::FULL){ //Replace with common break method
 			$this->position->getWorld()->useBreakOn($this->position);
 		}
 	}

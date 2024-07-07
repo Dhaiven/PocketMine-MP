@@ -52,12 +52,12 @@ final class WallCoralFan extends BaseCoral{
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}
 
-	public function onNearbyBlockChange() : void{
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
 		$world = $this->position->getWorld();
 		if(!$this->canBeSupportedAt($this, Facing::opposite($this->facing))){
 			$world->useBreakOn($this->position);
 		}else{
-			parent::onNearbyBlockChange();
+			parent::onNearbyBlockChange($block, $face);
 		}
 	}
 

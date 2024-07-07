@@ -70,9 +70,15 @@ class DoublePlant extends Flowable{
 		);
 	}
 
-	public function onNearbyBlockChange() : void{
-		$down = $this->getSide(Facing::DOWN);
-		if(!$this->isValidHalfPlant() || (!$this->top && !$down->hasTypeTag(BlockTypeTags::DIRT) && !$down->hasTypeTag(BlockTypeTags::MUD))){
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
+		$otherSide = $this->top ? Facing::DOWN : Facing::UP;
+		if((
+			$face === $otherSide && !(
+				$block instanceof DoublePlant &&
+				$block->hasSameTypeId($this) &&
+				$block->top !== $this->top
+			)
+		) || ($face === Facing::DOWN && !$this->top && !$block->hasTypeTag(BlockTypeTags::DIRT) && !$block->hasTypeTag(BlockTypeTags::MUD))){
 			$this->position->getWorld()->useBreakOn($this->position);
 		}
 	}

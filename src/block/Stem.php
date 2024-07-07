@@ -52,11 +52,11 @@ abstract class Stem extends Crops{
 
 	abstract protected function getPlant() : Block;
 
-	public function onNearbyBlockChange() : void{
-		if($this->facing !== Facing::UP && !$this->getSide($this->facing)->hasSameTypeId($this->getPlant())){
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
+		if($this->facing !== Facing::UP && $face === $this->facing && !$block->hasSameTypeId($this->getPlant())){
 			$this->position->getWorld()->setBlock($this->position, $this->setFacing(Facing::UP));
 		}
-		parent::onNearbyBlockChange();
+		parent::onNearbyBlockChange($block, $face);
 	}
 
 	public function ticksRandomly() : bool{

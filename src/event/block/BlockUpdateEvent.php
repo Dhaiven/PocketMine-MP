@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\event\block;
 
+use pocketmine\block\Block;
 use pocketmine\event\Cancellable;
 use pocketmine\event\CancellableTrait;
 
@@ -31,4 +32,23 @@ use pocketmine\event\CancellableTrait;
  */
 class BlockUpdateEvent extends BlockEvent implements Cancellable{
 	use CancellableTrait;
+
+	/** 
+	 * @param Block[] $neighbourBlocks
+	 */
+	public function __construct(
+		protected Block $block,
+		protected array $neighbourBlocks
+	){}
+
+	public function getBlock() : Block{
+		return $this->block;
+	}
+
+	/** 
+	 * @return Block[]
+	 */
+	public function getNeighbourBlocks() : array{
+		return $this->neighbourBlocks;
+	}
 }

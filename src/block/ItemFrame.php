@@ -167,8 +167,8 @@ class ItemFrame extends Flowable{
 		return $block->getAdjacentSupportType($face) !== SupportType::NONE;
 	}
 
-	public function onNearbyBlockChange() : void{
-		if(!$this->canBeSupportedAt($this, Facing::opposite($this->facing))){
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
+		if($face === Facing::opposite($this->facing) && $block->getSupportType($this->facing) !== SupportType::NONE){
 			$this->position->getWorld()->useBreakOn($this->position);
 		}
 	}

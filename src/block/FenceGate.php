@@ -92,7 +92,7 @@ class FenceGate extends Transparent{
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}
 
-	public function onNearbyBlockChange() : void{
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
 		$inWall = $this->checkInWall();
 		if($inWall !== $this->inWall){
 			$this->inWall = $inWall;

@@ -117,17 +117,9 @@ class GlowLichen extends Transparent{
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}
 
-	public function onNearbyBlockChange() : void{
-		$changed = false;
-
-		foreach($this->faces as $face){
-			if($this->getAdjacentSupportType($face) !== SupportType::FULL){
-				unset($this->faces[$face]);
-				$changed = true;
-			}
-		}
-
-		if($changed){
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
+		if (isset($this->faces[$face]) && $block->getSupportType(Facing::opposite($face)) !== SupportType::FULL) {
+			unset($this->faces[$face]);
 			$world = $this->position->getWorld();
 			if(count($this->faces) === 0){
 				$world->useBreakOn($this->position);

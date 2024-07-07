@@ -46,7 +46,7 @@ class RedstoneOre extends Opaque{
 		return false;
 	}
 
-	public function onNearbyBlockChange() : void{
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
 		if(!$this->lit){
 			$this->lit = true;
 			$this->position->getWorld()->setBlock($this->position, $this);

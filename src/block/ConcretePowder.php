@@ -35,11 +35,11 @@ class ConcretePowder extends Opaque implements Fallable{
 		onNearbyBlockChange as protected startFalling;
 	}
 
-	public function onNearbyBlockChange() : void{
+	public function onNearbyBlockChange(Block $block, ?int $face) : void{
 		if(($water = $this->getAdjacentWater()) !== null){
 			BlockEventHelper::form($this, VanillaBlocks::CONCRETE()->setColor($this->color), $water);
 		}else{
-			$this->startFalling();
+			$this->startFalling($block, $face);
 		}
 	}
 
