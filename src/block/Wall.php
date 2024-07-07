@@ -90,7 +90,10 @@ class Wall extends Transparent{
 	}
 
 	public function onNearbyBlockChange(Block $block, ?int $face) : void{
-		if($face != null && $this->recalculateConnection($block, $face) > 0){
+		if(match (true) {
+			$face != null => $this->recalculateConnection($block, $face) > 0,
+			default => $this->recalculateConnections(),
+		}){
 			$this->position->getWorld()->setBlock($this->position, $this);
 		}
 	}

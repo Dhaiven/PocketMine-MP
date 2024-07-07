@@ -42,7 +42,11 @@ trait FallableTrait{
 	abstract protected function getPosition() : Position;
 
 	public function onNearbyBlockChange(Block $block, ?int $face) : void{
-		if($face === Facing::DOWN && $block->canBeReplaced()){
+		if(match (true) {
+			$face === null => $block->getSide(Facing::DOWN)->canBeReplaced(),
+			$face === Facing::DOWN => $block->canBeReplaced(),
+			default => false
+		}){
 			$pos = $this->getPosition();
 			$world = $pos->getWorld();
 			$world->setBlock($pos, VanillaBlocks::AIR());
