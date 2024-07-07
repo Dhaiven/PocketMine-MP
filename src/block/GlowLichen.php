@@ -118,7 +118,7 @@ class GlowLichen extends Transparent{
 	}
 
 	public function onNearbyBlockChange(Block $block, ?int $face) : void{
-		if (isset($this->faces[$face]) && $block->getSupportType(Facing::opposite($face)) !== SupportType::FULL) {
+		if ($face != null && isset($this->faces[$face]) && $block->getSupportType(Facing::opposite($face)) !== SupportType::FULL) {
 			unset($this->faces[$face]);
 			$world = $this->position->getWorld();
 			if(count($this->faces) === 0){

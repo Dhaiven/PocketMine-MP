@@ -55,7 +55,7 @@ class Torch extends Flowable{
 	}
 
 	public function onNearbyBlockChange(Block $block, ?int $face) : void{
-		if($face === !$this->canBeSupportedAt($this, Facing::opposite($this->facing))){
+		if(!$this->canBeSupportedAt($this, Facing::opposite($this->facing))){
 			$this->position->getWorld()->useBreakOn($this->position);
 		}
 	}

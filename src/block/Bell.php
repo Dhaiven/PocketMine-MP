@@ -115,7 +115,7 @@ final class Bell extends Transparent{
 			BellAttachmentType::ONE_WALL => [Facing::opposite($this->facing)],
 			BellAttachmentType::TWO_WALLS => [$this->facing, Facing::opposite($this->facing)]
 		} as $supportBlockDirection){
-			if($face === $supportBlockDirection && !$block->getSupportType(Facing::opposite($face)) !== SupportType::NONE){
+			if($face === $supportBlockDirection && $block->getSupportType(Facing::opposite($face)) !== SupportType::NONE){
 				$this->position->getWorld()->useBreakOn($this->position);
 				break;
 			}

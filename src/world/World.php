@@ -991,9 +991,9 @@ class World implements ChunkManager{
 				$entity->onNearbyBlockChange();
 			}
 
-			$block->onNearbyBlockChange($block, null);
+			$changedBlock->onNearbyBlockChange($changedBlock, null);
 			foreach ($neighbourBlocks as $face => $neighbourBlock) {
-				$neighbourBlock->onNearbyBlockChange($block, Facing::opposite($face));
+				$neighbourBlock->onNearbyBlockChange($changedBlock, Facing::opposite($face));
 			}
 		}
 
