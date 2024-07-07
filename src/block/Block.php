@@ -47,6 +47,7 @@ use pocketmine\math\Facing;
 use pocketmine\math\RayTraceResult;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\network\mcpe\protocol\UpdateBlockPacket;
 use pocketmine\player\Player;
 use pocketmine\utils\AssumptionFailedError;
 use pocketmine\utils\Binary;
@@ -84,6 +85,8 @@ class Block{
 	private Block $defaultState;
 
 	private int $stateIdXorMask;
+
+	private int $layer = UpdateBlockPacket::DATA_LAYER_NORMAL;
 
 	/**
 	 * Computes the mask to be XOR'd with the state data.
@@ -379,7 +382,7 @@ class Block{
 		if($chunk === null){
 			throw new AssumptionFailedError("World::setBlock() should have loaded the chunk before calling this method");
 		}
-		$chunk->setBlockStateId($this->position->x & Chunk::COORD_MASK, $this->position->y, $this->position->z & Chunk::COORD_MASK, $this->getStateId());
+		$chunk->setBlockStateId($this->position->x & Chunk::COORD_MASK, $this->position->y, $this->position->z & Chunk::COORD_MASK, $this->getStateId(), $this->getLayer());
 
 		$tileType = $this->idInfo->getTileClass();
 		$oldTile = $world->getTile($this->position);
@@ -597,6 +600,18 @@ class Block{
 	 */
 	public function canBeFlowedInto() : bool{
 		return false;
+	}
+
+	public function getWaterLoggingLevel(): int {
+		return 0;
+	}
+
+	final public function getLayer(): int {
+		return $this->layer;
+	}
+
+	public function setLayer(int $layer): void { //TODO: enum for layer
+		$this->layer = $layer;
 	}
 
 	/**

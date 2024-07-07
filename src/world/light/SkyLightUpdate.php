@@ -194,7 +194,7 @@ class SkyLightUpdate extends LightUpdate{
 			for($x = 0; $x < Chunk::EDGE_LENGTH; ++$x){
 				$y = null;
 				for($subChunkY = $maxSubChunkY; $subChunkY >= Chunk::MIN_SUBCHUNK_INDEX; $subChunkY--){
-					$subHighestBlockY = $chunk->getSubChunk($subChunkY)->getHighestBlockAt($x, $z);
+					$subHighestBlockY = $chunk->getSubChunk($subChunkY)->getHighestBlockAt($x, $z, 0);
 					if($subHighestBlockY !== null){
 						$y = ($subChunkY * SubChunk::EDGE_LENGTH) + $subHighestBlockY;
 						break;
@@ -205,7 +205,7 @@ class SkyLightUpdate extends LightUpdate{
 					$result->set($x, $z, World::Y_MIN);
 				}else{
 					for(; $y >= World::Y_MIN; --$y){
-						if(isset($directSkyLightBlockers[$chunk->getBlockStateId($x, $y, $z)])){
+						if(isset($directSkyLightBlockers[$chunk->getBlockStateId($x, $y, $z, 0)])){
 							$result->set($x, $z, $y + 1);
 							break;
 						}
@@ -227,12 +227,12 @@ class SkyLightUpdate extends LightUpdate{
 	 * @return int New calculated heightmap value (0-256 inclusive)
 	 */
 	private static function recalculateHeightMapColumn(Chunk $chunk, int $x, int $z, array $directSkyLightBlockers) : int{
-		$y = $chunk->getHighestBlockAt($x, $z);
+		$y = $chunk->getHighestBlockAt($x, $z, 0);
 		if($y === null){
 			return World::Y_MIN;
 		}
 		for(; $y >= World::Y_MIN; --$y){
-			if(isset($directSkyLightBlockers[$chunk->getBlockStateId($x, $y, $z)])){
+			if(isset($directSkyLightBlockers[$chunk->getBlockStateId($x, $y, $z, 0)])){
 				break;
 			}
 		}

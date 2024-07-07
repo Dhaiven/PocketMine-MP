@@ -95,15 +95,15 @@ class Chunk{
 	 *
 	 * @return int the blockstate ID of the given block
 	 */
-	public function getBlockStateId(int $x, int $y, int $z) : int{
-		return $this->getSubChunk($y >> SubChunk::COORD_BIT_SIZE)->getBlockStateId($x, $y & SubChunk::COORD_MASK, $z);
+	public function getBlockStateId(int $x, int $y, int $z, int $layer = 0) : int{
+		return $this->getSubChunk($y >> SubChunk::COORD_BIT_SIZE)->getBlockStateId($x, $y & SubChunk::COORD_MASK, $z, $layer);
 	}
 
 	/**
 	 * Sets the blockstate at the given coordinate by internal ID.
 	 */
-	public function setBlockStateId(int $x, int $y, int $z, int $block) : void{
-		$this->getSubChunk($y >> SubChunk::COORD_BIT_SIZE)->setBlockStateId($x, $y & SubChunk::COORD_MASK, $z, $block);
+	public function setBlockStateId(int $x, int $y, int $z, int $block, int $layer = 0) : void{
+		$this->getSubChunk($y >> SubChunk::COORD_BIT_SIZE)->setBlockStateId($x, $y & SubChunk::COORD_MASK, $z, $block, $layer);
 		$this->terrainDirtyFlags |= self::DIRTY_FLAG_BLOCKS;
 	}
 
@@ -115,9 +115,9 @@ class Chunk{
 	 *
 	 * @return int|null the Y coordinate, or null if there are no blocks in the column
 	 */
-	public function getHighestBlockAt(int $x, int $z) : ?int{
+	public function getHighestBlockAt(int $x, int $z, int $layer = 0) : ?int{
 		for($y = self::MAX_SUBCHUNK_INDEX; $y >= self::MIN_SUBCHUNK_INDEX; --$y){
-			$height = $this->getSubChunk($y)->getHighestBlockAt($x, $z);
+			$height = $this->getSubChunk($y)->getHighestBlockAt($x, $z, $layer);
 			if($height !== null){
 				return $height | ($y << SubChunk::COORD_BIT_SIZE);
 			}
