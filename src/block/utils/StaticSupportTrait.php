@@ -42,8 +42,8 @@ trait StaticSupportTrait{
 	 * @see Block::canBePlacedAt()
 	 */
 	public function canBePlacedAt(Block $blockReplace, Vector3 $clickVector, int $face, bool $isClickedBlock) : bool{
-		foreach ($this->getCheckedFaces() as $face) {
-			if (!$this->canBeSupportedAt($blockReplace->getSide($face), $face)) {
+		foreach ($this->getCheckedFaces() as $side) {
+			if (!$this->canBeSupportedAt($blockReplace->getSide($side), $side)) {
 				return false;
 			}
 		}
@@ -52,8 +52,9 @@ trait StaticSupportTrait{
 
 	/**
 	 * return faces must be check for the block placement
+	 * @return int[]
 	 */
-	private function getCheckedFaces(): array {
+	private function getCheckedFaces() : array {
 		return [Facing::DOWN];
 	}
 

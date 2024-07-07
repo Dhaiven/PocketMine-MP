@@ -85,7 +85,7 @@ class CaveVines extends Flowable{
 			$block->hasSameTypeId($this);
 	}
 
-	private function getCheckedFaces(): array {
+	private function getCheckedFaces() : array {
 		return [Facing::UP];
 	}
 

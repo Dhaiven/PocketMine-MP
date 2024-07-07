@@ -67,7 +67,7 @@ final class ChorusFlower extends Flowable{
 		return false;
 	}
 
-	private function getCheckedFaces(): array {
+	private function getCheckedFaces() : array {
 		return [Facing::DOWN, Facing::UP];
 	}
 

@@ -32,6 +32,7 @@ use pocketmine\event\entity\EntityDamageByBlockEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Facing;
+use function in_array;
 
 class Cactus extends Transparent{
 	use AgeableTrait;
@@ -64,12 +65,12 @@ class Cactus extends Transparent{
 	private function canBeSupportedAt(Block $block, int $face) : bool{
 		return match (true) {
 			$face === Facing::DOWN => $block->hasSameTypeId($this) || $block->hasTypeTag(BlockTypeTags::SAND),
-			in_array($face, Facing::HORIZONTAL) => !$block->isSolid(),
+			in_array($face, Facing::HORIZONTAL, true) => !$block->isSolid(),
 			default => true,
 		};
 	}
 
-	private function getCheckedFaces(): array {
+	private function getCheckedFaces() : array {
 		return [Facing::DOWN, ...Facing::HORIZONTAL];
 	}
 

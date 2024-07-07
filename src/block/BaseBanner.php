@@ -26,6 +26,7 @@ namespace pocketmine\block;
 use pocketmine\block\tile\Banner as TileBanner;
 use pocketmine\block\utils\BannerPatternLayer;
 use pocketmine\block\utils\ColoredTrait;
+use pocketmine\block\utils\StaticSupportTrait;
 use pocketmine\block\utils\SupportType;
 use pocketmine\item\Banner as ItemBanner;
 use pocketmine\item\Item;
@@ -39,6 +40,7 @@ use function count;
 
 abstract class BaseBanner extends Transparent{
 	use ColoredTrait;
+	use StaticSupportTrait;
 
 	/**
 	 * @var BannerPatternLayer[]
@@ -108,14 +110,15 @@ abstract class BaseBanner extends Transparent{
 		return SupportType::NONE;
 	}
 
-	private function canBeSupportedBy(Block $block) : bool{
-		return $block->isSolid();
+	private function canBeSupportedAt(Block $block, int $face) : bool{
+		return $face !== $this->getSupportingFace() || $block->isSolid();
+	}
+
+	private function getCheckedFaces() : array {
+		return [$this->getSupportingFace()];
 	}
 
 	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
-		if(!$this->canBeSupportedBy($blockReplace->getSide($this->getSupportingFace()))){
-			return false;
-		}
 		if($item instanceof ItemBanner){
 			$this->color = $item->getColor();
 			$this->setPatterns($item->getPatterns());
@@ -125,12 +128,6 @@ abstract class BaseBanner extends Transparent{
 	}
 
 	abstract protected function getSupportingFace() : int;
-
-	public function onNearbyBlockChange(Block $block, ?int $face) : void{
-		if($face === $this->getSupportingFace() && !$this->canBeSupportedBy($block)){
-			$this->position->getWorld()->useBreakOn($this->position);
-		}
-	}
 
 	public function getDropsForCompatibleTool(Item $item) : array{
 		$drop = $this->asItem();

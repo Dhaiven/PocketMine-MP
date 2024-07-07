@@ -68,7 +68,7 @@ class NetherVines extends Flowable{
 		return $face !== $actualFace || $block->getSupportType($this->growthFace)->hasCenterSupport() || $block->hasSameTypeId($this);
 	}
 
-	private function getCheckedFaces(): array {
+	private function getCheckedFaces() : array {
 		return [Facing::opposite($this->growthFace)];
 	}
 
