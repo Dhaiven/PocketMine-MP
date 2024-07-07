@@ -44,8 +44,8 @@ final class PitcherCrop extends Flowable{
 
 	public const MAX_AGE = 2;
 
-	private function canBeSupportedAt(Block $block) : bool{
-		return $block->getSide(Facing::DOWN)->getTypeId() === BlockTypeIds::FARMLAND;
+	private function canBeSupportedAt(Block $block, int $face) : bool{
+		return $face !== Facing::DOWN || $block->getTypeId() === BlockTypeIds::FARMLAND;
 	}
 
 	protected function recalculateCollisionBoxes() : array{

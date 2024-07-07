@@ -63,10 +63,12 @@ class PinkPetals extends Flowable{
 		return $this;
 	}
 
-	private function canBeSupportedAt(Block $block) : bool{
-		$supportBlock = $block->getSide(Facing::DOWN);
+	private function canBeSupportedAt(Block $block, int $face) : bool{
 		//TODO: Moss block
-		return $supportBlock->hasTypeTag(BlockTypeTags::DIRT) || $supportBlock->hasTypeTag(BlockTypeTags::MUD);
+		return
+			$face !== Facing::DOWN ||
+			$block->hasTypeTag(BlockTypeTags::DIRT) ||
+			$block->hasTypeTag(BlockTypeTags::MUD);
 	}
 
 	public function canBePlacedAt(Block $blockReplace, Vector3 $clickVector, int $face, bool $isClickedBlock) : bool{

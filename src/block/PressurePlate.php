@@ -61,8 +61,8 @@ abstract class PressurePlate extends Transparent{
 		return SupportType::NONE;
 	}
 
-	private function canBeSupportedAt(Block $block) : bool{
-		return $block->getAdjacentSupportType(Facing::DOWN) !== SupportType::NONE;
+	private function canBeSupportedAt(Block $block, int $face) : bool{
+		return $face !== Facing::DOWN || $block->getSupportType(Facing::UP) !== SupportType::NONE;
 	}
 
 	public function hasEntityCollision() : bool{

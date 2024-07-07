@@ -43,8 +43,8 @@ class Carpet extends Flowable{
 		return [AxisAlignedBB::one()->trim(Facing::UP, 15 / 16)];
 	}
 
-	private function canBeSupportedAt(Block $block) : bool{
-		return $block->getSide(Facing::DOWN)->getTypeId() !== BlockTypeIds::AIR;
+	private function canBeSupportedAt(Block $block, int $face) : bool{
+		return $face !== Facing::DOWN || $block->getTypeId() !== BlockTypeIds::AIR;
 	}
 
 	public function getFlameEncouragement() : int{

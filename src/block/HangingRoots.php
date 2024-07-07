@@ -31,8 +31,8 @@ use pocketmine\math\Facing;
 final class HangingRoots extends Flowable{
 	use StaticSupportTrait;
 
-	private function canBeSupportedAt(Block $block) : bool{
-		return $block->getAdjacentSupportType(Facing::UP)->hasCenterSupport(); //weird I know, but they can be placed on the bottom of fences
+	private function canBeSupportedAt(Block $block, int $face) : bool{
+		return $face !== Facing::DOWN || $block->getSupportType(Facing::UP)->hasCenterSupport(); //weird I know, but they can be placed on the bottom of fences
 	}
 
 	public function getDropsForIncompatibleTool(Item $item) : array{

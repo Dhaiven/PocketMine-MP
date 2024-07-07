@@ -29,7 +29,7 @@ use pocketmine\math\Facing;
 final class Coral extends BaseCoral{
 	use StaticSupportTrait;
 
-	private function canBeSupportedAt(Block $block) : bool{
-		return $block->getAdjacentSupportType(Facing::DOWN)->hasCenterSupport();
+	private function canBeSupportedAt(Block $block, int $face) : bool{
+		return $face !== Facing::DOWN || $block->getSupportType(Facing::UP)->hasCenterSupport();
 	}
 }

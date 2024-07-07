@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace pocketmine\block\utils;
 
 use pocketmine\block\Block;
+use pocketmine\math\Facing;
 use pocketmine\math\Vector3;
 
 /**
@@ -35,20 +36,32 @@ trait StaticSupportTrait{
 	/**
 	 * Implement this to define the block's support requirements.
 	 */
-	abstract private function canBeSupportedAt(Block $block) : bool;
+	abstract private function canBeSupportedAt(Block $block, int $face) : bool;
 
 	/**
 	 * @see Block::canBePlacedAt()
 	 */
 	public function canBePlacedAt(Block $blockReplace, Vector3 $clickVector, int $face, bool $isClickedBlock) : bool{
-		return $this->canBeSupportedAt($blockReplace) && parent::canBePlacedAt($blockReplace, $clickVector, $face, $isClickedBlock);
+		foreach ($this->getCheckedFaces() as $face) {
+			if (!$this->canBeSupportedAt($blockReplace->getSide($face), $face)) {
+				return false;
+			}
+		}
+		return parent::canBePlacedAt($blockReplace, $clickVector, $face, $isClickedBlock);
+	}
+
+	/**
+	 * return faces must be check for the block placement
+	 */
+	private function getCheckedFaces(): array {
+		return [Facing::DOWN];
 	}
 
 	/**
 	 * @see Block::onNearbyBlockChange()
 	 */
 	public function onNearbyBlockChange(Block $block, ?int $face) : void{
-		if(!$this->canBeSupportedAt($this)){
+		if($face !== null && !$this->canBeSupportedAt($block, $face)){
 			$this->position->getWorld()->useBreakOn($this->position);
 		}else{
 			parent::onNearbyBlockChange($block, $face);

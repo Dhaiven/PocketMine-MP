@@ -50,12 +50,12 @@ class DeadBush extends Flowable{
 		return 100;
 	}
 
-	private function canBeSupportedAt(Block $block) : bool{
-		$supportBlock = $block->getSide(Facing::DOWN);
+	private function canBeSupportedAt(Block $block, int $face) : bool{
 		return
-			$supportBlock->hasTypeTag(BlockTypeTags::SAND) ||
-			$supportBlock->hasTypeTag(BlockTypeTags::MUD) ||
-			match($supportBlock->getTypeId()){
+			$face !== Facing::DOWN ||
+			$block->hasTypeTag(BlockTypeTags::SAND) ||
+			$block->hasTypeTag(BlockTypeTags::MUD) ||
+			match($block->getTypeId()){
 				//can't use DIRT tag here because it includes farmland
 				BlockTypeIds::PODZOL,
 				BlockTypeIds::MYCELIUM,

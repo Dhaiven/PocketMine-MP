@@ -78,9 +78,15 @@ class CaveVines extends Flowable{
 		return $this->berries ? 14 : 0;
 	}
 
-	private function canBeSupportedAt(Block $block) : bool{
-		$supportBlock = $block->getSide(Facing::UP);
-		return $supportBlock->getSupportType(Facing::DOWN) === SupportType::FULL || $supportBlock->hasSameTypeId($this);
+	private function canBeSupportedAt(Block $block, int $face) : bool{
+		return
+			$face !== Facing::UP ||
+			$block->getSupportType(Facing::DOWN) === SupportType::FULL ||
+			$block->hasSameTypeId($this);
+	}
+
+	private function getCheckedFaces(): array {
+		return [Facing::UP];
 	}
 
 	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{

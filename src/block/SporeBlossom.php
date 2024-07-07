@@ -30,7 +30,7 @@ use pocketmine\math\Facing;
 final class SporeBlossom extends Flowable{
 	use StaticSupportTrait;
 
-	private function canBeSupportedAt(Block $block) : bool{
-		return $block->getAdjacentSupportType(Facing::UP) === SupportType::FULL;
+	private function canBeSupportedAt(Block $block, int $face) : bool{
+		return $face !== Facing::DOWN || $block->getSupportType(Facing::UP) === SupportType::FULL;
 	}
 }

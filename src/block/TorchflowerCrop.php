@@ -50,8 +50,8 @@ final class TorchflowerCrop extends Flowable{
 		return $this;
 	}
 
-	private function canBeSupportedAt(Block $block) : bool{
-		return $block->getSide(Facing::DOWN)->getTypeId() === BlockTypeIds::FARMLAND;
+	private function canBeSupportedAt(Block $block, int $face) : bool{
+		return $face !== Facing::DOWN || $block->getTypeId() === BlockTypeIds::FARMLAND;
 	}
 
 	private function getNextState() : Block{

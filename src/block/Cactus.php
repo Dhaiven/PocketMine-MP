@@ -61,18 +61,16 @@ class Cactus extends Transparent{
 		return true;
 	}
 
-	private function canBeSupportedAt(Block $block) : bool{
-		$supportBlock = $block->getSide(Facing::DOWN);
-		if(!$supportBlock->hasSameTypeId($this) && !$supportBlock->hasTypeTag(BlockTypeTags::SAND)){
-			return false;
-		}
-		foreach(Facing::HORIZONTAL as $side){
-			if($block->getSide($side)->isSolid()){
-				return false;
-			}
-		}
+	private function canBeSupportedAt(Block $block, int $face) : bool{
+		return match (true) {
+			$face === Facing::DOWN => $block->hasSameTypeId($this) || $block->hasTypeTag(BlockTypeTags::SAND),
+			in_array($face, Facing::HORIZONTAL) => !$block->isSolid(),
+			default => true,
+		};
+	}
 
-		return true;
+	private function getCheckedFaces(): array {
+		return [Facing::DOWN, ...Facing::HORIZONTAL];
 	}
 
 	public function ticksRandomly() : bool{

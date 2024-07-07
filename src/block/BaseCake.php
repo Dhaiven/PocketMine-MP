@@ -40,8 +40,8 @@ abstract class BaseCake extends Transparent implements FoodSource{
 		return SupportType::NONE;
 	}
 
-	private function canBeSupportedAt(Block $block) : bool{
-		return $block->getSide(Facing::DOWN)->getTypeId() !== BlockTypeIds::AIR;
+	private function canBeSupportedAt(Block $block, int $face) : bool{
+		return $face !== Facing::DOWN || $block->getTypeId() !== BlockTypeIds::AIR;
 	}
 
 	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{

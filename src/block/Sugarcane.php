@@ -84,12 +84,13 @@ class Sugarcane extends Flowable{
 		return false;
 	}
 
-	private function canBeSupportedAt(Block $block) : bool{
-		$supportBlock = $block->getSide(Facing::DOWN);
-		return $supportBlock->hasSameTypeId($this) ||
-			$supportBlock->hasTypeTag(BlockTypeTags::MUD) ||
-			$supportBlock->hasTypeTag(BlockTypeTags::DIRT) ||
-			$supportBlock->hasTypeTag(BlockTypeTags::SAND);
+	private function canBeSupportedAt(Block $block, int $face) : bool{
+		return
+			$face !== Facing::DOWN ||
+			$block->hasSameTypeId($this) ||
+			$block->hasTypeTag(BlockTypeTags::MUD) ||
+			$block->hasTypeTag(BlockTypeTags::DIRT) ||
+			$block->hasTypeTag(BlockTypeTags::SAND);
 	}
 
 	public function ticksRandomly() : bool{

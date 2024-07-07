@@ -99,8 +99,8 @@ class RedstoneComparator extends Flowable{
 		return true;
 	}
 
-	private function canBeSupportedAt(Block $block) : bool{
-		return $block->getAdjacentSupportType(Facing::DOWN) !== SupportType::NONE;
+	private function canBeSupportedAt(Block $block, int $face) : bool{
+		return $face !== Facing::DOWN || $block->getSupportType(Facing::UP) !== SupportType::NONE;
 	}
 
 	//TODO: redstone functionality

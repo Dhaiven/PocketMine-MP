@@ -29,12 +29,12 @@ use pocketmine\math\Facing;
 final class NetherRoots extends Flowable{
 	use StaticSupportTrait;
 
-	private function canBeSupportedAt(Block $block) : bool{
+	private function canBeSupportedAt(Block $block, int $face) : bool{
 		//TODO: nylium, moss
-		$supportBlock = $block->getSide(Facing::DOWN);
 		return
-			$supportBlock->hasTypeTag(BlockTypeTags::DIRT) ||
-			$supportBlock->hasTypeTag(BlockTypeTags::MUD) ||
-			$supportBlock->getTypeId() === BlockTypeIds::SOUL_SOIL;
+			$face !== Facing::DOWN ||
+			$block->hasTypeTag(BlockTypeTags::DIRT) ||
+			$block->hasTypeTag(BlockTypeTags::MUD) ||
+			$block->getTypeId() === BlockTypeIds::SOUL_SOIL;
 	}
 }

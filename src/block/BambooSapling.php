@@ -52,13 +52,13 @@ final class BambooSapling extends Flowable{
 		return $this;
 	}
 
-	private function canBeSupportedAt(Block $block) : bool{
-		$supportBlock = $block->getSide(Facing::DOWN);
+	private function canBeSupportedAt(Block $block, int $face) : bool{
 		return
-			$supportBlock->getTypeId() === BlockTypeIds::GRAVEL ||
-			$supportBlock->hasTypeTag(BlockTypeTags::DIRT) ||
-			$supportBlock->hasTypeTag(BlockTypeTags::MUD) ||
-			$supportBlock->hasTypeTag(BlockTypeTags::SAND);
+			$face !== Facing::DOWN ||
+			$block->getTypeId() === BlockTypeIds::GRAVEL ||
+			$block->hasTypeTag(BlockTypeTags::DIRT) ||
+			$block->hasTypeTag(BlockTypeTags::MUD) ||
+			$block->hasTypeTag(BlockTypeTags::SAND);
 	}
 
 	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{

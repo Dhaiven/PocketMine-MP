@@ -53,30 +53,22 @@ final class ChorusFlower extends Flowable{
 		return [AxisAlignedBB::one()];
 	}
 
-	private function canBeSupportedAt(Block $block) : bool{
-		$position = $block->position;
-		$world = $position->getWorld();
-		$down = $world->getBlock($position->down());
-
-		if($down->getTypeId() === BlockTypeIds::END_STONE || $down->getTypeId() === BlockTypeIds::CHORUS_PLANT){
+	private function canBeSupportedAt(Block $block, int $face) : bool{
+		if($face === Facing::DOWN && ($block->getTypeId() === BlockTypeIds::END_STONE || $block->getTypeId() === BlockTypeIds::CHORUS_PLANT)){
 			return true;
 		}
 
-		$plantAdjacent = false;
-		foreach($position->sidesAroundAxis(Axis::Y) as $sidePosition){
-			$block = $world->getBlock($sidePosition);
-
+		if($face === Facing::UP || $face === Facing::DOWN){
 			if($block->getTypeId() === BlockTypeIds::CHORUS_PLANT){
-				if($plantAdjacent){ //at most one plant may be horizontally adjacent
-					return false;
-				}
-				$plantAdjacent = true;
-			}elseif($block->getTypeId() !== BlockTypeIds::AIR){
-				return false;
+				return true;
 			}
 		}
 
-		return $plantAdjacent;
+		return false;
+	}
+
+	private function getCheckedFaces(): array {
+		return [Facing::DOWN, Facing::UP];
 	}
 
 	public function onProjectileHit(Projectile $projectile, RayTraceResult $hitResult) : void{

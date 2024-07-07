@@ -33,12 +33,12 @@ use pocketmine\math\Facing;
 class WitherRose extends Flowable{
 	use StaticSupportTrait;
 
-	private function canBeSupportedAt(Block $block) : bool{
-		$supportBlock = $block->getSide(Facing::DOWN);
+	private function canBeSupportedAt(Block $block, ?int $face) : bool{
 		return
-			$supportBlock->hasTypeTag(BlockTypeTags::DIRT) ||
-			$supportBlock->hasTypeTag(BlockTypeTags::MUD) ||
-			match($supportBlock->getTypeId()){
+			$face !== Facing::DOWN ||
+			$block->hasTypeTag(BlockTypeTags::DIRT) ||
+			$block->hasTypeTag(BlockTypeTags::MUD) ||
+			match($block->getTypeId()){
 				BlockTypeIds::NETHERRACK,
 				BlockTypeIds::SOUL_SAND,
 				BlockTypeIds::SOUL_SOIL => true,

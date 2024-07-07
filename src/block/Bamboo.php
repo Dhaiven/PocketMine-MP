@@ -122,14 +122,14 @@ class Bamboo extends Transparent{
 		return new Vector3($retX, 0, $retZ);
 	}
 
-	private function canBeSupportedAt(Block $block) : bool{
-		$supportBlock = $block->getSide(Facing::DOWN);
+	private function canBeSupportedAt(Block $block, int $face) : bool{
 		return
-			$supportBlock->hasSameTypeId($this) ||
-			$supportBlock->getTypeId() === BlockTypeIds::GRAVEL ||
-			$supportBlock->hasTypeTag(BlockTypeTags::DIRT) ||
-			$supportBlock->hasTypeTag(BlockTypeTags::MUD) ||
-			$supportBlock->hasTypeTag(BlockTypeTags::SAND);
+			$face !== Facing::DOWN ||
+			$block->hasSameTypeId($this) ||
+			$block->getTypeId() === BlockTypeIds::GRAVEL ||
+			$block->hasTypeTag(BlockTypeTags::DIRT) ||
+			$block->hasTypeTag(BlockTypeTags::MUD) ||
+			$block->hasTypeTag(BlockTypeTags::SAND);
 	}
 
 	private function seekToTop() : Bamboo{
