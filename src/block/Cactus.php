@@ -70,6 +70,10 @@ class Cactus extends Transparent{
 		};
 	}
 
+	/**
+	 * return faces must be check for the block placement
+	 * @return int[]
+	 */
 	private function getCheckedFaces() : array {
 		return [Facing::DOWN, ...Facing::HORIZONTAL];
 	}

@@ -114,6 +114,10 @@ abstract class BaseBanner extends Transparent{
 		return $face !== $this->getSupportingFace() || $block->isSolid();
 	}
 
+	/**
+	 * return faces must be check for the block placement
+	 * @return int[]
+	 */
 	private function getCheckedFaces() : array {
 		return [$this->getSupportingFace()];
 	}

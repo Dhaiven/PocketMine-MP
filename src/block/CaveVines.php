@@ -85,6 +85,10 @@ class CaveVines extends Flowable{
 			$block->hasSameTypeId($this);
 	}
 
+	/**
+	 * return faces must be check for the block placement
+	 * @return int[]
+	 */
 	private function getCheckedFaces() : array {
 		return [Facing::UP];
 	}

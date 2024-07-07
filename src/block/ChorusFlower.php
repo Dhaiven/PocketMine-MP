@@ -67,6 +67,10 @@ final class ChorusFlower extends Flowable{
 		return false;
 	}
 
+	/**
+	 * return faces must be check for the block placement
+	 * @return int[]
+	 */
 	private function getCheckedFaces() : array {
 		return [Facing::DOWN, Facing::UP];
 	}
