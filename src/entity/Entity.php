@@ -663,11 +663,8 @@ abstract class Entity{
 			$entityBox = $this->getBoundingBox()->expandedCopy(0.001, 0.1, 0.001);
 			foreach (Facing::ALL as $face) {
 				$block = $entityBlock->getSide($face);
-				foreach ($block->getCollisionBoxes() as $blockBox) {
-					if ($entityBox->intersectsWith($blockBox)) {
-						$hasUpdate = $block->onEntityCollide($this, Facing::opposite($face));
-						break;
-					}
+				if ($block->collidesWithBB($entityBox)) {
+					$hasUpdate = $block->onEntityCollide($this, Facing::opposite($face));
 				}
 			}
 		}
