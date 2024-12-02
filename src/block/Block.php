@@ -870,9 +870,11 @@ class Block{
 
 	/**
 	 * Called when an entity collide on this block
+	 * 
+	 * @return bool Whether the entity has been updated
 	 */
-	public function onEntityCollide(Entity $entity, int $face) : void{
-		//NOOP
+	public function onEntityCollide(Entity $entity, int $face) : bool{
+		return false;
 	}
 
 	/**
