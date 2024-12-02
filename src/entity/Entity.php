@@ -659,10 +659,9 @@ abstract class Entity{
 			$this->attack($ev);
 			$hasUpdate = true;
 		}else{
-			$entityBlock = $this->getWorld()->getBlock($this->getLocation());
 			$entityBox = $this->getBoundingBox()->expandedCopy(0.001, 0.1, 0.001);
 			foreach (Facing::ALL as $face) {
-				$block = $entityBlock->getSide($face);
+				$block = $this->getWorld()->getBlock($this->getLocation()->getSide($face));
 				if ($block->collidesWithBB($entityBox)) {
 					$hasUpdate = $block->onEntityCollide($this, Facing::opposite($face));
 				}
