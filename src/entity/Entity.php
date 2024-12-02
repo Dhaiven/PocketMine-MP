@@ -666,7 +666,9 @@ abstract class Entity{
 			foreach (Facing::ALL as $face) {
 				$block = $this->getWorld()->getBlock($this->getLocation()->getSide($face));
 				if ($block->collidesWithBB($entityBox)) {
-					$hasUpdate = $block->onEntityCollide($this, Facing::opposite($face));
+					if ($block->onEntityCollide($this, Facing::opposite($face))) {
+						$hasUpdate = true;
+					}
 				}
 			}
 		}
