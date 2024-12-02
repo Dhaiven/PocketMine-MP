@@ -662,7 +662,7 @@ abstract class Entity{
 			$this->attack($ev);
 			$hasUpdate = true;
 		}else{
-			$entityBox = $this->getBoundingBox()->expandedCopy(0.001, 0.1, 0.001);
+			$entityBox = $this->getBoundingBox()->expandedCopy(0.00001, 3 / 16, 0.00001);
 			foreach (Facing::ALL as $face) {
 				$block = $this->getWorld()->getBlock($this->getLocation()->getSide($face));
 				if ($block->collidesWithBB($entityBox)) {
