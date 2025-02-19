@@ -68,7 +68,7 @@ final class Cauldron extends Spawnable{
 	}
 
 	protected function addAdditionalSpawnData(CompoundTag $nbt) : void{
-		$nbt->setShort(self::TAG_POTION_CONTAINER_TYPE, match($this->potionItem?->getTypeId()){
+		$nbt->setShort(self::TAG_POTION_CONTAINER_TYPE, match ($this->potionItem?->getTypeId()) {
 			ItemTypeIds::POTION => self::POTION_CONTAINER_TYPE_NORMAL,
 			ItemTypeIds::SPLASH_POTION => self::POTION_CONTAINER_TYPE_SPLASH,
 			ItemTypeIds::LINGERING_POTION => self::POTION_CONTAINER_TYPE_LINGERING,
@@ -93,7 +93,7 @@ final class Cauldron extends Spawnable{
 			if($potionType === null){
 				throw new SavedDataLoadingException("Unknown potion type ID $potionId");
 			}
-			$this->potionItem = match($containerType){
+			$this->potionItem = match ($containerType) {
 				self::POTION_CONTAINER_TYPE_NORMAL => VanillaItems::POTION()->setType($potionType),
 				self::POTION_CONTAINER_TYPE_SPLASH => VanillaItems::SPLASH_POTION()->setType($potionType),
 				self::POTION_CONTAINER_TYPE_LINGERING => throw new SavedDataLoadingException("Not implemented"),
@@ -107,7 +107,7 @@ final class Cauldron extends Spawnable{
 	}
 
 	protected function writeSaveData(CompoundTag $nbt) : void{
-		$nbt->setShort(self::TAG_POTION_CONTAINER_TYPE, match($this->potionItem?->getTypeId()){
+		$nbt->setShort(self::TAG_POTION_CONTAINER_TYPE, match ($this->potionItem?->getTypeId()) {
 			ItemTypeIds::POTION => self::POTION_CONTAINER_TYPE_NORMAL,
 			ItemTypeIds::SPLASH_POTION => self::POTION_CONTAINER_TYPE_SPLASH,
 			ItemTypeIds::LINGERING_POTION => self::POTION_CONTAINER_TYPE_LINGERING,

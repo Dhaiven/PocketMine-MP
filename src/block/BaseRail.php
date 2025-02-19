@@ -37,7 +37,7 @@ use function in_array;
 
 abstract class BaseRail extends Flowable{
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
 		if($blockReplace->getAdjacentSupportType(Facing::DOWN)->hasEdgeSupport()){
 			return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 		}
@@ -50,8 +50,9 @@ abstract class BaseRail extends Flowable{
 	}
 
 	/**
-	 * @param int[]   $connections
-	 * @param int[][] $lookup
+	 * @param RailConnectionInfo[]          $connections
+	 * @param RailConnectionInfo[][]        $lookup
+	 *
 	 * @phpstan-param array<int, list<int>> $lookup
 	 */
 	protected static function searchState(array $connections, array $lookup) : ?int{
@@ -65,7 +66,7 @@ abstract class BaseRail extends Flowable{
 	/**
 	 * Sets the rail shape according to the given connections, if a shape matches.
 	 *
-	 * @param int[] $connections
+	 * @param RailConnectionInfo[] $connections
 	 *
 	 * @throws \InvalidArgumentException if no shape matches the given connections
 	 */
@@ -74,30 +75,27 @@ abstract class BaseRail extends Flowable{
 	/**
 	 * Returns the connection directions of this rail (depending on the current block state)
 	 *
-	 * @return int[]
+	 * @return RailConnectionInfo[]
 	 */
 	abstract protected function getCurrentShapeConnections() : array;
 
 	/**
 	 * Returns all the directions this rail is already connected in.
 	 *
-	 * @return int[]
+	 * @return RailConnectionInfo[]
 	 */
 	private function getConnectedDirections() : array{
-		/** @var int[] $connections */
 		$connections = [];
 
-		/** @var int $connection */
 		foreach($this->getCurrentShapeConnections() as $connection){
-			$other = $this->getSide($connection & ~RailConnectionInfo::FLAG_ASCEND);
-			$otherConnection = Facing::opposite($connection & ~RailConnectionInfo::FLAG_ASCEND);
+			$other = $this->getSide($connection->facing);
+			$otherConnection = new RailConnectionInfo($connection->facing->opposite(), $connection->ascend);
 
-			if(($connection & RailConnectionInfo::FLAG_ASCEND) !== 0){
+			if($connection->ascend){
 				$other = $other->getSide(Facing::UP);
-
 			}elseif(!($other instanceof BaseRail)){ //check for rail sloping up to meet this one
 				$other = $other->getSide(Facing::DOWN);
-				$otherConnection |= RailConnectionInfo::FLAG_ASCEND;
+				$otherConnection = new RailConnectionInfo($otherConnection->facing, true);
 			}
 
 			if(
@@ -112,26 +110,20 @@ abstract class BaseRail extends Flowable{
 	}
 
 	/**
-	 * @param int[] $constraints
+	 * @param RailConnectionInfo[] $constraints
 	 *
-	 * @return true[]
-	 * @phpstan-return array<int, true>
+	 * @return RailConnectionInfo[]
 	 */
 	private function getPossibleConnectionDirections(array $constraints) : array{
 		switch(count($constraints)){
 			case 0:
 				//No constraints, can connect in any direction
-				$possible = [
-					Facing::NORTH => true,
-					Facing::SOUTH => true,
-					Facing::WEST => true,
-					Facing::EAST => true
+				return [
+					new RailConnectionInfo(Facing::NORTH, true),
+					new RailConnectionInfo(Facing::SOUTH, true),
+					new RailConnectionInfo(Facing::WEST, true),
+					new RailConnectionInfo(Facing::EAST, true),
 				];
-				foreach($possible as $p => $_){
-					$possible[$p | RailConnectionInfo::FLAG_ASCEND] = true;
-				}
-
-				return $possible;
 			case 1:
 				return $this->getPossibleConnectionDirectionsOneConstraint(array_shift($constraints));
 			case 2:
@@ -142,17 +134,16 @@ abstract class BaseRail extends Flowable{
 	}
 
 	/**
-	 * @return true[]
-	 * @phpstan-return array<int, true>
+	 * @return RailConnectionInfo[]
 	 */
-	protected function getPossibleConnectionDirectionsOneConstraint(int $constraint) : array{
-		$opposite = Facing::opposite($constraint & ~RailConnectionInfo::FLAG_ASCEND);
+	protected function getPossibleConnectionDirectionsOneConstraint(RailConnectionInfo $constraint) : array{
+		$opposite = $constraint->facing->opposite();
 
-		$possible = [$opposite => true];
+		$possible = [new RailConnectionInfo($opposite, $constraint->ascend)];
 
-		if(($constraint & RailConnectionInfo::FLAG_ASCEND) === 0){
+		if(!$constraint->ascend){
 			//We can slope the other way if this connection isn't already a slope
-			$possible[$opposite | RailConnectionInfo::FLAG_ASCEND] = true;
+			$possible[] = new RailConnectionInfo($constraint->facing, true);
 		}
 
 		return $possible;
@@ -167,17 +158,16 @@ abstract class BaseRail extends Flowable{
 			$possible = $this->getPossibleConnectionDirections($thisConnections);
 			$continue = false;
 
-			foreach($possible as $thisSide => $_){
-				$otherSide = Facing::opposite($thisSide & ~RailConnectionInfo::FLAG_ASCEND);
+			foreach($possible as $connection){
+				$otherSide = new RailConnectionInfo($connection->facing->opposite(), $connection->ascend);
 
-				$other = $this->getSide($thisSide & ~RailConnectionInfo::FLAG_ASCEND);
+				$other = $this->getSide($connection->facing);
 
-				if(($thisSide & RailConnectionInfo::FLAG_ASCEND) !== 0){
+				if($connection->ascend){
 					$other = $other->getSide(Facing::UP);
-
 				}elseif(!($other instanceof BaseRail)){ //check if other rails can slope up to meet this one
 					$other = $other->getSide(Facing::DOWN);
-					$otherSide |= RailConnectionInfo::FLAG_ASCEND;
+					$otherSide = new RailConnectionInfo($otherSide->facing, true);
 				}
 
 				if(!($other instanceof BaseRail) || count($otherConnections = $other->getConnectedDirections()) >= 2){
@@ -187,13 +177,13 @@ abstract class BaseRail extends Flowable{
 
 				$otherPossible = $other->getPossibleConnectionDirections($otherConnections);
 
-				if(isset($otherPossible[$otherSide])){
+				if(in_array($connection, $otherPossible)){
 					$otherConnections[] = $otherSide;
 					$other->setConnections($otherConnections);
 					$world->setBlock($other->position, $other);
 
 					$changed = true;
-					$thisConnections[] = $thisSide;
+					$thisConnections[] = $connection;
 					$continue = count($thisConnections) < 2;
 
 					break; //force recomputing possible directions, since this connection could invalidate others
@@ -208,11 +198,11 @@ abstract class BaseRail extends Flowable{
 	}
 
 	/**
-	 * @param int[] $connections
+	 * @param RailConnectionInfo[] $connections
 	 */
 	private function setConnections(array $connections) : void{
 		if(count($connections) === 1){
-			$connections[] = Facing::opposite($connections[0] & ~RailConnectionInfo::FLAG_ASCEND);
+			$connections[] = new RailConnectionInfo($connections[0]->facing->opposite(), $connections[0]->ascend);
 		}elseif(count($connections) !== 2){
 			throw new \InvalidArgumentException("Expected exactly 2 connections, got " . count($connections));
 		}
@@ -226,7 +216,7 @@ abstract class BaseRail extends Flowable{
 			$world->useBreakOn($this->position);
 		}else{
 			foreach($this->getCurrentShapeConnections() as $connection){
-				if(($connection & RailConnectionInfo::FLAG_ASCEND) !== 0 && !$this->getSide($connection & ~RailConnectionInfo::FLAG_ASCEND)->getSupportType(Facing::UP)->hasEdgeSupport()){
+				if($connection->ascend && !$this->getSide($connection->facing)->getSupportType(Facing::UP)->hasEdgeSupport()){
 					$world->useBreakOn($this->position);
 					break;
 				}

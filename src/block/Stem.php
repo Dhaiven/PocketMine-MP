@@ -32,17 +32,17 @@ use function array_rand;
 use function mt_rand;
 
 abstract class Stem extends Crops{
-	protected int $facing = Facing::UP;
+	protected Facing $facing = Facing::UP;
 
 	protected function describeBlockOnlyState(RuntimeDataDescriber $w) : void{
 		parent::describeBlockOnlyState($w);
 		$w->facingExcept($this->facing, Facing::DOWN);
 	}
 
-	public function getFacing() : int{ return $this->facing; }
+	public function getFacing() : Facing{ return $this->facing; }
 
 	/** @return $this */
-	public function setFacing(int $facing) : self{
+	public function setFacing(Facing $facing) : self{
 		if($facing === Facing::DOWN){
 			throw new \InvalidArgumentException("DOWN is not a valid facing for this block");
 		}

@@ -29,7 +29,7 @@ use pocketmine\math\Facing;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 use pocketmine\world\BlockTransaction;
-use function array_key_first;
+use function array_shift;
 use function count;
 
 /**
@@ -42,21 +42,21 @@ trait MultiAnySupportTrait{
 	/**
 	 * Returns a list of faces that block should already have when placed.
 	 *
-	 * @return int[]
+	 * @return Facing[]
 	 */
 	abstract protected function getInitialPlaceFaces(Block $blockReplace) : array;
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
-		$this->faces = $this->getInitialPlaceFaces($blockReplace);
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
+		$this->setFaces($this->getInitialPlaceFaces($blockReplace));
 		$availableFaces = $this->getAvailableFaces();
 
 		if(count($availableFaces) === 0){
 			return false;
 		}
 
-		$opposite = Facing::opposite($face);
-		$placedFace = isset($availableFaces[$opposite]) ? $opposite : array_key_first($availableFaces);
-		$this->faces[$placedFace] = $placedFace;
+		$opposite = $face->opposite();
+		$placedFace = isset($availableFaces[$opposite->name]) ? $opposite : array_shift($availableFaces);
+		$this->setFace($placedFace, true);
 
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}
@@ -66,7 +66,7 @@ trait MultiAnySupportTrait{
 
 		foreach($this->faces as $face){
 			if($this->getAdjacentSupportType($face) !== SupportType::FULL){
-				unset($this->faces[$face]);
+				$this->setFace($face, false);
 				$changed = true;
 			}
 		}
@@ -82,13 +82,13 @@ trait MultiAnySupportTrait{
 	}
 
 	/**
-	 * @return array<int, int> $faces
+	 * @return array<string, Facing> $faces
 	 */
 	private function getAvailableFaces() : array{
 		$faces = [];
-		foreach(Facing::ALL as $face){
+		foreach(Facing::cases() as $face){
 			if(!$this->hasFace($face) && $this->getAdjacentSupportType($face) === SupportType::FULL){
-				$faces[$face] = $face;
+				$faces[$face->name] = $face;
 			}
 		}
 		return $faces;

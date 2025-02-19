@@ -153,7 +153,7 @@ final class BlockStateDeserializerHelper{
 	/** @throws BlockStateDeserializeException */
 	public static function decodeFloorCoralFan(FloorCoralFan $block, BlockStateReader $in) : FloorCoralFan{
 		return $block
-			->setAxis(match($in->readBoundedInt(BlockStateNames::CORAL_FAN_DIRECTION, 0, 1)){
+			->setAxis(match ($in->readBoundedInt(BlockStateNames::CORAL_FAN_DIRECTION, 0, 1)) {
 				0 => Axis::X,
 				1 => Axis::Z,
 				default => throw new AssumptionFailedError("readBoundedInt() should have prevented this"),
@@ -208,7 +208,8 @@ final class BlockStateDeserializerHelper{
 	public static function decodeMushroomBlock(RedMushroomBlock $block, BlockStateReader $in) : Block{
 		switch($type = $in->readBoundedInt(BlockStateNames::HUGE_MUSHROOM_BITS, 0, 15)){
 			case BlockLegacyMetadata::MUSHROOM_BLOCK_ALL_STEM:
-			case BlockLegacyMetadata::MUSHROOM_BLOCK_STEM: throw new BlockStateDeserializeException("This state does not exist");
+			case BlockLegacyMetadata::MUSHROOM_BLOCK_STEM:
+				throw new BlockStateDeserializeException("This state does not exist");
 			default:
 				//invalid types get left as default
 				$type = MushroomBlockTypeIdMap::getInstance()->fromId($type);

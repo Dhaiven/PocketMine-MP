@@ -59,7 +59,7 @@ final class ItemSerializer{
 
 	/**
 	 * @phpstan-template TItemType of Item
-	 * @phpstan-param TItemType $item
+	 * @phpstan-param TItemType                  $item
 	 * @phpstan-param \Closure(TItemType) : Data $serializer
 	 */
 	public function map(Item $item, \Closure $serializer) : void{
@@ -72,7 +72,7 @@ final class ItemSerializer{
 
 	/**
 	 * @phpstan-template TBlockType of Block
-	 * @phpstan-param TBlockType $block
+	 * @phpstan-param TBlockType                  $block
 	 * @phpstan-param \Closure(TBlockType) : Data $serializer
 	 */
 	public function mapBlock(Block $block, \Closure $serializer) : void{
@@ -108,7 +108,7 @@ final class ItemSerializer{
 			 * the type ID of the item (which never makes sense, even in a world where overriding item types is a thing).
 			 * In the future we'll need some way to guarantee that type IDs are never reused (perhaps spl_object_id()?)
 			 *
-			 * @var \Closure $serializer
+			 * @var \Closure                           $serializer
 			 * @phpstan-var \Closure(TItemType) : Data $serializer
 			 */
 			$serializer = $locatedSerializer;

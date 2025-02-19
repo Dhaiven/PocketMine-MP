@@ -39,7 +39,7 @@ final class BuddingAmethyst extends Opaque{
 
 	public function onRandomTick() : void{
 		if(mt_rand(1, 5) === 1){
-			$face = Facing::ALL[array_rand(Facing::ALL)];
+			$face = Facing::cases()[array_rand(Facing::cases())];
 
 			$adjacent = $this->getSide($face);
 			//TODO: amethyst buds can spawn in water - we need waterlogging support for this

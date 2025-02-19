@@ -74,7 +74,7 @@ class Sugarcane extends Flowable{
 		return $grew;
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
+	public function onInteract(Item $item, Facing $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
 		if($item instanceof Fertilizer){
 			if($this->grow($this->seekToBottom(), $player)){
 				$item->pop();
@@ -115,7 +115,7 @@ class Sugarcane extends Flowable{
 		}
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
 		$down = $blockReplace->getSide(Facing::DOWN);
 		if($down->hasSameTypeId($this)){
 			return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);

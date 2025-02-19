@@ -34,7 +34,7 @@ enum BrewingStandSlot{
 	 * Returns the brewing stand inventory slot number associated with this visual slot.
 	 */
 	public function getSlotNumber() : int{
-		return match($this){
+		return match ($this) {
 			self::EAST => BrewingStandInventory::SLOT_BOTTLE_LEFT,
 			self::NORTHWEST => BrewingStandInventory::SLOT_BOTTLE_MIDDLE,
 			self::SOUTHWEST => BrewingStandInventory::SLOT_BOTTLE_RIGHT

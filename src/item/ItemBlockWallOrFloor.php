@@ -38,8 +38,8 @@ class ItemBlockWallOrFloor extends Item{
 		$this->wallVariant = $wallVariant->getStateId();
 	}
 
-	public function getBlock(?int $clickedFace = null) : Block{
-		if($clickedFace !== null && Facing::axis($clickedFace) !== Axis::Y){
+	public function getBlock(?Facing $clickedFace = null) : Block{
+		if($clickedFace !== null && $clickedFace->axis() !== Axis::Y){
 			return RuntimeBlockStateRegistry::getInstance()->fromStateId($this->wallVariant);
 		}
 		return RuntimeBlockStateRegistry::getInstance()->fromStateId($this->floorVariant);

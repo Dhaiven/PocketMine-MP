@@ -45,7 +45,7 @@ final class GameModeIdMap{
 
 	public function __construct(){
 		foreach(GameMode::cases() as $case){
-			$this->register(match($case){
+			$this->register(match ($case) {
 				GameMode::SURVIVAL => 0,
 				GameMode::CREATIVE => 1,
 				GameMode::ADVENTURE => 2,

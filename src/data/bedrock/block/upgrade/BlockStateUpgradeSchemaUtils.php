@@ -109,7 +109,7 @@ final class BlockStateUpgradeSchemaUtils{
 	}
 
 	private static function jsonModelToTag(BlockStateUpgradeSchemaModelTag $model) : Tag{
-		return match(true){
+		return match (true) {
 			isset($model->byte) && !isset($model->int) && !isset($model->string) => new ByteTag($model->byte),
 			!isset($model->byte) && isset($model->int) && !isset($model->string) => new IntTag($model->int),
 			!isset($model->byte) && !isset($model->int) && isset($model->string) => new StringTag($model->string),
@@ -263,7 +263,7 @@ final class BlockStateUpgradeSchemaUtils{
 			$flattenRule->flattenedProperty,
 			$flattenRule->suffix,
 			$flattenRule->flattenedValueRemaps,
-			match($flattenRule->flattenedPropertyType){
+			match ($flattenRule->flattenedPropertyType) {
 				StringTag::class => null, //omit for TAG_String, as this is the common case
 				ByteTag::class => "byte",
 				IntTag::class => "int",

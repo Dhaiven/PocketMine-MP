@@ -28,12 +28,13 @@ use pocketmine\utils\SingletonTrait;
 
 final class MedicineTypeIdMap{
 	use SingletonTrait;
+
 	/** @phpstan-use IntSaveIdMapTrait<MedicineType> */
 	use IntSaveIdMapTrait;
 
 	private function __construct(){
 		foreach(MedicineType::cases() as $case){
-			$this->register(match($case){
+			$this->register(match ($case) {
 				MedicineType::ANTIDOTE => MedicineTypeIds::ANTIDOTE,
 				MedicineType::ELIXIR => MedicineTypeIds::ELIXIR,
 				MedicineType::EYE_DROPS => MedicineTypeIds::EYE_DROPS,

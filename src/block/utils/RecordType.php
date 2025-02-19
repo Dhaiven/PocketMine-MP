@@ -59,7 +59,7 @@ enum RecordType{
 		/** @phpstan-var array<int, TMetadata> $cache */
 		static $cache = [];
 
-		return $cache[spl_object_id($this)] ??= match($this){
+		return $cache[spl_object_id($this)] ??= match ($this) {
 			self::DISK_13 => ["C418 - 13", LevelSoundEvent::RECORD_13, KnownTranslationFactory::item_record_13_desc()],
 			self::DISK_5 => ["Samuel Åberg - 5", LevelSoundEvent::RECORD_5, KnownTranslationFactory::item_record_5_desc()],
 			self::DISK_CAT => ["C418 - cat", LevelSoundEvent::RECORD_CAT, KnownTranslationFactory::item_record_cat_desc()],

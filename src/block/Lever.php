@@ -60,37 +60,36 @@ class Lever extends Flowable{
 		return $this;
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
-		if(!$this->canBeSupportedAt($blockReplace, Facing::opposite($face))){
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
+		if(!$this->canBeSupportedAt($blockReplace, $face->opposite())){
 			return false;
 		}
 
 		$selectUpDownPos = function(LeverFacing $x, LeverFacing $z) use ($player) : LeverFacing{
 			if($player !== null){
-				return Facing::axis($player->getHorizontalFacing()) === Axis::X ? $x : $z;
+				return $player->getHorizontalFacing()->axis() === Axis::X ? $x : $z;
 			}
 			return $x;
 		};
-		$this->facing = match($face){
+		$this->facing = match ($face) {
 			Facing::DOWN => $selectUpDownPos(LeverFacing::DOWN_AXIS_X, LeverFacing::DOWN_AXIS_Z),
 			Facing::UP => $selectUpDownPos(LeverFacing::UP_AXIS_X, LeverFacing::UP_AXIS_Z),
 			Facing::NORTH => LeverFacing::NORTH,
 			Facing::SOUTH => LeverFacing::SOUTH,
 			Facing::WEST => LeverFacing::WEST,
 			Facing::EAST => LeverFacing::EAST,
-			default => throw new AssumptionFailedError("Bad facing value"),
 		};
 
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}
 
 	public function onNearbyBlockChange() : void{
-		if(!$this->canBeSupportedAt($this, Facing::opposite($this->facing->getFacing()))){
+		if(!$this->canBeSupportedAt($this, $this->facing->getFacing()->opposite())){
 			$this->position->getWorld()->useBreakOn($this->position);
 		}
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
+	public function onInteract(Item $item, Facing $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
 		$this->activated = !$this->activated;
 		$world = $this->position->getWorld();
 		$world->setBlock($this->position, $this);
@@ -101,7 +100,7 @@ class Lever extends Flowable{
 		return true;
 	}
 
-	private function canBeSupportedAt(Block $block, int $face) : bool{
+	private function canBeSupportedAt(Block $block, Facing $face) : bool{
 		return $block->getAdjacentSupportType($face)->hasCenterSupport();
 	}
 

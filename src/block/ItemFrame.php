@@ -131,7 +131,7 @@ class ItemFrame extends Flowable{
 		return $this;
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
+	public function onInteract(Item $item, Facing $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
 		if($this->framedItem !== null){
 			$this->itemRotation = ($this->itemRotation + 1) % self::ROTATIONS;
 
@@ -149,7 +149,7 @@ class ItemFrame extends Flowable{
 		return true;
 	}
 
-	public function onAttack(Item $item, int $face, ?Player $player = null) : bool{
+	public function onAttack(Item $item, Facing $face, ?Player $player = null) : bool{
 		if($this->framedItem === null){
 			return false;
 		}
@@ -163,18 +163,18 @@ class ItemFrame extends Flowable{
 		return true;
 	}
 
-	private function canBeSupportedAt(Block $block, int $face) : bool{
+	private function canBeSupportedAt(Block $block, Facing $face) : bool{
 		return $block->getAdjacentSupportType($face) !== SupportType::NONE;
 	}
 
 	public function onNearbyBlockChange() : void{
-		if(!$this->canBeSupportedAt($this, Facing::opposite($this->facing))){
+		if(!$this->canBeSupportedAt($this, $this->facing->opposite())){
 			$this->position->getWorld()->useBreakOn($this->position);
 		}
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
-		if(!$this->canBeSupportedAt($blockReplace, Facing::opposite($face))){
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
+		if(!$this->canBeSupportedAt($blockReplace, $face->opposite())){
 			return false;
 		}
 

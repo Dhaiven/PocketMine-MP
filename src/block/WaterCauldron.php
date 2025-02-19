@@ -36,6 +36,7 @@ use pocketmine\item\Potion;
 use pocketmine\item\PotionType;
 use pocketmine\item\SplashPotion;
 use pocketmine\item\VanillaItems;
+use pocketmine\math\Facing;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 use pocketmine\world\sound\CauldronAddDyeSound;
@@ -107,9 +108,9 @@ final class WaterCauldron extends FillableCauldron{
 		return new CauldronEmptyWaterSound();
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
+	public function onInteract(Item $item, Facing $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
 		$world = $this->position->getWorld();
-		if(($dyeColor = match($item->getTypeId()){
+		if(($dyeColor = match ($item->getTypeId()) {
 				ItemTypeIds::LAPIS_LAZULI => DyeColor::BLUE,
 				ItemTypeIds::INK_SAC => DyeColor::BLACK,
 				ItemTypeIds::COCOA_BEANS => DyeColor::BROWN,
@@ -130,13 +131,13 @@ final class WaterCauldron extends FillableCauldron{
 			}
 		}elseif($item instanceof Armor){
 			if($this->customWaterColor !== null){
-				if(match($item->getTypeId()){ //TODO: a DyeableArmor class would probably be a better idea, since not all types of armor are dyeable
-					ItemTypeIds::LEATHER_CAP,
-					ItemTypeIds::LEATHER_TUNIC,
-					ItemTypeIds::LEATHER_PANTS,
-					ItemTypeIds::LEATHER_BOOTS => true,
-					default => false
-				} && $item->getCustomColor()?->toRGBA() !== $this->customWaterColor->toRGBA()){
+				if(match ($item->getTypeId()) { //TODO: a DyeableArmor class would probably be a better idea, since not all types of armor are dyeable
+						ItemTypeIds::LEATHER_CAP,
+						ItemTypeIds::LEATHER_TUNIC,
+						ItemTypeIds::LEATHER_PANTS,
+						ItemTypeIds::LEATHER_BOOTS => true,
+						default => false
+					} && $item->getCustomColor()?->toRGBA() !== $this->customWaterColor->toRGBA()){
 					$item->setCustomColor($this->customWaterColor);
 					$world->setBlock($this->position, $this->withFillLevel($this->getFillLevel() - self::DYE_ARMOR_USE_AMOUNT));
 					$world->addSound($this->position->add(0.5, 0.5, 0.5), new CauldronDyeItemSound());
@@ -167,7 +168,7 @@ final class WaterCauldron extends FillableCauldron{
 				$world->addSound($this->position->add(0.5, 0.5, 0.5), new CauldronCleanItemSound());
 			}
 		}else{
-			match($item->getTypeId()){
+			match ($item->getTypeId()) {
 				ItemTypeIds::WATER_BUCKET => $this->setCustomWaterColor(null)->addFillLevels(self::MAX_FILL_LEVEL, $item, VanillaItems::BUCKET(), $returnedItems),
 				ItemTypeIds::BUCKET => $this->removeFillLevels(self::MAX_FILL_LEVEL, $item, VanillaItems::WATER_BUCKET(), $returnedItems),
 				ItemTypeIds::GLASS_BOTTLE => $this->removeFillLevels(self::WATER_BOTTLE_FILL_AMOUNT, $item, VanillaItems::POTION()->setType(PotionType::WATER), $returnedItems),

@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\block\utils;
 
-enum CopperOxidation : int{
+enum CopperOxidation: int{
 	case NONE = 0;
 	case EXPOSED = 1;
 	case WEATHERED = 2;

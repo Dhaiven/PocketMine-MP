@@ -64,7 +64,7 @@ final class BlockStateReader{
 		return new BlockStateDeserializeException(
 			"Property \"$name\" has unexpected value \"$stringifiedValue\"" . (
 			$reason !== null ? " ($reason)" : ""
-		));
+			));
 	}
 
 	/** @throws BlockStateDeserializeException */
@@ -73,9 +73,12 @@ final class BlockStateReader{
 		$tag = $this->data->getState($name);
 		if($tag instanceof ByteTag){
 			switch($tag->getValue()){
-				case 0: return false;
-				case 1: return true;
-				default: throw $this->badValueException($name, (string) $tag->getValue());
+				case 0:
+					return false;
+				case 1:
+					return true;
+				default:
+					throw $this->badValueException($name, (string) $tag->getValue());
 			}
 		}
 		throw $this->missingOrWrongTypeException($name, $tag);
@@ -112,12 +115,13 @@ final class BlockStateReader{
 	}
 
 	/**
-	 * @param int[] $mapping
-	 * @phpstan-param array<int, int> $mapping
-	 * @phpstan-return int
+	 * @param int[]                      $mapping
+	 *
+	 * @phpstan-param array<int, Facing> $mapping
+	 * @phpstan-return Facing
 	 * @throws BlockStateDeserializeException
 	 */
-	private function parseFacingValue(int $value, array $mapping) : int{
+	private function parseFacingValue(int $value, array $mapping) : Facing{
 		$result = $mapping[$value] ?? null;
 		if($result === null){
 			throw new BlockStateDeserializeException("Unmapped facing value " . $value);
@@ -126,7 +130,7 @@ final class BlockStateReader{
 	}
 
 	/** @throws BlockStateDeserializeException */
-	public function readFacingDirection() : int{
+	public function readFacingDirection() : Facing{
 		return $this->parseFacingValue($this->readInt(BlockStateNames::FACING_DIRECTION), [
 			0 => Facing::DOWN,
 			1 => Facing::UP,
@@ -138,8 +142,8 @@ final class BlockStateReader{
 	}
 
 	/** @throws BlockStateDeserializeException */
-	public function readBlockFace() : int{
-		return match($raw = $this->readString(BlockStateNames::MC_BLOCK_FACE)){
+	public function readBlockFace() : Facing{
+		return match ($raw = $this->readString(BlockStateNames::MC_BLOCK_FACE)) {
 			StringValues::MC_BLOCK_FACE_DOWN => Facing::DOWN,
 			StringValues::MC_BLOCK_FACE_UP => Facing::UP,
 			StringValues::MC_BLOCK_FACE_NORTH => Facing::NORTH,
@@ -151,8 +155,7 @@ final class BlockStateReader{
 	}
 
 	/**
-	 * @return int[]
-	 * @phpstan-return array<int, int>
+	 * @return Facing[]
 	 */
 	public function readFacingFlags() : array{
 		$result = [];
@@ -166,7 +169,7 @@ final class BlockStateReader{
 			BlockLegacyMetadata::MULTI_FACE_DIRECTION_FLAG_EAST => Facing::EAST
 		] as $flag => $facing){
 			if(($flags & $flag) !== 0){
-				$result[$facing] = $facing;
+				$result[] = $facing;
 			}
 		}
 
@@ -174,13 +177,13 @@ final class BlockStateReader{
 	}
 
 	/** @throws BlockStateDeserializeException */
-	public function readEndRodFacingDirection() : int{
+	public function readEndRodFacingDirection() : Facing{
 		$result = $this->readFacingDirection();
-		return Facing::axis($result) !== Axis::Y ? Facing::opposite($result) : $result;
+		return $result->axis() !== Axis::Y ? $result->opposite() : $result;
 	}
 
 	/** @throws BlockStateDeserializeException */
-	public function readHorizontalFacing() : int{
+	public function readHorizontalFacing() : Facing{
 		return $this->parseFacingValue($this->readInt(BlockStateNames::FACING_DIRECTION), [
 			0 => Facing::NORTH, //should be illegal, but 1.13 allows it
 			1 => Facing::NORTH, //also should be illegal
@@ -192,7 +195,7 @@ final class BlockStateReader{
 	}
 
 	/** @throws BlockStateDeserializeException */
-	public function readWeirdoHorizontalFacing() : int{
+	public function readWeirdoHorizontalFacing() : Facing{
 		return $this->parseFacingValue($this->readInt(BlockStateNames::WEIRDO_DIRECTION), [
 			0 => Facing::EAST,
 			1 => Facing::WEST,
@@ -202,7 +205,7 @@ final class BlockStateReader{
 	}
 
 	/** @throws BlockStateDeserializeException */
-	public function readLegacyHorizontalFacing() : int{
+	public function readLegacyHorizontalFacing() : Facing{
 		return $this->parseFacingValue($this->readInt(BlockStateNames::DIRECTION), [
 			0 => Facing::SOUTH,
 			1 => Facing::WEST,
@@ -215,7 +218,7 @@ final class BlockStateReader{
 	 * This is for trapdoors, because Mojang botched the conversion in 1.13
 	 * @throws BlockStateDeserializeException
 	 */
-	public function read5MinusHorizontalFacing() : int{
+	public function read5MinusHorizontalFacing() : Facing{
 		return $this->parseFacingValue($this->readInt(BlockStateNames::DIRECTION), [
 			0 => Facing::EAST,
 			1 => Facing::WEST,
@@ -228,8 +231,8 @@ final class BlockStateReader{
 	 * Used by pumpkins as of 1.20.0.23 beta
 	 * @throws BlockStateDeserializeException
 	 */
-	public function readCardinalHorizontalFacing() : int{
-		return match($raw = $this->readString(BlockStateNames::MC_CARDINAL_DIRECTION)){
+	public function readCardinalHorizontalFacing() : Facing{
+		return match ($raw = $this->readString(BlockStateNames::MC_CARDINAL_DIRECTION)) {
 			StringValues::MC_CARDINAL_DIRECTION_NORTH => Facing::NORTH,
 			StringValues::MC_CARDINAL_DIRECTION_SOUTH => Facing::SOUTH,
 			StringValues::MC_CARDINAL_DIRECTION_WEST => Facing::WEST,
@@ -239,7 +242,7 @@ final class BlockStateReader{
 	}
 
 	/** @throws BlockStateDeserializeException */
-	public function readCoralFacing() : int{
+	public function readCoralFacing() : Facing{
 		return $this->parseFacingValue($this->readInt(BlockStateNames::CORAL_DIRECTION), [
 			0 => Facing::WEST,
 			1 => Facing::EAST,
@@ -249,7 +252,7 @@ final class BlockStateReader{
 	}
 
 	/** @throws BlockStateDeserializeException */
-	public function readFacingWithoutDown() : int{
+	public function readFacingWithoutDown() : Facing{
 		$result = $this->readFacingDirection();
 		if($result === Facing::DOWN){ //shouldn't be legal, but 1.13 allows it
 			$result = Facing::UP;
@@ -257,7 +260,7 @@ final class BlockStateReader{
 		return $result;
 	}
 
-	public function readFacingWithoutUp() : int{
+	public function readFacingWithoutUp() : Facing{
 		$result = $this->readFacingDirection();
 		if($result === Facing::UP){
 			$result = Facing::DOWN; //shouldn't be legal, but 1.13 allows it
@@ -266,10 +269,10 @@ final class BlockStateReader{
 	}
 
 	/**
-	 * @phpstan-return Axis::*
+	 * @phpstan-return Axis
 	 * @throws BlockStateDeserializeException
 	 */
-	public function readPillarAxis() : int{
+	public function readPillarAxis() : Axis{
 		$rawValue = $this->readString(BlockStateNames::PILLAR_AXIS);
 		$value = [
 			StringValues::PILLAR_AXIS_X => Axis::X,
@@ -284,7 +287,7 @@ final class BlockStateReader{
 
 	/** @throws BlockStateDeserializeException */
 	public function readSlabPosition() : SlabType{
-		return match($rawValue = $this->readString(BlockStateNames::MC_VERTICAL_HALF)){
+		return match ($rawValue = $this->readString(BlockStateNames::MC_VERTICAL_HALF)) {
 			StringValues::MC_VERTICAL_HALF_BOTTOM => SlabType::BOTTOM,
 			StringValues::MC_VERTICAL_HALF_TOP => SlabType::TOP,
 			default => throw $this->badValueException(BlockStateNames::MC_VERTICAL_HALF, $rawValue, "Invalid slab position"),
@@ -295,9 +298,9 @@ final class BlockStateReader{
 	 * @phpstan-return Facing::UP|Facing::NORTH|Facing::SOUTH|Facing::WEST|Facing::EAST
 	 * @throws BlockStateDeserializeException
 	 */
-	public function readTorchFacing() : int{
+	public function readTorchFacing() : Facing{
 		//TODO: horizontal directions are flipped (MCPE bug: https://bugs.mojang.com/browse/MCPE-152036)
-		return match($rawValue = $this->readString(BlockStateNames::TORCH_FACING_DIRECTION)){
+		return match ($rawValue = $this->readString(BlockStateNames::TORCH_FACING_DIRECTION)) {
 			StringValues::TORCH_FACING_DIRECTION_EAST => Facing::WEST,
 			StringValues::TORCH_FACING_DIRECTION_NORTH => Facing::SOUTH,
 			StringValues::TORCH_FACING_DIRECTION_SOUTH => Facing::NORTH,
@@ -310,7 +313,7 @@ final class BlockStateReader{
 
 	/** @throws BlockStateDeserializeException */
 	public function readBellAttachmentType() : BellAttachmentType{
-		return match($type = $this->readString(BlockStateNames::ATTACHMENT)){
+		return match ($type = $this->readString(BlockStateNames::ATTACHMENT)) {
 			StringValues::ATTACHMENT_HANGING => BellAttachmentType::CEILING,
 			StringValues::ATTACHMENT_STANDING => BellAttachmentType::FLOOR,
 			StringValues::ATTACHMENT_SIDE => BellAttachmentType::ONE_WALL,
@@ -321,7 +324,7 @@ final class BlockStateReader{
 
 	/** @throws BlockStateDeserializeException */
 	public function readWallConnectionType(string $name) : ?WallConnectionType{
-		return match($type = $this->readString($name)){
+		return match ($type = $this->readString($name)) {
 			//TODO: this looks a bit confusing due to use of EAST, but the values are the same for all connections
 			//we need to find a better way to auto-generate the constant names when they are reused
 			//for now, using these constants is better than nothing since it still gives static analysability

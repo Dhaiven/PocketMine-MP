@@ -49,16 +49,17 @@ final class MinimumCostFlowCalculator{
 		private World $world,
 		private int $flowDecayPerBlock,
 		private \Closure $canFlowInto
-	){}
+	){
+	}
 
-	private function calculateFlowCost(int $blockX, int $blockY, int $blockZ, int $accumulatedCost, int $maxCost, int $originOpposite, int $lastOpposite) : int{
+	private function calculateFlowCost(int $blockX, int $blockY, int $blockZ, int $accumulatedCost, int $maxCost, Facing $originOpposite, Facing $lastOpposite) : int{
 		$cost = 1000;
 
 		foreach(Facing::HORIZONTAL as $j){
 			if($j === $originOpposite || $j === $lastOpposite){
 				continue;
 			}
-			[$dx, $dy, $dz] = Facing::OFFSET[$j];
+			[$dx, $dy, $dz] = $j->offset();
 			$x = $blockX + $dx;
 			$y = $blockY + $dy;
 			$z = $blockZ + $dz;
@@ -85,7 +86,7 @@ final class MinimumCostFlowCalculator{
 				continue;
 			}
 
-			$realCost = $this->calculateFlowCost($x, $y, $z, $accumulatedCost + 1, $maxCost, $originOpposite, Facing::opposite($j));
+			$realCost = $this->calculateFlowCost($x, $y, $z, $accumulatedCost + 1, $maxCost, $originOpposite, $j->opposite());
 
 			if($realCost < $cost){
 				$cost = $realCost;
@@ -96,13 +97,13 @@ final class MinimumCostFlowCalculator{
 	}
 
 	/**
-	 * @return int[]
+	 * @return Facing[]
 	 */
 	public function getOptimalFlowDirections(int $originX, int $originY, int $originZ) : array{
-		$flowCost = array_fill_keys(Facing::HORIZONTAL, 1000);
+		$flowCost = [1000 => Facing::HORIZONTAL];
 		$maxCost = intdiv(4, $this->flowDecayPerBlock);
 		foreach(Facing::HORIZONTAL as $j){
-			[$dx, $dy, $dz] = Facing::OFFSET[$j];
+			[$dx, $dy, $dz] = $j->offset();
 			$x = $originX + $dx;
 			$y = $originY + $dy;
 			$z = $originZ + $dz;
@@ -111,28 +112,22 @@ final class MinimumCostFlowCalculator{
 				$this->flowCostVisited[World::blockHash($x, $y, $z)] = self::BLOCKED;
 			}elseif($this->world->getBlockAt($x, $y - 1, $z)->canBeFlowedInto()){
 				$this->flowCostVisited[World::blockHash($x, $y, $z)] = self::CAN_FLOW_DOWN;
-				$flowCost[$j] = $maxCost = 0;
+				$maxCost = 0;
+				$flowCost[$maxCost][] = $j;
 			}elseif($maxCost > 0){
 				$this->flowCostVisited[World::blockHash($x, $y, $z)] = self::CAN_FLOW;
-				$opposite = Facing::opposite($j);
-				$flowCost[$j] = $this->calculateFlowCost($x, $y, $z, 1, $maxCost, $opposite, $opposite);
-				$maxCost = min($maxCost, $flowCost[$j]);
+				$opposite = $j->opposite();
+				$flow = $this->calculateFlowCost($x, $y, $z, 1, $maxCost, $opposite, $opposite);
+				$flowCost[$flow][] = $j;
+				$maxCost = min($maxCost, $flow);
 			}
 		}
 
 		$this->flowCostVisited = [];
 
-		$minCost = min($flowCost);
+		$minCost = min(array_keys($flowCost));
 
-		$isOptimalFlowDirection = [];
-
-		foreach($flowCost as $facing => $cost){
-			if($cost === $minCost){
-				$isOptimalFlowDirection[] = $facing;
-			}
-		}
-
-		return $isOptimalFlowDirection;
+		return $flowCost[$minCost];
 	}
 
 	private function canFlowInto(Block $block) : bool{

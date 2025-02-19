@@ -31,16 +31,16 @@ use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 
 class CopperDoor extends Door implements CopperMaterial{
-	use CopperTrait{
+	use CopperTrait {
 		onInteract as onInteractCopper;
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
-		if ($player !== null && $player->isSneaking() && $this->onInteractCopper($item, $face, $clickVector, $player, $returnedItems)) {
+	public function onInteract(Item $item, Facing $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
+		if($player !== null && $player->isSneaking() && $this->onInteractCopper($item, $face, $clickVector, $player, $returnedItems)){
 			//copy copper properties to other half
 			$other = $this->getSide($this->top ? Facing::DOWN : Facing::UP);
 			$world = $this->position->getWorld();
-			if ($other instanceof CopperDoor) {
+			if($other instanceof CopperDoor){
 				$other->setOxidation($this->oxidation);
 				$other->setWaxed($this->waxed);
 				$world->setBlock($other->position, $other);

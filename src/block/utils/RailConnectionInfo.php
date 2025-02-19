@@ -30,53 +30,63 @@ final class RailConnectionInfo{
 
 	public const FLAG_ASCEND = 1 << 24; //used to indicate direction-up
 
-	public const CONNECTIONS = [
-		//straights
-		BlockLegacyMetadata::RAIL_STRAIGHT_NORTH_SOUTH => [
-			Facing::NORTH,
-			Facing::SOUTH
-		],
-		BlockLegacyMetadata::RAIL_STRAIGHT_EAST_WEST => [
-			Facing::EAST,
-			Facing::WEST
-		],
+	public static function CONNECTIONS() : array{
+		return [
+			//straights
+			BlockLegacyMetadata::RAIL_STRAIGHT_NORTH_SOUTH => [
+				new RailConnectionInfo(Facing::NORTH),
+				new RailConnectionInfo(Facing::SOUTH)
+			],
+			BlockLegacyMetadata::RAIL_STRAIGHT_EAST_WEST => [
+				new RailConnectionInfo(Facing::EAST),
+				new RailConnectionInfo(Facing::WEST)
+			],
 
-		//ascending
-		BlockLegacyMetadata::RAIL_ASCENDING_EAST => [
-			Facing::WEST,
-			Facing::EAST | self::FLAG_ASCEND
-		],
-		BlockLegacyMetadata::RAIL_ASCENDING_WEST => [
-			Facing::EAST,
-			Facing::WEST | self::FLAG_ASCEND
-		],
-		BlockLegacyMetadata::RAIL_ASCENDING_NORTH => [
-			Facing::SOUTH,
-			Facing::NORTH | self::FLAG_ASCEND
-		],
-		BlockLegacyMetadata::RAIL_ASCENDING_SOUTH => [
-			Facing::NORTH,
-			Facing::SOUTH | self::FLAG_ASCEND
-		]
-	];
+			//ascending
+			BlockLegacyMetadata::RAIL_ASCENDING_EAST => [
+				new RailConnectionInfo(Facing::WEST),
+				new RailConnectionInfo(Facing::EAST, true)
+			],
+			BlockLegacyMetadata::RAIL_ASCENDING_WEST => [
+				new RailConnectionInfo(Facing::EAST),
+				new RailConnectionInfo(Facing::WEST, true)
+			],
+			BlockLegacyMetadata::RAIL_ASCENDING_NORTH => [
+				new RailConnectionInfo(Facing::SOUTH),
+				new RailConnectionInfo(Facing::NORTH, true)
+			],
+			BlockLegacyMetadata::RAIL_ASCENDING_SOUTH => [
+				new RailConnectionInfo(Facing::NORTH),
+				new RailConnectionInfo(Facing::SOUTH, true)
+			]
+		];
+	}
 
 	/* extended meta values for regular rails, to allow curving */
-	public const CURVE_CONNECTIONS = [
-		BlockLegacyMetadata::RAIL_CURVE_SOUTHEAST => [
-			Facing::SOUTH,
-			Facing::EAST
-		],
-		BlockLegacyMetadata::RAIL_CURVE_SOUTHWEST => [
-			Facing::SOUTH,
-			Facing::WEST
-		],
-		BlockLegacyMetadata::RAIL_CURVE_NORTHWEST => [
-			Facing::NORTH,
-			Facing::WEST
-		],
-		BlockLegacyMetadata::RAIL_CURVE_NORTHEAST => [
-			Facing::NORTH,
-			Facing::EAST
-		]
-	];
+	public static function CURVE_CONNECTIONS() : array{
+		return [
+			BlockLegacyMetadata::RAIL_CURVE_SOUTHEAST => [
+				new RailConnectionInfo(Facing::SOUTH),
+				new RailConnectionInfo(Facing::EAST)
+			],
+			BlockLegacyMetadata::RAIL_CURVE_SOUTHWEST => [
+				new RailConnectionInfo(Facing::SOUTH),
+				new RailConnectionInfo(Facing::WEST)
+			],
+			BlockLegacyMetadata::RAIL_CURVE_NORTHWEST => [
+				new RailConnectionInfo(Facing::NORTH),
+				new RailConnectionInfo(Facing::WEST)
+			],
+			BlockLegacyMetadata::RAIL_CURVE_NORTHEAST => [
+				new RailConnectionInfo(Facing::NORTH),
+				new RailConnectionInfo(Facing::EAST)
+			]
+		];
+	}
+
+	public function __construct(
+		public readonly Facing $facing,
+		public readonly bool $ascend = false
+	){
+	}
 }

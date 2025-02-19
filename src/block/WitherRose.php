@@ -38,7 +38,7 @@ class WitherRose extends Flowable{
 		return
 			$supportBlock->hasTypeTag(BlockTypeTags::DIRT) ||
 			$supportBlock->hasTypeTag(BlockTypeTags::MUD) ||
-			match($supportBlock->getTypeId()){
+			match ($supportBlock->getTypeId()) {
 				BlockTypeIds::NETHERRACK,
 				BlockTypeIds::SOUL_SAND,
 				BlockTypeIds::SOUL_SOIL => true,

@@ -37,7 +37,7 @@ enum MedicineType{
 	 */
 	private function getMetadata() : array{
 		//cache not required here - VanillaEffects always returns the same object
-		return match($this){
+		return match ($this) {
 			self::ANTIDOTE => ['Antidote', VanillaEffects::POISON()],
 			self::ELIXIR => ['Elixir', VanillaEffects::WEAKNESS()],
 			self::EYE_DROPS => ['Eye Drops', VanillaEffects::BLINDNESS()],

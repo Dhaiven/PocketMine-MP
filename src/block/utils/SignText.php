@@ -45,7 +45,8 @@ class SignText{
 	private bool $glowing;
 
 	/**
-	 * @param string[]|null $lines index-sensitive; keys 0-3 will be used, regardless of array order
+	 * @param string[]|null                                                      $lines index-sensitive; keys 0-3 will be used, regardless of array order
+	 *
 	 * @phpstan-param array{0?: string, 1?: string, 2?: string, 3?: string}|null $lines
 	 *
 	 * @throws \InvalidArgumentException if the array size is greater than 4

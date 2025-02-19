@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\block\utils;
 
+use pocketmine\block\GlowLichen;
 use pocketmine\data\runtime\RuntimeDataDescriber;
 use pocketmine\math\Facing;
 
@@ -31,41 +32,43 @@ use pocketmine\math\Facing;
  */
 trait MultiAnyFacingTrait{
 
-	/** @var int[] */
+	/** @var Facing[] */
 	protected array $faces = [];
 
 	protected function describeBlockOnlyState(RuntimeDataDescriber $w) : void{
 		$w->facingFlags($this->faces);
 	}
 
-	/** @return int[] */
+	/** @return Facing[] */
 	public function getFaces() : array{ return $this->faces; }
 
-	public function hasFace(int $face) : bool{
-		return isset($this->faces[$face]);
+	public function hasFace(Facing $face) : bool{
+		return isset($this->faces[$face->name]);
 	}
 
 	/**
-	 * @param int[] $faces
+	 * @param Facing[] $faces
+	 *
 	 * @return $this
 	 */
 	public function setFaces(array $faces) : self{
-		$uniqueFaces = [];
 		foreach($faces as $face){
-			Facing::validate($face);
-			$uniqueFaces[$face] = $face;
+			$this->faces[$face->name] = $face;
 		}
-		$this->faces = $uniqueFaces;
 		return $this;
 	}
 
-	/** @return $this */
-	public function setFace(int $face, bool $value) : self{
-		Facing::validate($face);
+	/**
+	 * @param Facing $face
+	 * @param bool   $value
+	 *
+	 * @return $this
+	 */
+	public function setFace(Facing $face, bool $value) : self{
 		if($value){
-			$this->faces[$face] = $face;
+			$this->faces[$face->name] = $face;
 		}else{
-			unset($this->faces[$face]);
+			unset($this->faces[$face->name]);
 		}
 		return $this;
 	}

@@ -57,7 +57,7 @@ abstract class PressurePlate extends Transparent{
 		return [];
 	}
 
-	public function getSupportType(int $facing) : SupportType{
+	public function getSupportType(Facing $facing) : SupportType{
 		return SupportType::NONE;
 	}
 
@@ -83,9 +83,9 @@ abstract class PressurePlate extends Transparent{
 	 */
 	protected function getActivationBox() : AxisAlignedBB{
 		return AxisAlignedBB::one()
-			->squash(Axis::X, 1 / 8)
-			->squash(Axis::Z, 1 / 8)
-			->trim(Facing::UP, 3 / 4)
+			->squashedCopy(Axis::X, 1 / 8)
+			->squashedCopy(Axis::Z, 1 / 8)
+			->trimmedCopy(Facing::UP, 3 / 4)
 			->offset($this->position->x, $this->position->y, $this->position->z);
 	}
 
@@ -112,6 +112,7 @@ abstract class PressurePlate extends Transparent{
 	 * Filters entities which don't affect the pressure plate state from the given list.
 	 *
 	 * @param Entity[] $entities
+	 *
 	 * @return Entity[]
 	 */
 	protected function filterIrrelevantEntities(array $entities) : array{

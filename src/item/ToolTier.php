@@ -46,7 +46,7 @@ enum ToolTier{
 	 * @phpstan-return TMetadata
 	 */
 	private function getMetadata() : array{
-		return match($this){
+		return match ($this) {
 			self::WOOD => self::meta(1, 60, 5, 2, 15),
 			self::GOLD => self::meta(2, 33, 5, 12, 22),
 			self::STONE => self::meta(3, 132, 6, 4, 5),

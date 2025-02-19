@@ -53,11 +53,11 @@ class CocoaBlock extends Flowable{
 	protected function recalculateCollisionBoxes() : array{
 		return [
 			AxisAlignedBB::one()
-				->squash(Facing::axis(Facing::rotateY($this->facing, true)), (6 - $this->age) / 16) //sides
-				->trim(Facing::DOWN, (7 - $this->age * 2) / 16)
-				->trim(Facing::UP, 0.25)
-				->trim(Facing::opposite($this->facing), 1 / 16) //gap between log and pod
-				->trim($this->facing, (11 - $this->age * 2) / 16) //outward face
+				->squashedCopy($this->facing->rotateY(true)->axis(), (6 - $this->age) / 16) //sides
+				->trimmedCopy(Facing::DOWN, (7 - $this->age * 2) / 16)
+				->trimmedCopy(Facing::UP, 0.25)
+				->trimmedCopy($this->facing->opposite(), 1 / 16) //gap between log and pod
+				->trimmedCopy($this->facing, (11 - $this->age * 2) / 16) //outward face
 		];
 	}
 
@@ -65,8 +65,8 @@ class CocoaBlock extends Flowable{
 		return $block instanceof Wood && $block->getWoodType() === WoodType::JUNGLE;
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
-		if(Facing::axis($face) !== Axis::Y && $this->canAttachTo($blockClicked)){
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
+		if($face->axis() !== Axis::Y && $this->canAttachTo($blockClicked)){
 			$this->facing = $face;
 			return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 		}
@@ -74,7 +74,7 @@ class CocoaBlock extends Flowable{
 		return false;
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
+	public function onInteract(Item $item, Facing $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
 		if($item instanceof Fertilizer && $this->grow($player)){
 			$item->pop();
 
@@ -85,7 +85,7 @@ class CocoaBlock extends Flowable{
 	}
 
 	public function onNearbyBlockChange() : void{
-		if(!$this->canAttachTo($this->getSide(Facing::opposite($this->facing)))){
+		if(!$this->canAttachTo($this->getSide($this->facing->opposite()))){
 			$this->position->getWorld()->useBreakOn($this->position);
 		}
 	}

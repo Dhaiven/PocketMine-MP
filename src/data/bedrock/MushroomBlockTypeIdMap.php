@@ -29,12 +29,13 @@ use pocketmine\utils\SingletonTrait;
 
 final class MushroomBlockTypeIdMap{
 	use SingletonTrait;
+
 	/** @phpstan-use IntSaveIdMapTrait<MushroomBlockType> */
 	use IntSaveIdMapTrait;
 
 	public function __construct(){
 		foreach(MushroomBlockType::cases() as $case){
-			$this->register(match($case){
+			$this->register(match ($case) {
 				MushroomBlockType::PORES => LegacyMeta::MUSHROOM_BLOCK_ALL_PORES,
 				MushroomBlockType::CAP_NORTHWEST => LegacyMeta::MUSHROOM_BLOCK_CAP_NORTHWEST_CORNER,
 				MushroomBlockType::CAP_NORTH => LegacyMeta::MUSHROOM_BLOCK_CAP_NORTH_SIDE,

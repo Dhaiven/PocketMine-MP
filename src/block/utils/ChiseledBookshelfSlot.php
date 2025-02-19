@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\block\utils;
 
-enum ChiseledBookshelfSlot : int{
+enum ChiseledBookshelfSlot: int{
 	case TOP_LEFT = 0;
 	case TOP_MIDDLE = 1;
 	case TOP_RIGHT = 2;
@@ -41,12 +41,12 @@ enum ChiseledBookshelfSlot : int{
 			throw new \InvalidArgumentException("Y must be between 0 and 1, got $y");
 		}
 
-		$slot = ($y < 0.5 ? self::SLOTS_PER_SHELF : 0) + match(true){
-			//we can't use simple maths here as the action is aligned to the 16x16 pixel grid :(
-			$x < 6 / 16 => 0,
-			$x < 11 / 16 => 1,
-			default => 2
-		};
+		$slot = ($y < 0.5 ? self::SLOTS_PER_SHELF : 0) + match (true) {
+				//we can't use simple maths here as the action is aligned to the 16x16 pixel grid :(
+				$x < 6 / 16 => 0,
+				$x < 11 / 16 => 1,
+				default => 2
+			};
 
 		return self::from($slot);
 	}

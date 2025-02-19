@@ -111,7 +111,7 @@ abstract class Entity{
 
 	protected int $id;
 
-	private EntityMetadataCollection $networkProperties;
+	protected EntityMetadataCollection $networkProperties;
 
 	protected ?EntityDamageEvent $lastDamageCause = null;
 
@@ -926,7 +926,7 @@ abstract class Entity{
 		return false;
 	}
 
-	public function getHorizontalFacing() : int{
+	public function getHorizontalFacing() : Facing{
 		$angle = fmod($this->location->yaw, 360);
 		if($angle < 0){
 			$angle += 360.0;
@@ -1148,7 +1148,7 @@ abstract class Entity{
 		$wantedZ = $dz;
 
 		if($this->keepMovement){
-			$this->boundingBox->offset($dx, $dy, $dz);
+			$this->boundingBox->offsetCopy($dx, $dy, $dz);
 		}else{
 			$this->ySize *= self::STEP_CLIP_MULTIPLIER;
 
@@ -1162,7 +1162,7 @@ abstract class Entity{
 				$dy = $bb->calculateYOffset($moveBB, $dy);
 			}
 
-			$moveBB->offset(0, $dy, 0);
+			$moveBB->offsetCopy(0, $dy, 0);
 
 			$fallingFlag = ($this->onGround || ($dy !== $wantedY && $wantedY < 0));
 
@@ -1170,13 +1170,13 @@ abstract class Entity{
 				$dx = $bb->calculateXOffset($moveBB, $dx);
 			}
 
-			$moveBB->offset($dx, 0, 0);
+			$moveBB->offsetCopy($dx, 0, 0);
 
 			foreach($list as $bb){
 				$dz = $bb->calculateZOffset($moveBB, $dz);
 			}
 
-			$moveBB->offset(0, 0, $dz);
+			$moveBB->offsetCopy(0, 0, $dz);
 
 			if($this->stepHeight > 0 && $fallingFlag && ($wantedX !== $dx || $wantedZ !== $dz)){
 				$cx = $dx;
@@ -1193,26 +1193,26 @@ abstract class Entity{
 					$dy = $bb->calculateYOffset($stepBB, $dy);
 				}
 
-				$stepBB->offset(0, $dy, 0);
+				$stepBB->offsetCopy(0, $dy, 0);
 
 				foreach($list as $bb){
 					$dx = $bb->calculateXOffset($stepBB, $dx);
 				}
 
-				$stepBB->offset($dx, 0, 0);
+				$stepBB->offsetCopy($dx, 0, 0);
 
 				foreach($list as $bb){
 					$dz = $bb->calculateZOffset($stepBB, $dz);
 				}
 
-				$stepBB->offset(0, 0, $dz);
+				$stepBB->offsetCopy(0, 0, $dz);
 
 				$reverseDY = -$dy;
 				foreach($list as $bb){
 					$reverseDY = $bb->calculateYOffset($stepBB, $reverseDY);
 				}
 				$dy += $reverseDY;
-				$stepBB->offset(0, $reverseDY, 0);
+				$stepBB->offsetCopy(0, $reverseDY, 0);
 
 				if(($cx ** 2 + $cz ** 2) >= ($dx ** 2 + $dz ** 2)){
 					$dx = $cx;

@@ -86,7 +86,7 @@ final class CropGrowthHelper{
 				if(!$improperArrangement){
 					$nextCrop = $world->getBlockAt($baseX + $x, $baseY, $baseZ + $z);
 					if($nextCrop->hasSameTypeId($block)){
-						match(0){
+						match (0) {
 							$x => $zRow ? $improperArrangement = true : $xRow = true,
 							$z => $xRow ? $improperArrangement = true : $zRow = true,
 							default => $improperArrangement = true,

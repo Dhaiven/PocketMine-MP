@@ -63,7 +63,7 @@ enum DyeColor{
 		/** @phpstan-var array<int, TMetadata> $cache */
 		static $cache = [];
 
-		return $cache[spl_object_id($this)] ??= match($this){
+		return $cache[spl_object_id($this)] ??= match ($this) {
 			self::WHITE => self::meta("White", new Color(0xf0, 0xf0, 0xf0)),
 			self::ORANGE => self::meta("Orange", new Color(0xf9, 0x80, 0x1d)),
 			self::MAGENTA => self::meta("Magenta", new Color(0xc7, 0x4e, 0xbd)),

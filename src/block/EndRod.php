@@ -35,10 +35,10 @@ use pocketmine\world\BlockTransaction;
 class EndRod extends Flowable{
 	use AnyFacingTrait;
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
 		$this->facing = $face;
 		if($blockClicked instanceof EndRod && $blockClicked->facing === $this->facing){
-			$this->facing = Facing::opposite($face);
+			$this->facing = $face->opposite();
 		}
 
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
@@ -53,14 +53,14 @@ class EndRod extends Flowable{
 	}
 
 	protected function recalculateCollisionBoxes() : array{
-		$myAxis = Facing::axis($this->facing);
+		$myAxis = $this->facing->axis();
 
 		$bb = AxisAlignedBB::one();
 		foreach([Axis::Y, Axis::Z, Axis::X] as $axis){
 			if($axis === $myAxis){
 				continue;
 			}
-			$bb->squash($axis, 6 / 16);
+			$bb->squashedCopy($axis, 6 / 16);
 		}
 		return [$bb];
 	}

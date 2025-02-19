@@ -28,7 +28,8 @@ use pocketmine\block\Block;
 class ItemIdentifier{
 	public function __construct(
 		private int $typeId
-	){}
+	){
+	}
 
 	public static function fromBlock(Block $block) : self{
 		//TODO: maybe an ItemBlockIdentifier is in order?

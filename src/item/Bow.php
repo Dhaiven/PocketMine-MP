@@ -46,7 +46,7 @@ class Bow extends Tool implements Releasable{
 
 	public function onReleaseUsing(Player $player, array &$returnedItems) : ItemUseResult{
 		$arrow = VanillaItems::ARROW();
-		$inventory = match(true){
+		$inventory = match (true) {
 			$player->getOffHandInventory()->contains($arrow) => $player->getOffHandInventory(),
 			$player->getInventory()->contains($arrow) => $player->getInventory(),
 			default => null

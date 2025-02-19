@@ -32,6 +32,7 @@ use pocketmine\utils\SingletonTrait;
  */
 final class EnchantmentIdMap{
 	use SingletonTrait;
+
 	/** @phpstan-use IntSaveIdMapTrait<Enchantment> */
 	use IntSaveIdMapTrait;
 

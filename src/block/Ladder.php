@@ -59,15 +59,15 @@ class Ladder extends Transparent{
 	}
 
 	protected function recalculateCollisionBoxes() : array{
-		return [AxisAlignedBB::one()->trim($this->facing, 13 / 16)];
+		return [AxisAlignedBB::one()->trimmedCopy($this->facing, 13 / 16)];
 	}
 
-	public function getSupportType(int $facing) : SupportType{
+	public function getSupportType(Facing $facing) : SupportType{
 		return SupportType::NONE;
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
-		if($this->canBeSupportedAt($blockReplace, Facing::opposite($face)) && Facing::axis($face) !== Axis::Y){
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
+		if($this->canBeSupportedAt($blockReplace, $face->opposite()) && $face->axis() !== Axis::Y){
 			$this->facing = $face;
 			return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 		}
@@ -76,12 +76,12 @@ class Ladder extends Transparent{
 	}
 
 	public function onNearbyBlockChange() : void{
-		if(!$this->canBeSupportedAt($this, Facing::opposite($this->facing))){ //Replace with common break method
+		if(!$this->canBeSupportedAt($this, $this->facing->opposite())){ //Replace with common break method
 			$this->position->getWorld()->useBreakOn($this->position);
 		}
 	}
 
-	private function canBeSupportedAt(Block $block, int $face) : bool{
+	private function canBeSupportedAt(Block $block, Facing $face) : bool{
 		return $block->getAdjacentSupportType($face) === SupportType::FULL;
 	}
 }

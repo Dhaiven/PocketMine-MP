@@ -29,6 +29,7 @@ use pocketmine\utils\SingletonTrait;
 
 final class EffectIdMap{
 	use SingletonTrait;
+
 	/** @phpstan-use IntSaveIdMapTrait<Effect> */
 	use IntSaveIdMapTrait;
 

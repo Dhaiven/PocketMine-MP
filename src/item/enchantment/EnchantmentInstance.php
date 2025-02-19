@@ -32,7 +32,8 @@ final class EnchantmentInstance{
 	public function __construct(
 		private Enchantment $enchantment,
 		private int $level = 1
-	){}
+	){
+	}
 
 	/**
 	 * Returns the type of this enchantment.

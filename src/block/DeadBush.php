@@ -55,7 +55,7 @@ class DeadBush extends Flowable{
 		return
 			$supportBlock->hasTypeTag(BlockTypeTags::SAND) ||
 			$supportBlock->hasTypeTag(BlockTypeTags::MUD) ||
-			match($supportBlock->getTypeId()){
+			match ($supportBlock->getTypeId()) {
 				//can't use DIRT tag here because it includes farmland
 				BlockTypeIds::PODZOL,
 				BlockTypeIds::MYCELIUM,

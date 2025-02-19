@@ -39,7 +39,7 @@ class Rail extends BaseRail{
 	}
 
 	protected function setShapeFromConnections(array $connections) : void{
-		$railShape = self::searchState($connections, RailConnectionInfo::CONNECTIONS) ?? self::searchState($connections, RailConnectionInfo::CURVE_CONNECTIONS);
+		$railShape = self::searchState($connections, RailConnectionInfo::CONNECTIONS()) ?? self::searchState($connections, RailConnectionInfo::CURVE_CONNECTIONS());
 		if($railShape === null){
 			throw new \InvalidArgumentException("No rail shape matches these connections");
 		}
@@ -47,21 +47,16 @@ class Rail extends BaseRail{
 	}
 
 	protected function getCurrentShapeConnections() : array{
-		return RailConnectionInfo::CURVE_CONNECTIONS[$this->railShape] ?? RailConnectionInfo::CONNECTIONS[$this->railShape];
+		return RailConnectionInfo::CURVE_CONNECTIONS()[$this->railShape] ?? RailConnectionInfo::CONNECTIONS()[$this->railShape];
 	}
 
-	protected function getPossibleConnectionDirectionsOneConstraint(int $constraint) : array{
+	protected function getPossibleConnectionDirectionsOneConstraint(RailConnectionInfo $constraint) : array{
 		$possible = parent::getPossibleConnectionDirectionsOneConstraint($constraint);
 
-		if(($constraint & RailConnectionInfo::FLAG_ASCEND) === 0){
-			foreach([
-				Facing::NORTH,
-				Facing::SOUTH,
-				Facing::WEST,
-				Facing::EAST
-			] as $d){
-				if($constraint !== $d){
-					$possible[$d] = true;
+		if(!$constraint->ascend){
+			foreach(Facing::HORIZONTAL as $d){
+				if($constraint->facing !== $d){
+					$possible[] = new RailConnectionInfo($d, $constraint->ascend);
 				}
 			}
 		}
@@ -73,8 +68,8 @@ class Rail extends BaseRail{
 
 	/** @return $this */
 	public function setShape(int $shape) : self{
-		if(!isset(RailConnectionInfo::CONNECTIONS[$shape]) && !isset(RailConnectionInfo::CURVE_CONNECTIONS[$shape])){
-			throw new \InvalidArgumentException("Invalid shape, must be one of " . implode(", ", [...array_keys(RailConnectionInfo::CONNECTIONS), ...array_keys(RailConnectionInfo::CURVE_CONNECTIONS)]));
+		if(!isset(RailConnectionInfo::CONNECTIONS()[$shape]) && !isset(RailConnectionInfo::CURVE_CONNECTIONS()[$shape])){
+			throw new \InvalidArgumentException("Invalid shape, must be one of " . implode(", ", [...array_keys(RailConnectionInfo::CONNECTIONS()), ...array_keys(RailConnectionInfo::CURVE_CONNECTIONS())]));
 		}
 		$this->railShape = $shape;
 		return $this;

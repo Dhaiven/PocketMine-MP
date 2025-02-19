@@ -30,9 +30,9 @@ use function count;
 
 final class BlockStateUpgradeSchemaBlockRemap{
 	/**
-	 * @param Tag[]    $oldState
-	 * @param Tag[]    $newState
-	 * @param string[] $copiedState
+	 * @param Tag[]                      $oldState
+	 * @param Tag[]                      $newState
+	 * @param string[]                   $copiedState
 	 *
 	 * @phpstan-param array<string, Tag> $oldState
 	 * @phpstan-param array<string, Tag> $newState
@@ -43,7 +43,8 @@ final class BlockStateUpgradeSchemaBlockRemap{
 		public string|BlockStateUpgradeSchemaFlattenInfo $newName,
 		public array $newState,
 		public array $copiedState
-	){}
+	){
+	}
 
 	public function equals(self $that) : bool{
 		$sameName = $this->newName === $that->newName ||

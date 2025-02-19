@@ -35,16 +35,16 @@ final class ChorusPlant extends Flowable{
 	use StaticSupportTrait;
 
 	/**
-	 * @var true[]
-	 * @phpstan-var array<int, true>
+	 * @var Facing[]
+	 * @phpstan-var array<string, Facing>
 	 */
 	protected array $connections = [];
 
 	protected function recalculateCollisionBoxes() : array{
 		$bb = AxisAlignedBB::one();
-		foreach(Facing::ALL as $facing){
-			if(!isset($this->connections[$facing])){
-				$bb->trim($facing, 2 / 16);
+		foreach(Facing::cases() as $facing){
+			if(!isset($this->connections[$facing->name)){
+				$bb->trimmedCopy($facing, 2 / 16);
 			}
 		}
 
@@ -56,15 +56,15 @@ final class ChorusPlant extends Flowable{
 
 		$this->collisionBoxes = null;
 
-		foreach(Facing::ALL as $facing){
+		foreach(Facing::cases() as $facing){
 			$block = $this->getSide($facing);
-			if(match($block->getTypeId()){
+			if(match ($block->getTypeId()) {
 				BlockTypeIds::END_STONE, BlockTypeIds::CHORUS_FLOWER, $this->getTypeId() => true,
 				default => false
 			}){
-				$this->connections[$facing] = true;
+				$this->connections[$facing->name] = $facing;
 			}else{
-				unset($this->connections[$facing]);
+				unset($this->connections[$facing->name]);
 			}
 		}
 

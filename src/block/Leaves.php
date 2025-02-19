@@ -77,8 +77,9 @@ class Leaves extends Transparent{
 	}
 
 	/**
-	 * @param true[] $visited reference parameter
-	 * @phpstan-param array<int, true> $visited
+	 * @param true[]                       $visited reference parameter
+	 *
+	 * @phpstan-param array<int, true>     $visited
 	 * @phpstan-param-out array<int, true> $visited
 	 */
 	protected function findLog(Vector3 $pos, array &$visited = [], int $distance = 0) : bool{
@@ -94,7 +95,7 @@ class Leaves extends Transparent{
 		}
 
 		if($block instanceof Leaves && $distance <= self::MAX_LOG_DISTANCE){
-			foreach(Facing::ALL as $side){
+			foreach(Facing::cases() as $side){
 				if($this->findLog($pos->getSide($side), $visited, $distance + 1)){
 					return true;
 				}
@@ -134,7 +135,7 @@ class Leaves extends Transparent{
 		}
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
 		$this->noDecay = true; //artificial leaves don't decay
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}
@@ -147,7 +148,7 @@ class Leaves extends Transparent{
 		$drops = [];
 		if(FortuneDropHelper::bonusChanceDivisor($item, 20, 4)){ //Saplings
 			// TODO: according to the wiki, the jungle saplings have a different drop rate
-			$sapling = (match($this->leavesType){
+			$sapling = (match ($this->leavesType) {
 				LeavesType::ACACIA => VanillaBlocks::ACACIA_SAPLING(),
 				LeavesType::BIRCH => VanillaBlocks::BIRCH_SAPLING(),
 				LeavesType::DARK_OAK => VanillaBlocks::DARK_OAK_SAPLING(),
@@ -188,7 +189,7 @@ class Leaves extends Transparent{
 		return 60;
 	}
 
-	public function getSupportType(int $facing) : SupportType{
+	public function getSupportType(Facing $facing) : SupportType{
 		return SupportType::NONE;
 	}
 }

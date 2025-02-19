@@ -55,11 +55,11 @@ final class BlockTypeInfo{
 	/**
 	 * Returns tags that represent the type of item being enchanted and are used to determine
 	 * what enchantments can be applied to the item of this block during in-game enchanting (enchanting table, anvil, fishing, etc.).
-	 * @see ItemEnchantmentTags
+	 * @return string[]
 	 * @see ItemEnchantmentTagRegistry
 	 * @see AvailableEnchantmentRegistry
 	 *
-	 * @return string[]
+	 * @see ItemEnchantmentTags
 	 */
 	public function getEnchantmentTags() : array{
 		return $this->enchantmentTags;

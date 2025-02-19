@@ -39,7 +39,8 @@ final class RuntimeDataReader implements RuntimeDataDescriber{
 	public function __construct(
 		private int $maxBits,
 		private int $value
-	){}
+	){
+	}
 
 	public function readInt(int $bits) : int{
 		$bitsLeft = $this->maxBits - $this->offset;
@@ -77,8 +78,8 @@ final class RuntimeDataReader implements RuntimeDataDescriber{
 		$value = $this->readBool();
 	}
 
-	public function horizontalFacing(int &$facing) : void{
-		$facing = match($this->readInt(2)){
+	public function horizontalFacing(Facing &$facing) : void{
+		$facing = match ($this->readInt(2)) {
 			0 => Facing::NORTH,
 			1 => Facing::EAST,
 			2 => Facing::SOUTH,
@@ -88,13 +89,13 @@ final class RuntimeDataReader implements RuntimeDataDescriber{
 	}
 
 	/**
-	 * @param int[] $faces
+	 * @param Facing[] $faces
 	 */
 	public function facingFlags(array &$faces) : void{
 		$result = [];
-		foreach(Facing::ALL as $facing){
+		foreach(Facing::cases() as $facing){
 			if($this->readBool()){
-				$result[$facing] = $facing;
+				$result[$facing->name] = $facing;
 			}
 		}
 
@@ -102,21 +103,21 @@ final class RuntimeDataReader implements RuntimeDataDescriber{
 	}
 
 	/**
-	 * @param int[] $faces
+	 * @param Facing[] $faces
 	 */
 	public function horizontalFacingFlags(array &$faces) : void{
 		$result = [];
 		foreach(Facing::HORIZONTAL as $facing){
 			if($this->readBool()){
-				$result[$facing] = $facing;
+				$result[$facing->name] = $facing;
 			}
 		}
 
 		$faces = $result;
 	}
 
-	public function facing(int &$facing) : void{
-		$facing = match($this->readInt(3)){
+	public function facing(Facing &$facing) : void{
+		$facing = match ($this->readInt(3)) {
 			0 => Facing::DOWN,
 			1 => Facing::UP,
 			2 => Facing::NORTH,
@@ -127,8 +128,8 @@ final class RuntimeDataReader implements RuntimeDataDescriber{
 		};
 	}
 
-	public function facingExcept(int &$facing, int $except) : void{
-		$result = 0;
+	public function facingExcept(Facing &$facing, Facing $except) : void{
+		$result = Facing::DOWN;
 		$this->facing($result);
 		if($result === $except){
 			throw new InvalidSerializedRuntimeDataException("Illegal facing value");
@@ -137,8 +138,8 @@ final class RuntimeDataReader implements RuntimeDataDescriber{
 		$facing = $result;
 	}
 
-	public function axis(int &$axis) : void{
-		$axis = match($this->readInt(2)){
+	public function axis(Axis &$axis) : void{
+		$axis = match ($this->readInt(2)) {
 			0 => Axis::X,
 			1 => Axis::Z,
 			2 => Axis::Y,
@@ -146,8 +147,8 @@ final class RuntimeDataReader implements RuntimeDataDescriber{
 		};
 	}
 
-	public function horizontalAxis(int &$axis) : void{
-		$axis = match($this->readInt(1)){
+	public function horizontalAxis(Axis &$axis) : void{
+		$axis = match ($this->readInt(1)) {
 			0 => Axis::X,
 			1 => Axis::Z,
 			default => throw new AssumptionFailedError("Unreachable")
@@ -155,17 +156,18 @@ final class RuntimeDataReader implements RuntimeDataDescriber{
 	}
 
 	/**
-	 * @param WallConnectionType[] $connections
-	 * @phpstan-param array<Facing::NORTH|Facing::EAST|Facing::SOUTH|Facing::WEST, WallConnectionType> $connections
+	 * @param WallConnectionType[]                      $connections
+	 *
+	 * @phpstan-param array<string, WallConnectionType> $connections
 	 */
 	public function wallConnections(array &$connections) : void{
 		$result = [];
 		$offset = 0;
 		$packed = $this->readBoundedIntAuto(0, (3 ** 4) - 1);
 		foreach(Facing::HORIZONTAL as $facing){
-			$type = intdiv($packed,  (3 ** $offset)) % 3;
+			$type = intdiv($packed, (3 ** $offset)) % 3;
 			if($type !== 0){
-				$result[$facing] = match($type){
+				$result[$facing->name] = match ($type) {
 					1 => WallConnectionType::SHORT,
 					2 => WallConnectionType::TALL,
 					default => throw new AssumptionFailedError("Unreachable")
@@ -179,7 +181,7 @@ final class RuntimeDataReader implements RuntimeDataDescriber{
 
 	public function railShape(int &$railShape) : void{
 		$result = $this->readInt(4);
-		if(!isset(RailConnectionInfo::CONNECTIONS[$result]) && !isset(RailConnectionInfo::CURVE_CONNECTIONS[$result])){
+		if(!isset(RailConnectionInfo::CONNECTIONS()[$result]) && !isset(RailConnectionInfo::CURVE_CONNECTIONS()[$result])){
 			throw new InvalidSerializedRuntimeDataException("Invalid rail shape $result");
 		}
 
@@ -188,7 +190,7 @@ final class RuntimeDataReader implements RuntimeDataDescriber{
 
 	public function straightOnlyRailShape(int &$railShape) : void{
 		$result = $this->readInt(3);
-		if(!isset(RailConnectionInfo::CONNECTIONS[$result])){
+		if(!isset(RailConnectionInfo::CONNECTIONS()[$result])){
 			throw new InvalidSerializedRuntimeDataException("No rail shape matches meta $result");
 		}
 

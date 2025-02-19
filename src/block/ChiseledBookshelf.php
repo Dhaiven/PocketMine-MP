@@ -130,14 +130,14 @@ class ChiseledBookshelf extends Opaque{
 		return $this;
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
+	public function onInteract(Item $item, Facing $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
 		if($face !== $this->facing){
 			return false;
 		}
 
-		$x = Facing::axis($face) === Axis::X ? $clickVector->z : $clickVector->x;
+		$x = $face->axis() === Axis::X ? $clickVector->z : $clickVector->x;
 		$slot = ChiseledBookshelfSlot::fromBlockFaceCoordinates(
-			Facing::isPositive(Facing::rotateY($face, true)) ? 1 - $x : $x,
+			$face->rotateY(true)->isPositive() ? 1 - $x : $x,
 			$clickVector->y
 		);
 		$tile = $this->position->getWorld()->getTile($this->position);

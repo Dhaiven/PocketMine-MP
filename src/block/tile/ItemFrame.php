@@ -55,7 +55,7 @@ class ItemFrame extends Spawnable{
 		}
 		if($nbt->getTag(self::TAG_ITEM_ROTATION) instanceof FloatTag){
 			$this->itemRotation = (int) ($nbt->getFloat(self::TAG_ITEM_ROTATION, $this->itemRotation * 45) / 45);
-		} else {
+		}else{
 			$this->itemRotation = $nbt->getByte(self::TAG_ITEM_ROTATION, $this->itemRotation);
 		}
 		$this->itemDropChance = $nbt->getFloat(self::TAG_ITEM_DROP_CHANCE, $this->itemDropChance);

@@ -53,7 +53,7 @@ class Barrel extends Opaque{
 		return $this;
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
 		if($player !== null){
 			if(abs($player->getPosition()->x - $this->position->x) < 2 && abs($player->getPosition()->z - $this->position->z) < 2){
 				$y = $player->getEyePos()->y;
@@ -63,17 +63,17 @@ class Barrel extends Opaque{
 				}elseif($this->position->y - $y > 0){
 					$this->facing = Facing::DOWN;
 				}else{
-					$this->facing = Facing::opposite($player->getHorizontalFacing());
+					$this->facing = $player->getHorizontalFacing()->opposite();
 				}
 			}else{
-				$this->facing = Facing::opposite($player->getHorizontalFacing());
+				$this->facing = $player->getHorizontalFacing()->opposite();
 			}
 		}
 
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
+	public function onInteract(Item $item, Facing $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
 		if($player instanceof Player){
 			$barrel = $this->position->getWorld()->getTile($this->position);
 			if($barrel instanceof TileBarrel){

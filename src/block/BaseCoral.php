@@ -27,6 +27,7 @@ use pocketmine\block\utils\BlockEventHelper;
 use pocketmine\block\utils\CoralTypeTrait;
 use pocketmine\block\utils\SupportType;
 use pocketmine\item\Item;
+use pocketmine\math\Facing;
 use function mt_rand;
 
 abstract class BaseCoral extends Transparent{
@@ -71,7 +72,7 @@ abstract class BaseCoral extends Transparent{
 
 	protected function recalculateCollisionBoxes() : array{ return []; }
 
-	public function getSupportType(int $facing) : SupportType{
+	public function getSupportType(Facing $facing) : SupportType{
 		return SupportType::NONE;
 	}
 }

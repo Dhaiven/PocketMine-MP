@@ -820,7 +820,7 @@ final class VanillaBlocks{
 
 	/**
 	 * @phpstan-template TBlock of Block
-	 * @phpstan-param \Closure(BID) : TBlock $createBlock
+	 * @phpstan-param \Closure(BID) : TBlock       $createBlock
 	 * @phpstan-param class-string<covariant Tile> $tileClass
 	 * @phpstan-return TBlock
 	 */
@@ -1038,7 +1038,7 @@ final class VanillaBlocks{
 		self::register("nether_wart", fn(BID $id) => new NetherWartPlant($id, "Nether Wart", new Info(BreakInfo::instant())));
 		self::register("netherrack", fn(BID $id) => new Netherrack($id, "Netherrack", new Info(BreakInfo::pickaxe(0.4, ToolTier::WOOD))));
 		self::register("note_block", fn(BID $id) => new Note($id, "Note Block", new Info(BreakInfo::axe(0.8))), TileNote::class);
-		self::register("obsidian", fn(BID $id) => new Opaque($id, "Obsidian", new Info(BreakInfo::pickaxe(35.0 /* 50 in PC */,  ToolTier::DIAMOND, 6000.0))));
+		self::register("obsidian", fn(BID $id) => new Opaque($id, "Obsidian", new Info(BreakInfo::pickaxe(35.0 /* 50 in PC */, ToolTier::DIAMOND, 6000.0))));
 		self::register("packed_ice", fn(BID $id) => new PackedIce($id, "Packed Ice", new Info(BreakInfo::pickaxe(0.5))));
 		self::register("podzol", fn(BID $id) => new Podzol($id, "Podzol", new Info(BreakInfo::shovel(0.5), [Tags::DIRT])));
 		self::register("potatoes", fn(BID $id) => new Potato($id, "Potato Block", new Info(BreakInfo::instant())));
@@ -1370,7 +1370,7 @@ final class VanillaBlocks{
 			self::register($idName("pressure_plate"), fn(BID $id) => new WoodenPressurePlate($id, $name . " Pressure Plate", $woodenPressurePlateBreakInfo, $woodType, 20));
 			self::register($idName("trapdoor"), fn(BID $id) => new WoodenTrapdoor($id, $name . " Trapdoor", $woodenDoorBreakInfo, $woodType));
 
-			$signAsItem = match($woodType){
+			$signAsItem = match ($woodType) {
 				WoodType::OAK => VanillaItems::OAK_SIGN(...),
 				WoodType::SPRUCE => VanillaItems::SPRUCE_SIGN(...),
 				WoodType::BIRCH => VanillaItems::BIRCH_SIGN(...),
@@ -1403,8 +1403,7 @@ final class VanillaBlocks{
 		$instaBreak = new Info(BreakInfo::instant());
 		self::register("element_zero", fn(BID $id) => new Opaque($id, "???", $instaBreak));
 
-		$register = fn(string $name, string $displayName, string $symbol, int $atomicWeight, int $group) =>
-			self::register("element_$name", fn(BID $id) => new Element($id, $displayName, $instaBreak, $symbol, $atomicWeight, $group));
+		$register = fn(string $name, string $displayName, string $symbol, int $atomicWeight, int $group) => self::register("element_$name", fn(BID $id) => new Element($id, $displayName, $instaBreak, $symbol, $atomicWeight, $group));
 
 		$register("hydrogen", "Hydrogen", "h", 1, 5);
 		$register("helium", "Helium", "he", 2, 7);
@@ -1631,7 +1630,7 @@ final class VanillaBlocks{
 
 		self::register("warped_wart_block", fn(BID $id) => new Opaque($id, "Warped Wart Block", new Info(new BreakInfo(1.0, ToolType::HOE))));
 		self::register("crying_obsidian", fn(BID $id) => new class($id, "Crying Obsidian", new Info(BreakInfo::pickaxe(35.0 /* 50 in Java */, ToolTier::DIAMOND, 6000.0))) extends Opaque{
-			public function getLightLevel() : int{ return 10;}
+			public function getLightLevel() : int{ return 10; }
 		});
 
 		self::register("twisting_vines", fn(BID $id) => new NetherVines($id, "Twisting Vines", new Info(BreakInfo::instant()), Facing::UP));

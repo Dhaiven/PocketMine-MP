@@ -74,30 +74,30 @@ final class AmethystCluster extends Transparent{
 	}
 
 	protected function recalculateCollisionBoxes() : array{
-		$myAxis = Facing::axis($this->facing);
+		$myAxis = $this->facing->axis();
 
 		$box = AxisAlignedBB::one();
-		foreach([Axis::Y, Axis::Z, Axis::X] as $axis){
+		foreach(Axis::cases() as $axis){
 			if($axis === $myAxis){
 				continue;
 			}
-			$box->squash($axis, $this->stage === self::STAGE_SMALL_BUD ? 4 / 16 : 3 / 16);
+			$box->squashedCopy($axis, $this->stage === self::STAGE_SMALL_BUD ? 4 / 16 : 3 / 16);
 		}
-		$box->trim($this->facing, 1 - ($this->stage === self::STAGE_CLUSTER ? 7 / 16 : ($this->stage + 3) / 16));
+		$box->trimmedCopy($this->facing, 1 - ($this->stage === self::STAGE_CLUSTER ? 7 / 16 : ($this->stage + 3) / 16));
 
 		return [$box];
 	}
 
-	private function canBeSupportedAt(Block $block, int $facing) : bool{
+	private function canBeSupportedAt(Block $block, Facing $facing) : bool{
 		return $block->getAdjacentSupportType($facing) === SupportType::FULL;
 	}
 
-	public function getSupportType(int $facing) : SupportType{
+	public function getSupportType(Facing $facing) : SupportType{
 		return SupportType::NONE;
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
-		if(!$this->canBeSupportedAt($blockReplace, Facing::opposite($face))){
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
+		if(!$this->canBeSupportedAt($blockReplace, $face->opposite())){
 			return false;
 		}
 
@@ -106,7 +106,7 @@ final class AmethystCluster extends Transparent{
 	}
 
 	public function onNearbyBlockChange() : void{
-		if(!$this->canBeSupportedAt($this, Facing::opposite($this->facing))){
+		if(!$this->canBeSupportedAt($this, $this->facing->opposite())){
 			$this->position->getWorld()->useBreakOn($this->position);
 		}
 	}

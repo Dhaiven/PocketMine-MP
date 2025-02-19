@@ -27,6 +27,7 @@ use pocketmine\block\utils\FortuneDropHelper;
 use pocketmine\block\utils\LightableTrait;
 use pocketmine\item\Item;
 use pocketmine\item\VanillaItems;
+use pocketmine\math\Facing;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 use function mt_rand;
@@ -38,7 +39,7 @@ class RedstoneOre extends Opaque{
 		return $this->lit ? 9 : 0;
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
+	public function onInteract(Item $item, Facing $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
 		if(!$this->lit){
 			$this->lit = true;
 			$this->position->getWorld()->setBlock($this->position, $this); //no return here - this shouldn't prevent block placement

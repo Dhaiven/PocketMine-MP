@@ -70,7 +70,8 @@ abstract class LightUpdate{
 
 	protected function getHighestAdjacentLight(int $x, int $y, int $z) : int{
 		$adjacent = 0;
-		foreach(Facing::OFFSET as [$ox, $oy, $oz]){
+		foreach(Facing::cases() as $face){
+			[$ox, $oy, $oz] = $face->opposite();
 			if(($adjacent = max($adjacent, $this->getEffectiveLight($x + $ox, $y + $oy, $z + $oz))) === 15){
 				break;
 			}
@@ -115,7 +116,8 @@ abstract class LightUpdate{
 			$touched++;
 			[$x, $y, $z, $oldAdjacentLight] = $context->removalQueue->dequeue();
 
-			foreach(Facing::OFFSET as [$ox, $oy, $oz]){
+			foreach(Facing::cases() as $face){
+				[$ox, $oy, $oz] = $face->opposite();
 				$cx = $x + $ox;
 				$cy = $y + $oy;
 				$cz = $z + $oz;
@@ -156,8 +158,9 @@ abstract class LightUpdate{
 				continue;
 			}
 
-			foreach(Facing::OFFSET as $side => [$ox, $oy, $oz]){
-				if($from === $side){
+			foreach(Facing::cases() as $face){
+				[$ox, $oy, $oz] = $face->opposite();
+				if($from === $face){
 					//don't check the side that this node received its initial light from
 					continue;
 				}
@@ -174,7 +177,7 @@ abstract class LightUpdate{
 					$lightArray = $this->getCurrentLightArray();
 				}
 				assert($subChunk !== null);
-				$this->computeSpreadLight($cx, $cy, $cz, $newAdjacentLight, $context, $lightArray, $subChunk, $side);
+				$this->computeSpreadLight($cx, $cy, $cz, $newAdjacentLight, $context, $lightArray, $subChunk, $face);
 			}
 		}
 
@@ -204,7 +207,7 @@ abstract class LightUpdate{
 		}
 	}
 
-	protected function computeSpreadLight(int $x, int $y, int $z, int $newAdjacentLevel, LightPropagationContext $context, LightArray $lightArray, SubChunk $subChunk, int $side) : void{
+	protected function computeSpreadLight(int $x, int $y, int $z, int $newAdjacentLevel, LightPropagationContext $context, LightArray $lightArray, SubChunk $subChunk, Facing $side) : void{
 		$lx = $x & SubChunk::COORD_MASK;
 		$ly = $y & SubChunk::COORD_MASK;
 		$lz = $z & SubChunk::COORD_MASK;
@@ -219,7 +222,7 @@ abstract class LightUpdate{
 				//TODO: In the future it might be worth tracking more than one adjacent source face in case multiple
 				//nodes try to light the same node. However, this is a rare case since the vast majority of calls are
 				//basic propagation with only one source anyway.
-				$context->spreadVisited[$index] = Facing::opposite($side);
+				$context->spreadVisited[$index] = $side->opposite();
 				$context->spreadQueue->enqueue([$x, $y, $z]);
 			}
 		}

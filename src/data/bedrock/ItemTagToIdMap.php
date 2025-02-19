@@ -75,7 +75,8 @@ final class ItemTagToIdMap{
 	private array $tagToIdsMap = [];
 
 	/**
-	 * @param string[][] $tagToIds
+	 * @param string[][]                          $tagToIds
+	 *
 	 * @phpstan-param array<string, list<string>> $tagToIds
 	 */
 	public function __construct(

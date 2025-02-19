@@ -58,7 +58,8 @@ final class BlockItemIdMap{
 	private array $itemToBlockId;
 
 	/**
-	 * @param string[] $blockToItemId
+	 * @param string[]                      $blockToItemId
+	 *
 	 * @phpstan-param array<string, string> $blockToItemId
 	 */
 	public function __construct(private array $blockToItemId){

@@ -44,7 +44,7 @@ class Enchantment{
 	/**
 	 * @phpstan-param null|(\Closure(int $level) : int) $minEnchantingPower
 	 *
-	 * @param int $enchantingPowerRange Value used to calculate the maximum enchanting power (minEnchantingPower + enchantingPowerRange)
+	 * @param int                                       $enchantingPowerRange Value used to calculate the maximum enchanting power (minEnchantingPower + enchantingPowerRange)
 	 */
 	public function __construct(
 		private Translatable|string $name,

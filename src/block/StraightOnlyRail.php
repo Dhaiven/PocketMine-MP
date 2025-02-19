@@ -41,7 +41,7 @@ class StraightOnlyRail extends BaseRail{
 	}
 
 	protected function setShapeFromConnections(array $connections) : void{
-		$railShape = self::searchState($connections, RailConnectionInfo::CONNECTIONS);
+		$railShape = self::searchState($connections, RailConnectionInfo::CONNECTIONS());
 		if($railShape === null){
 			throw new \InvalidArgumentException("No rail shape matches these connections");
 		}
@@ -49,18 +49,17 @@ class StraightOnlyRail extends BaseRail{
 	}
 
 	protected function getCurrentShapeConnections() : array{
-		return RailConnectionInfo::CONNECTIONS[$this->railShape];
+		return RailConnectionInfo::CONNECTIONS()[$this->railShape];
 	}
 
 	public function getShape() : int{ return $this->railShape; }
 
 	/** @return $this */
 	public function setShape(int $shape) : self{
-		if(!isset(RailConnectionInfo::CONNECTIONS[$shape])){
-			throw new \InvalidArgumentException("Invalid rail shape, must be one of " . implode(", ", array_keys(RailConnectionInfo::CONNECTIONS)));
+		if(!isset(RailConnectionInfo::CONNECTIONS()[$shape])){
+			throw new \InvalidArgumentException("Invalid rail shape, must be one of " . implode(", ", array_keys(RailConnectionInfo::CONNECTIONS())));
 		}
 		$this->railShape = $shape;
 		return $this;
-
 	}
 }

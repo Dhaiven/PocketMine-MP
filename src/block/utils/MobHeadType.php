@@ -33,7 +33,7 @@ enum MobHeadType{
 	case PIGLIN;
 
 	public function getDisplayName() : string{
-		return match($this){
+		return match ($this) {
 			self::SKELETON => "Skeleton Skull",
 			self::WITHER_SKELETON => "Wither Skeleton Skull",
 			self::ZOMBIE => "Zombie Head",

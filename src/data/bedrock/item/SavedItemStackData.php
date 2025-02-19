@@ -49,7 +49,8 @@ final class SavedItemStackData{
 		private ?bool $wasPickedUp,
 		private array $canPlaceOn,
 		private array $canDestroy
-	){}
+	){
+	}
 
 	public function getTypeData() : SavedItemData{ return $this->typeData; }
 

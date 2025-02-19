@@ -65,10 +65,10 @@ class Painting extends Entity{
 	];
 
 	protected Vector3 $blockIn;
-	protected int $facing;
+	protected Facing $facing;
 	protected PaintingMotive $motive;
 
-	public function __construct(Location $location, Vector3 $blockIn, int $facing, PaintingMotive $motive, ?CompoundTag $nbt = null){
+	public function __construct(Location $location, Vector3 $blockIn, Facing $facing, PaintingMotive $motive, ?CompoundTag $nbt = null){
 		$this->motive = $motive;
 		$this->blockIn = $blockIn->asVector3();
 		$this->facing = $facing;
@@ -125,7 +125,7 @@ class Painting extends Entity{
 
 	protected function recalculateBoundingBox() : void{
 		$side = $this->blockIn->getSide($this->facing);
-		$this->boundingBox = self::getPaintingBB($this->facing, $this->getMotive())->offset($side->x, $side->y, $side->z);
+		$this->boundingBox = self::getPaintingBB($this->facing, $this->getMotive())->offsetCopy($side->x, $side->y, $side->z);
 	}
 
 	public function onNearbyBlockChange() : void{
@@ -184,7 +184,7 @@ class Painting extends Entity{
 	/**
 	 * Returns the bounding-box a painting with the specified motive would have at the given position and direction.
 	 */
-	private static function getPaintingBB(int $facing, PaintingMotive $motive) : AxisAlignedBB{
+	private static function getPaintingBB(Facing $facing, PaintingMotive $motive) : AxisAlignedBB{
 		$width = $motive->getWidth();
 		$height = $motive->getHeight();
 
@@ -192,17 +192,17 @@ class Painting extends Entity{
 		$verticalStart = (int) (ceil($height / 2) - 1);
 
 		return AxisAlignedBB::one()
-			->trim($facing, 15 / 16)
-			->extend(Facing::rotateY($facing, true), $horizontalStart)
-			->extend(Facing::rotateY($facing, false), -$horizontalStart + $width - 1)
-			->extend(Facing::DOWN, $verticalStart)
-			->extend(Facing::UP, -$verticalStart + $height - 1);
+			->trimmedCopy($facing, 15 / 16)
+			->extendedCopy(Facing::rotateY($facing, true), $horizontalStart)
+			->extendedCopy(Facing::rotateY($facing, false), -$horizontalStart + $width - 1)
+			->extendedCopy(Facing::DOWN, $verticalStart)
+			->extendedCopy(Facing::UP, -$verticalStart + $height - 1);
 	}
 
 	/**
 	 * Returns whether a painting with the specified motive can be placed at the given position.
 	 */
-	public static function canFit(World $world, Vector3 $blockIn, int $facing, bool $checkOverlap, PaintingMotive $motive) : bool{
+	public static function canFit(World $world, Vector3 $blockIn, Facing $facing, bool $checkOverlap, PaintingMotive $motive) : bool{
 		$width = $motive->getWidth();
 		$height = $motive->getHeight();
 
@@ -211,9 +211,9 @@ class Painting extends Entity{
 
 		$rotatedFace = Facing::rotateY($facing, false);
 
-		$oppositeSide = Facing::opposite($facing);
+		$oppositeSide = $facing->opposite();
 
-		$startPos = $blockIn->asVector3()->getSide(Facing::opposite($rotatedFace), $horizontalStart)->getSide(Facing::DOWN, $verticalStart);
+		$startPos = $blockIn->asVector3()->getSide($rotatedFace->opposite(), $horizontalStart)->getSide(Facing::DOWN, $verticalStart);
 
 		for($w = 0; $w < $width; ++$w){
 			for($h = 0; $h < $height; ++$h){
@@ -227,7 +227,7 @@ class Painting extends Entity{
 		}
 
 		if($checkOverlap){
-			$bb = self::getPaintingBB($facing, $motive)->offset($blockIn->x, $blockIn->y, $blockIn->z);
+			$bb = self::getPaintingBB($facing, $motive)->offsetCopyCopy($blockIn->x, $blockIn->y, $blockIn->z);
 
 			foreach($world->getNearbyEntities($bb) as $entity){
 				if($entity instanceof self){

@@ -81,7 +81,8 @@ final class R12ItemIdToBlockIdMap{
 	private array $blockToItem = [];
 
 	/**
-	 * @param string[] $itemToBlock
+	 * @param string[]                      $itemToBlock
+	 *
 	 * @phpstan-param array<string, string> $itemToBlock
 	 */
 	public function __construct(array $itemToBlock){

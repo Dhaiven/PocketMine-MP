@@ -31,7 +31,7 @@ enum CoralType{
 	case HORN;
 
 	public function getDisplayName() : string{
-		return match($this){
+		return match ($this) {
 			self::TUBE => "Tube",
 			self::BRAIN => "Brain",
 			self::BUBBLE => "Bubble",

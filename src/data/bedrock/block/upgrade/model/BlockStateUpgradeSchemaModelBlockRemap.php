@@ -60,12 +60,13 @@ final class BlockStateUpgradeSchemaModelBlockRemap{
 	public array $copiedState;
 
 	/**
-	 * @param BlockStateUpgradeSchemaModelTag[] $oldState
-	 * @param BlockStateUpgradeSchemaModelTag[] $newState
-	 * @param string[]                          $copiedState
+	 * @param BlockStateUpgradeSchemaModelTag[]                      $oldState
+	 * @param BlockStateUpgradeSchemaModelTag[]                      $newState
+	 * @param string[]                                               $copiedState
+	 *
 	 * @phpstan-param array<string, BlockStateUpgradeSchemaModelTag> $oldState
 	 * @phpstan-param array<string, BlockStateUpgradeSchemaModelTag> $newState
-	 * @phpstan-param list<string> $copiedState
+	 * @phpstan-param list<string>                                   $copiedState
 	 */
 	public function __construct(array $oldState, string|BlockStateUpgradeSchemaModelFlattenInfo $newNameRule, array $newState, array $copiedState){
 		$this->oldState = count($oldState) === 0 ? null : $oldState;

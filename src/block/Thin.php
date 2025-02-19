@@ -33,7 +33,7 @@ use function count;
  * Thin blocks behave like glass panes. They connect to full-cube blocks horizontally adjacent to them if possible.
  */
 class Thin extends Transparent{
-	/** @var bool[] facing => dummy */
+	/** @var Facing[] facing name => facing */
 	protected array $connections = [];
 
 	public function readStateFromWorld() : Block{
@@ -43,10 +43,10 @@ class Thin extends Transparent{
 
 		foreach(Facing::HORIZONTAL as $facing){
 			$side = $this->getSide($facing);
-			if($side instanceof Thin || $side instanceof Wall || $side->getSupportType(Facing::opposite($facing)) === SupportType::FULL){
-				$this->connections[$facing] = true;
+			if($side instanceof Thin || $side instanceof Wall || $side->getSupportType($facing->opposite()) === SupportType::FULL){
+				$this->connections[$facing->name] = $facing;
 			}else{
-				unset($this->connections[$facing]);
+				unset($this->connections[$facing->name]);
 			}
 		}
 
@@ -58,24 +58,24 @@ class Thin extends Transparent{
 
 		$bbs = [];
 
-		if(isset($this->connections[Facing::WEST]) || isset($this->connections[Facing::EAST])){
-			$bb = AxisAlignedBB::one()->squash(Axis::Z, $inset);
+		if(isset($this->connections[Facing::WEST->name]) || isset($this->connections[Facing::EAST->name])){
+			$bb = AxisAlignedBB::one()->squashedCopy(Axis::Z, $inset);
 
-			if(!isset($this->connections[Facing::WEST])){
-				$bb->trim(Facing::WEST, $inset);
-			}elseif(!isset($this->connections[Facing::EAST])){
-				$bb->trim(Facing::EAST, $inset);
+			if(!isset($this->connections[Facing::WEST->name])){
+				$bb->trimmedCopy(Facing::WEST, $inset);
+			}elseif(!isset($this->connections[Facing::EAST->name])){
+				$bb->trimmedCopy(Facing::EAST, $inset);
 			}
 			$bbs[] = $bb;
 		}
 
-		if(isset($this->connections[Facing::NORTH]) || isset($this->connections[Facing::SOUTH])){
-			$bb = AxisAlignedBB::one()->squash(Axis::X, $inset);
+		if(isset($this->connections[Facing::NORTH->name]) || isset($this->connections[Facing::SOUTH->name])){
+			$bb = AxisAlignedBB::one()->squashedCopy(Axis::X, $inset);
 
-			if(!isset($this->connections[Facing::NORTH])){
-				$bb->trim(Facing::NORTH, $inset);
-			}elseif(!isset($this->connections[Facing::SOUTH])){
-				$bb->trim(Facing::SOUTH, $inset);
+			if(!isset($this->connections[Facing::NORTH->name])){
+				$bb->trimmedCopy(Facing::NORTH, $inset);
+			}elseif(!isset($this->connections[Facing::SOUTH->name])){
+				$bb->trimmedCopy(Facing::SOUTH, $inset);
 			}
 			$bbs[] = $bb;
 		}
@@ -83,14 +83,14 @@ class Thin extends Transparent{
 		if(count($bbs) === 0){
 			//centre post AABB (only needed if not connected on any axis - other BBs overlapping will do this if any connections are made)
 			return [
-				AxisAlignedBB::one()->contract($inset, 0, $inset)
+				AxisAlignedBB::one()->contractedCopy($inset, 0, $inset)
 			];
 		}
 
 		return $bbs;
 	}
 
-	public function getSupportType(int $facing) : SupportType{
+	public function getSupportType(Facing $facing) : SupportType{
 		return SupportType::NONE;
 	}
 }

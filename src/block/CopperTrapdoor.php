@@ -26,16 +26,17 @@ namespace pocketmine\block;
 use pocketmine\block\utils\CopperMaterial;
 use pocketmine\block\utils\CopperTrait;
 use pocketmine\item\Item;
+use pocketmine\math\Facing;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 
 class CopperTrapdoor extends Trapdoor implements CopperMaterial{
-	use CopperTrait{
+	use CopperTrait {
 		onInteract as onInteractCopper;
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
-		if ($player !== null && $player->isSneaking() && $this->onInteractCopper($item, $face, $clickVector, $player, $returnedItems)) {
+	public function onInteract(Item $item, Facing $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
+		if($player !== null && $player->isSneaking() && $this->onInteractCopper($item, $face, $clickVector, $player, $returnedItems)){
 			return true;
 		}
 

@@ -44,7 +44,7 @@ final class BannerPatternTypeIdMap{
 
 	public function __construct(){
 		foreach(BannerPatternType::cases() as $case){
-			$this->register(match($case){
+			$this->register(match ($case) {
 				BannerPatternType::BORDER => "bo",
 				BannerPatternType::BRICKS => "bri",
 				BannerPatternType::CIRCLE => "mc",

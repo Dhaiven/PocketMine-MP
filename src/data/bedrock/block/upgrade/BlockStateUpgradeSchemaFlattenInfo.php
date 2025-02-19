@@ -32,7 +32,8 @@ use const SORT_STRING;
 final class BlockStateUpgradeSchemaFlattenInfo{
 
 	/**
-	 * @param string[] $flattenedValueRemaps
+	 * @param string[]                      $flattenedValueRemaps
+	 *
 	 * @phpstan-param array<string, string> $flattenedValueRemaps
 	 * @phpstan-param ?class-string<ByteTag|IntTag|StringTag> $flattenedPropertyType
 	 */

@@ -24,6 +24,7 @@ declare(strict_types=1);
 /**
  * All the Item classes
  */
+
 namespace pocketmine\item;
 
 use pocketmine\block\Block;
@@ -38,6 +39,7 @@ use pocketmine\data\SavedDataLoadingException;
 use pocketmine\entity\Entity;
 use pocketmine\entity\Living;
 use pocketmine\item\enchantment\EnchantmentInstance;
+use pocketmine\math\Facing;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\LittleEndianNbtSerializer;
 use pocketmine\nbt\NBT;
@@ -106,9 +108,11 @@ class Item implements \JsonSerializable{
 	 *
 	 * NOTE: This should NOT BE USED for creating items to set into an inventory. Use VanillaItems for that
 	 * purpose.
-	 * @see VanillaItems
 	 *
 	 * @param string[] $enchantmentTags
+	 *
+	 * @see VanillaItems
+	 *
 	 */
 	public function __construct(
 		private ItemIdentifier $identifier,
@@ -461,11 +465,11 @@ class Item implements \JsonSerializable{
 	/**
 	 * Returns tags that represent the type of item being enchanted and are used to determine
 	 * what enchantments can be applied to this item during in-game enchanting (enchanting table, anvil, fishing, etc.).
-	 * @see ItemEnchantmentTags
+	 * @return string[]
 	 * @see ItemEnchantmentTagRegistry
 	 * @see AvailableEnchantmentRegistry
 	 *
-	 * @return string[]
+	 * @see ItemEnchantmentTags
 	 */
 	public function getEnchantmentTags() : array{
 		return $this->enchantmentTags;
@@ -488,7 +492,7 @@ class Item implements \JsonSerializable{
 	/**
 	 * Returns the block corresponding to this Item.
 	 */
-	public function getBlock(?int $clickedFace = null) : Block{
+	public function getBlock(?Facing $clickedFace = null) : Block{
 		return VanillaBlocks::AIR();
 	}
 
@@ -587,7 +591,7 @@ class Item implements \JsonSerializable{
 	 *
 	 * @param Item[] &$returnedItems Items to be added to the target's inventory (or dropped, if the inventory is full)
 	 */
-	public function onInteractBlock(Player $player, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, array &$returnedItems) : ItemUseResult{
+	public function onInteractBlock(Player $player, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, array &$returnedItems) : ItemUseResult{
 		return ItemUseResult::NONE;
 	}
 
@@ -641,6 +645,7 @@ class Item implements \JsonSerializable{
 	 * Called when a player uses the item to interact with entity, for example by using a name tag.
 	 *
 	 * @param Vector3 $clickVector The exact position of the click (absolute coordinates)
+	 *
 	 * @return bool whether some action took place
 	 */
 	public function onInteractEntity(Player $player, Entity $entity, Vector3 $clickVector) : bool{
@@ -671,7 +676,7 @@ class Item implements \JsonSerializable{
 	/**
 	 * Compares an Item to this Item and check if they match.
 	 *
-	 * @param bool $checkDamage   @deprecated
+	 * @param bool $checkDamage @deprecated
 	 * @param bool $checkCompound Whether to verify that the items' NBT match.
 	 */
 	final public function equals(Item $item, bool $checkDamage = true, bool $checkCompound = true) : bool{

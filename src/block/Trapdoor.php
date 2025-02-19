@@ -63,16 +63,16 @@ class Trapdoor extends Transparent{
 	}
 
 	protected function recalculateCollisionBoxes() : array{
-		return [AxisAlignedBB::one()->trim($this->open ? $this->facing : ($this->top ? Facing::DOWN : Facing::UP), 13 / 16)];
+		return [AxisAlignedBB::one()->trimmedCopy($this->open ? $this->facing : ($this->top ? Facing::DOWN : Facing::UP), 13 / 16)];
 	}
 
-	public function getSupportType(int $facing) : SupportType{
+	public function getSupportType(Facing $facing) : SupportType{
 		return SupportType::NONE;
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
 		if($player !== null){
-			$this->facing = Facing::opposite($player->getHorizontalFacing());
+			$this->facing = $player->getHorizontalFacing()->opposite();
 		}
 		if(($clickVector->y > 0.5 && $face !== Facing::UP) || $face === Facing::DOWN){
 			$this->top = true;
@@ -81,7 +81,7 @@ class Trapdoor extends Transparent{
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
+	public function onInteract(Item $item, Facing $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
 		$this->open = !$this->open;
 		$world = $this->position->getWorld();
 		$world->setBlock($this->position, $this);

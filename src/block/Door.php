@@ -97,10 +97,10 @@ class Door extends Transparent{
 
 	protected function recalculateCollisionBoxes() : array{
 		//TODO: doors are 0.1825 blocks thick, instead of 0.1875 like JE (https://bugs.mojang.com/browse/MCPE-19214)
-		return [AxisAlignedBB::one()->trim($this->open ? Facing::rotateY($this->facing, !$this->hingeRight) : $this->facing, 327 / 400)];
+		return [AxisAlignedBB::one()->trimmedCopy($this->open ? $this->facing->rotateY(!$this->hingeRight) : $this->facing, 327 / 400)];
 	}
 
-	public function getSupportType(int $facing) : SupportType{
+	public function getSupportType(Facing $facing) : SupportType{
 		return SupportType::NONE;
 	}
 
@@ -110,7 +110,7 @@ class Door extends Transparent{
 		}
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
 		if($face === Facing::UP){
 			$blockUp = $this->getSide(Facing::UP);
 			if(!$blockUp->canBeReplaced() || !$this->canBeSupportedAt($blockReplace)){
@@ -121,8 +121,8 @@ class Door extends Transparent{
 				$this->facing = $player->getHorizontalFacing();
 			}
 
-			$next = $this->getSide(Facing::rotateY($this->facing, false));
-			$next2 = $this->getSide(Facing::rotateY($this->facing, true));
+			$next = $this->getSide($this->facing->rotateY(false));
+			$next2 = $this->getSide($this->facing->rotateY(true));
 
 			if($next->hasSameTypeId($this) || (!$next2->isTransparent() && $next->isTransparent())){ //Door hinge
 				$this->hingeRight = true;
@@ -138,7 +138,7 @@ class Door extends Transparent{
 		return false;
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
+	public function onInteract(Item $item, Facing $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
 		$this->open = !$this->open;
 
 		$other = $this->getSide($this->top ? Facing::DOWN : Facing::UP);

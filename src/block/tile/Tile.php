@@ -56,9 +56,9 @@ abstract class Tile{
 	}
 
 	/**
-	 * @internal
 	 * @throws NbtDataException
 	 * Reads additional data from the CompoundTag on tile creation.
+	 * @internal
 	 */
 	abstract public function readSaveData(CompoundTag $nbt) : void;
 
@@ -85,9 +85,9 @@ abstract class Tile{
 	}
 
 	/**
+	 * @throws \RuntimeException
 	 * @internal
 	 *
-	 * @throws \RuntimeException
 	 */
 	public function copyDataFromItem(Item $item) : void{
 		if(($blockNbt = $item->getCustomBlockData()) !== null){ //TODO: check item root tag (MCPE doesn't use BlockEntityTag)

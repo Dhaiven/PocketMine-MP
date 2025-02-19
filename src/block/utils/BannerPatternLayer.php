@@ -33,7 +33,8 @@ class BannerPatternLayer{
 	public function __construct(
 		private BannerPatternType $type,
 		private DyeColor $color
-	){}
+	){
+	}
 
 	public function getType() : BannerPatternType{ return $this->type; }
 

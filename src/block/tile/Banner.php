@@ -128,7 +128,7 @@ class Banner extends Spawnable{
 	}
 
 	/**
-	 * @param BannerPatternLayer[] $patterns
+	 * @param BannerPatternLayer[]             $patterns
 	 *
 	 * @phpstan-param list<BannerPatternLayer> $patterns
 	 */

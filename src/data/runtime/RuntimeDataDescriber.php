@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace pocketmine\data\runtime;
 
 use pocketmine\block\utils\WallConnectionType;
+use pocketmine\math\Axis;
 use pocketmine\math\Facing;
 
 /**
@@ -45,28 +46,29 @@ interface RuntimeDataDescriber{
 
 	public function bool(bool &$value) : void;
 
-	public function horizontalFacing(int &$facing) : void;
+	public function horizontalFacing(Facing &$facing) : void;
 
 	/**
-	 * @param int[] $faces
+	 * @param Facing[] $faces
 	 */
 	public function facingFlags(array &$faces) : void;
 
 	/**
-	 * @param int[] $faces
+	 * @param Facing[] $faces
 	 */
 	public function horizontalFacingFlags(array &$faces) : void;
 
-	public function facing(int &$facing) : void;
+	public function facing(Facing &$facing) : void;
 
-	public function facingExcept(int &$facing, int $except) : void;
+	public function facingExcept(Facing &$facing, Facing $except) : void;
 
-	public function axis(int &$axis) : void;
+	public function axis(Axis &$axis) : void;
 
-	public function horizontalAxis(int &$axis) : void;
+	public function horizontalAxis(Axis &$axis) : void;
 
 	/**
-	 * @param WallConnectionType[] $connections
+	 * @param WallConnectionType[]                                                                     $connections
+	 *
 	 * @phpstan-param array<Facing::NORTH|Facing::EAST|Facing::SOUTH|Facing::WEST, WallConnectionType> $connections
 	 */
 	public function wallConnections(array &$connections) : void;
@@ -77,18 +79,18 @@ interface RuntimeDataDescriber{
 
 	/**
 	 * @phpstan-template T of \UnitEnum
-	 * @phpstan-param T &$case
+	 * @phpstan-param T &   $case
 	 * @phpstan-param-out T $case
 	 */
 	public function enum(\UnitEnum &$case) : void;
 
 	/**
-	 * @param \UnitEnum[] &$set
-	 * @param \UnitEnum[] $allCases
+	 * @param \UnitEnum[] &          $set
+	 * @param \UnitEnum[]            $allCases
 	 *
 	 * @phpstan-template T of \UnitEnum
 	 * @phpstan-param array<int, T> &$set
-	 * @phpstan-param array<int, T> $allCases
+	 * @phpstan-param array<int, T>  $allCases
 	 */
 	public function enumSet(array &$set, array $allCases) : void;
 }

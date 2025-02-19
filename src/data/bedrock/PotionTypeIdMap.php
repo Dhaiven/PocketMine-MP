@@ -28,12 +28,13 @@ use pocketmine\utils\SingletonTrait;
 
 final class PotionTypeIdMap{
 	use SingletonTrait;
+
 	/** @phpstan-use IntSaveIdMapTrait<PotionType> */
 	use IntSaveIdMapTrait;
 
 	private function __construct(){
 		foreach(PotionType::cases() as $case){
-			$this->register(match($case){
+			$this->register(match ($case) {
 				PotionType::WATER => PotionTypeIds::WATER,
 				PotionType::MUNDANE => PotionTypeIds::MUNDANE,
 				PotionType::LONG_MUNDANE => PotionTypeIds::LONG_MUNDANE,

@@ -38,7 +38,7 @@ class ShulkerBox extends Spawnable implements Container, Nameable{
 
 	public const TAG_FACING = "facing";
 
-	protected int $facing = Facing::NORTH;
+	protected Facing $facing = Facing::NORTH;
 
 	protected ShulkerBoxInventory $inventory;
 
@@ -89,7 +89,7 @@ class ShulkerBox extends Spawnable implements Container, Nameable{
 		return $this->facing;
 	}
 
-	public function setFacing(int $facing) : void{
+	public function setFacing(Facing $facing) : void{
 		$this->facing = $facing;
 	}
 

@@ -30,7 +30,7 @@ enum DripleafState{
 	case FULL_TILT;
 
 	public function getScheduledUpdateDelayTicks() : ?int{
-		return match($this){
+		return match ($this) {
 			self::STABLE => null,
 			self::UNSTABLE, self::PARTIAL_TILT => 10,
 			self::FULL_TILT => 100,

@@ -35,7 +35,7 @@ enum BoatType{
 	case MANGROVE;
 
 	public function getWoodType() : WoodType{
-		return match($this){
+		return match ($this) {
 			self::OAK => WoodType::OAK,
 			self::SPRUCE => WoodType::SPRUCE,
 			self::BIRCH => WoodType::BIRCH,

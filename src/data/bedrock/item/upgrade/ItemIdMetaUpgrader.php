@@ -38,7 +38,8 @@ final class ItemIdMetaUpgrader{
 	private array $idMetaUpgradeSchemas = [];
 
 	/**
-	 * @param ItemIdMetaUpgradeSchema[] $idMetaUpgradeSchemas
+	 * @param ItemIdMetaUpgradeSchema[]                   $idMetaUpgradeSchemas
+	 *
 	 * @phpstan-param array<int, ItemIdMetaUpgradeSchema> $idMetaUpgradeSchemas
 	 */
 	public function __construct(

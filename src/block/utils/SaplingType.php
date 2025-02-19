@@ -32,10 +32,11 @@ enum SaplingType{
 	case JUNGLE;
 	case ACACIA;
 	case DARK_OAK;
+
 	//TODO: cherry
 
 	public function getTreeType() : TreeType{
-		return match($this){
+		return match ($this) {
 			self::OAK => TreeType::OAK,
 			self::SPRUCE => TreeType::SPRUCE,
 			self::BIRCH => TreeType::BIRCH,

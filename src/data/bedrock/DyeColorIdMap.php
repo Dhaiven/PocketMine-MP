@@ -30,6 +30,7 @@ use function spl_object_id;
 
 final class DyeColorIdMap{
 	use SingletonTrait;
+
 	/** @phpstan-use IntSaveIdMapTrait<DyeColor> */
 	use IntSaveIdMapTrait {
 		register as registerInt;
@@ -49,7 +50,7 @@ final class DyeColorIdMap{
 
 	private function __construct(){
 		foreach(DyeColor::cases() as $case){
-			[$colorId, $dyeItemId] = match($case){
+			[$colorId, $dyeItemId] = match ($case) {
 				DyeColor::WHITE => [0, ItemTypeNames::WHITE_DYE],
 				DyeColor::ORANGE => [1, ItemTypeNames::ORANGE_DYE],
 				DyeColor::MAGENTA => [2, ItemTypeNames::MAGENTA_DYE],

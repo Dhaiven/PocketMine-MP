@@ -28,12 +28,13 @@ use pocketmine\utils\SingletonTrait;
 
 final class SuspiciousStewTypeIdMap{
 	use SingletonTrait;
+
 	/** @phpstan-use IntSaveIdMapTrait<SuspiciousStewType> */
 	use IntSaveIdMapTrait;
 
 	private function __construct(){
 		foreach(SuspiciousStewType::cases() as $case){
-			$this->register(match($case){
+			$this->register(match ($case) {
 				SuspiciousStewType::POPPY => SuspiciousStewTypeIds::POPPY,
 				SuspiciousStewType::CORNFLOWER => SuspiciousStewTypeIds::CORNFLOWER,
 				SuspiciousStewType::TULIP => SuspiciousStewTypeIds::TULIP,

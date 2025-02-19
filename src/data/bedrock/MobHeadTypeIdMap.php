@@ -28,12 +28,13 @@ use pocketmine\utils\SingletonTrait;
 
 final class MobHeadTypeIdMap{
 	use SingletonTrait;
+
 	/** @phpstan-use IntSaveIdMapTrait<MobHeadType> */
 	use IntSaveIdMapTrait;
 
 	private function __construct(){
 		foreach(MobHeadType::cases() as $case){
-			$this->register(match($case){
+			$this->register(match ($case) {
 				MobHeadType::SKELETON => 0,
 				MobHeadType::WITHER_SKELETON => 1,
 				MobHeadType::ZOMBIE => 2,

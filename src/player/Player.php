@@ -103,6 +103,7 @@ use pocketmine\item\Releasable;
 use pocketmine\lang\KnownTranslationFactory;
 use pocketmine\lang\Language;
 use pocketmine\lang\Translatable;
+use pocketmine\math\Facing;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
@@ -1847,7 +1848,7 @@ class Player extends Human implements CommandSender, ChunkListener, IPlayer{
 	 *
 	 * @return bool if an action took place successfully
 	 */
-	public function attackBlock(Vector3 $pos, int $face) : bool{
+	public function attackBlock(Vector3 $pos, Facing $face) : bool{
 		if($pos->distanceSquared($this->location) > 10000){
 			return false; //TODO: maybe this should throw an exception instead?
 		}
@@ -1881,7 +1882,7 @@ class Player extends Human implements CommandSender, ChunkListener, IPlayer{
 		return true;
 	}
 
-	public function continueBreakBlock(Vector3 $pos, int $face) : void{
+	public function continueBreakBlock(Vector3 $pos, Facing $face) : void{
 		if($this->blockBreakHandler !== null && $this->blockBreakHandler->getBlockPos()->distanceSquared($pos) < 0.0001){
 			$this->blockBreakHandler->setTargetedFace($face);
 		}
@@ -1924,7 +1925,7 @@ class Player extends Human implements CommandSender, ChunkListener, IPlayer{
 	 *
 	 * @return bool if it did something
 	 */
-	public function interactBlock(Vector3 $pos, int $face, Vector3 $clickOffset) : bool{
+	public function interactBlock(Vector3 $pos, Facing $face, Vector3 $clickOffset) : bool{
 		$this->setUsingItem(false);
 
 		if($this->canInteract($pos->add(0.5, 0.5, 0.5), $this->isCreative() ? self::MAX_REACH_DISTANCE_CREATIVE : self::MAX_REACH_DISTANCE_SURVIVAL)){

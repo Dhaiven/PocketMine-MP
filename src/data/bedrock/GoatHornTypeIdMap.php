@@ -28,12 +28,13 @@ use pocketmine\utils\SingletonTrait;
 
 final class GoatHornTypeIdMap{
 	use SingletonTrait;
+
 	/** @phpstan-use IntSaveIdMapTrait<GoatHornType> */
 	use IntSaveIdMapTrait;
 
 	private function __construct(){
 		foreach(GoatHornType::cases() as $case){
-			$this->register(match($case){
+			$this->register(match ($case) {
 				GoatHornType::PONDER => GoatHornTypeIds::PONDER,
 				GoatHornType::SING => GoatHornTypeIds::SING,
 				GoatHornType::SEEK => GoatHornTypeIds::SEEK,

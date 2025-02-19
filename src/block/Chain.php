@@ -32,15 +32,15 @@ use pocketmine\math\Facing;
 final class Chain extends Transparent{
 	use PillarRotationTrait;
 
-	public function getSupportType(int $facing) : SupportType{
-		return $this->axis === Axis::Y && Facing::axis($facing) === Axis::Y ? SupportType::CENTER : SupportType::NONE;
+	public function getSupportType(Facing $facing) : SupportType{
+		return $this->axis === Axis::Y && $facing->axis() === Axis::Y ? SupportType::CENTER : SupportType::NONE;
 	}
 
 	protected function recalculateCollisionBoxes() : array{
 		$bb = AxisAlignedBB::one();
-		foreach([Axis::Y, Axis::Z, Axis::X] as $axis){
+		foreach(Axis::cases() as $axis){
 			if($axis !== $this->axis){
-				$bb->squash($axis, 13 / 32);
+				$bb->squashedCopy($axis, 13 / 32);
 			}
 		}
 		return [$bb];

@@ -36,19 +36,19 @@ final class LightningRod extends Transparent{
 	use AnyFacingTrait;
 
 	protected function recalculateCollisionBoxes() : array{
-		$myAxis = Facing::axis($this->facing);
+		$myAxis = $this->facing->axis();
 
 		$result = AxisAlignedBB::one();
 		foreach([Axis::X, Axis::Y, Axis::Z] as $axis){
 			if($axis !== $myAxis){
-				$result->squash($axis, 6 / 16);
+				$result->squashedCopy($axis, 6 / 16);
 			}
 		}
 
 		return [$result];
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
 		$this->facing = $face;
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}

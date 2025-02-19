@@ -65,21 +65,21 @@ class FenceGate extends Transparent{
 	}
 
 	protected function recalculateCollisionBoxes() : array{
-		return $this->open ? [] : [AxisAlignedBB::one()->extend(Facing::UP, 0.5)->squash(Facing::axis($this->facing), 6 / 16)];
+		return $this->open ? [] : [AxisAlignedBB::one()->extendedCopy(Facing::UP, 0.5)->squashedCopy($this->facing->axis(), 6 / 16)];
 	}
 
-	public function getSupportType(int $facing) : SupportType{
+	public function getSupportType(Facing $facing) : SupportType{
 		return SupportType::NONE;
 	}
 
 	private function checkInWall() : bool{
 		return (
-			$this->getSide(Facing::rotateY($this->facing, false)) instanceof Wall ||
-			$this->getSide(Facing::rotateY($this->facing, true)) instanceof Wall
+			$this->getSide($this->facing->rotateY(false)) instanceof Wall ||
+			$this->getSide($this->facing->rotateY(true)) instanceof Wall
 		);
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
 		if($player !== null){
 			$this->facing = $player->getHorizontalFacing();
 		}
@@ -97,11 +97,11 @@ class FenceGate extends Transparent{
 		}
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
+	public function onInteract(Item $item, Facing $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
 		$this->open = !$this->open;
 		if($this->open && $player !== null){
 			$playerFacing = $player->getHorizontalFacing();
-			if($playerFacing === Facing::opposite($this->facing)){
+			if($playerFacing === $this->facing->opposite()){
 				$this->facing = $playerFacing;
 			}
 		}

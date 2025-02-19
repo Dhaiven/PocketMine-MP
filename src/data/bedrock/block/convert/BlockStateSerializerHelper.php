@@ -53,6 +53,7 @@ use pocketmine\data\bedrock\block\BlockStateNames as StateNames;
 use pocketmine\data\bedrock\block\BlockTypeNames as Ids;
 use pocketmine\data\bedrock\block\convert\BlockStateWriter as Writer;
 use pocketmine\data\bedrock\MushroomBlockTypeIdMap;
+use pocketmine\math\Axis;
 use pocketmine\math\Facing;
 
 final class BlockStateSerializerHelper{
@@ -70,7 +71,7 @@ final class BlockStateSerializerHelper{
 
 	public static function encodeChemistryTable(ChemistryTable $block, Writer $out) : Writer{
 		return $out
-			->writeLegacyHorizontalFacing(Facing::opposite($block->getFacing()));
+			->writeLegacyHorizontalFacing($block->getFacing()->opposite());
 	}
 
 	public static function encodeCrops(Crops $block, Writer $out) : Writer{
@@ -89,7 +90,7 @@ final class BlockStateSerializerHelper{
 	}
 
 	public static function selectCopperId(CopperOxidation $oxidation, string $noneId, string $exposedId, string $weatheredId, string $oxidizedId) : string{
-		return match($oxidation){
+		return match ($oxidation) {
 			CopperOxidation::NONE => $noneId,
 			CopperOxidation::EXPOSED => $exposedId,
 			CopperOxidation::WEATHERED => $weatheredId,
@@ -158,7 +159,7 @@ final class BlockStateSerializerHelper{
 			->writeInt(BlockStateNames::HUGE_MUSHROOM_BITS, MushroomBlockTypeIdMap::getInstance()->toId($block->getMushroomBlockType()));
 	}
 
-	public static function encodeQuartz(int $axis, Writer $out) : Writer{
+	public static function encodeQuartz(Axis $axis, Writer $out) : Writer{
 		return $out
 			->writePillarAxis($axis); //this isn't needed for all types, but we have to write it anyway
 	}

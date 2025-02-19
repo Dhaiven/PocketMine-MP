@@ -92,7 +92,7 @@ abstract class Liquid extends Transparent{
 		return [];
 	}
 
-	public function getSupportType(int $facing) : SupportType{
+	public function getSupportType(Facing $facing) : SupportType{
 		return SupportType::NONE;
 	}
 
@@ -170,7 +170,7 @@ abstract class Liquid extends Transparent{
 		$world = $this->position->getWorld();
 
 		foreach(Facing::HORIZONTAL as $j){
-			[$dx, $dy, $dz] = Facing::OFFSET[$j];
+			[$dx, $dy, $dz] = $j->offset();
 
 			$sideX = $x + $dx;
 			$sideY = $y + $dy;
@@ -206,7 +206,7 @@ abstract class Liquid extends Transparent{
 
 		if($this->falling){
 			foreach(Facing::HORIZONTAL as $facing){
-				[$dx, $dy, $dz] = Facing::OFFSET[$facing];
+				[$dx, $dy, $dz] = $facing->offset();
 				if(
 					!$this->canFlowInto($world->getBlockAt($x + $dx, $y + $dy, $z + $dz)) ||
 					!$this->canFlowInto($world->getBlockAt($x + $dx, $y + $dy + 1, $z + $dz))
@@ -313,7 +313,7 @@ abstract class Liquid extends Transparent{
 			if($adjacentDecay <= self::MAX_DECAY){
 				$calculator = new MinimumCostFlowCalculator($world, $this->getFlowDecayPerBlock(), $this->canFlowInto(...));
 				foreach($calculator->getOptimalFlowDirections($x, $y, $z) as $facing){
-					[$dx, $dy, $dz] = Facing::OFFSET[$facing];
+					[$dx, $dy, $dz] = $facing->offset();
 					$this->flowIntoBlock($world->getBlockAt($x + $dx, $y + $dy, $z + $dz), $adjacentDecay, false);
 				}
 			}

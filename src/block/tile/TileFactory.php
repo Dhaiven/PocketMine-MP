@@ -96,7 +96,8 @@ final class TileFactory{
 	}
 
 	/**
-	 * @param string[] $saveNames
+	 * @param string[]                   $saveNames
+	 *
 	 * @phpstan-param class-string<Tile> $className
 	 */
 	public function register(string $className, array $saveNames = []) : void{
@@ -115,8 +116,8 @@ final class TileFactory{
 	}
 
 	/**
-	 * @internal
 	 * @throws SavedDataLoadingException
+	 * @internal
 	 */
 	public function createFromData(World $world, CompoundTag $nbt) : ?Tile{
 		try{

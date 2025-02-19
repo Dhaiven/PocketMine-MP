@@ -53,17 +53,20 @@ final class BlockStateData{
 	public const TAG_VERSION = "version";
 
 	/**
-	 * @param Tag[] $states
+	 * @param Tag[]                      $states
+	 *
 	 * @phpstan-param array<string, Tag> $states
 	 */
 	public function __construct(
 		private string $name,
 		private array $states,
 		private int $version
-	){}
+	){
+	}
 
 	/**
-	 * @param Tag[] $states
+	 * @param Tag[]                      $states
+	 *
 	 * @phpstan-param array<string, Tag> $states
 	 */
 	public static function current(string $name, array $states) : self{

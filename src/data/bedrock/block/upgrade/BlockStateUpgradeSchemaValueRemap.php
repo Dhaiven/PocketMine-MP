@@ -30,5 +30,6 @@ final class BlockStateUpgradeSchemaValueRemap{
 	public function __construct(
 		public Tag $old,
 		public Tag $new
-	){}
+	){
+	}
 }

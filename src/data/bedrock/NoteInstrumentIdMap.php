@@ -28,12 +28,13 @@ use pocketmine\world\sound\NoteInstrument;
 
 final class NoteInstrumentIdMap{
 	use SingletonTrait;
+
 	/** @phpstan-use IntSaveIdMapTrait<NoteInstrument> */
 	use IntSaveIdMapTrait;
 
 	private function __construct(){
 		foreach(NoteInstrument::cases() as $case){
-			$this->register(match($case){
+			$this->register(match ($case) {
 				NoteInstrument::PIANO => 0,
 				NoteInstrument::BASS_DRUM => 1,
 				NoteInstrument::SNARE => 2,

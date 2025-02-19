@@ -264,7 +264,7 @@ final class VanillaEnchantments{
 	 */
 	public static function getAll() : array{
 		/**
-		 * @var Enchantment[] $result
+		 * @var Enchantment[]                      $result
 		 * @phpstan-var array<string, Enchantment> $result
 		 */
 		$result = self::_registryGetAll();

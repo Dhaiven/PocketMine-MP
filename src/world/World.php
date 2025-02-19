@@ -991,7 +991,7 @@ class World implements ChunkManager{
 					continue;
 				}
 			}
-			foreach($this->getNearbyEntities(AxisAlignedBB::one()->offset($x, $y, $z)) as $entity){
+			foreach($this->getNearbyEntities(AxisAlignedBB::one()->offsetCopyCopy($x, $y, $z)) as $entity){
 				$entity->onNearbyBlockChange();
 			}
 			$block->onNearbyBlockChange();
@@ -1501,7 +1501,8 @@ class World implements ChunkManager{
 	 */
 	private function internalNotifyNeighbourBlockUpdate(int $x, int $y, int $z) : void{
 		$this->tryAddToNeighbourUpdateQueue($x, $y, $z);
-		foreach(Facing::OFFSET as [$dx, $dy, $dz]){
+		foreach(Facing::cases() as $face){
+			[$dx, $dy, $dz] = $face->offset();
 			$this->tryAddToNeighbourUpdateQueue($x + $dx, $y + $dy, $z + $dz);
 		}
 	}
@@ -1619,21 +1620,22 @@ class World implements ChunkManager{
 		$stateCollisionInfo = $this->getBlockCollisionInfo($x, $y, $z, $collisionInfo);
 		$boxes = match($stateCollisionInfo){
 			RuntimeBlockStateRegistry::COLLISION_NONE => [],
-			RuntimeBlockStateRegistry::COLLISION_CUBE => [AxisAlignedBB::one()->offset($x, $y, $z)],
+			RuntimeBlockStateRegistry::COLLISION_CUBE => [AxisAlignedBB::one()->offsetCopyCopy($x, $y, $z)],
 			default => $this->getBlockAt($x, $y, $z)->getCollisionBoxes()
 		};
 
 		//overlapping AABBs can't make any difference if this is a cube, so we can save some CPU cycles in this common case
 		if($stateCollisionInfo !== RuntimeBlockStateRegistry::COLLISION_CUBE){
 			$cellBB = null;
-			foreach(Facing::OFFSET as [$dx, $dy, $dz]){
+			foreach(Facing::cases() as $face){
+				[$dx, $dy, $dz] = $face->offset();
 				$offsetX = $x + $dx;
 				$offsetY = $y + $dy;
 				$offsetZ = $z + $dz;
 				$stateCollisionInfo = $this->getBlockCollisionInfo($offsetX, $offsetY, $offsetZ, $collisionInfo);
 				if($stateCollisionInfo === RuntimeBlockStateRegistry::COLLISION_MAY_OVERFLOW){
 					//avoid allocating this unless it's needed
-					$cellBB ??= AxisAlignedBB::one()->offset($x, $y, $z);
+					$cellBB ??= AxisAlignedBB::one()->offsetCopyCopy($x, $y, $z);
 					$extraBoxes = $this->getBlockAt($offsetX, $offsetY, $offsetZ)->getCollisionBoxes();
 					foreach($extraBoxes as $extraBox){
 						if($extraBox->intersectsWith($cellBB)){
@@ -1866,7 +1868,8 @@ class World implements ChunkManager{
 	 */
 	private function getHighestAdjacentLight(int $x, int $y, int $z, \Closure $lightGetter) : int{
 		$max = 0;
-		foreach(Facing::OFFSET as [$offsetX, $offsetY, $offsetZ]){
+		foreach(Facing::cases() as $face){
+			[$offsetX, $offsetY, $offsetZ] = $face->opposite();
 			$x1 = $x + $offsetX;
 			$y1 = $y + $offsetY;
 			$z1 = $z + $offsetZ;
@@ -1994,7 +1997,7 @@ class World implements ChunkManager{
 			$this->blockCache[$chunkHash][$relativeBlockHash] = $block;
 
 			if(++$this->blockCacheSize >= self::BLOCK_CACHE_SIZE_CAP){
-				$this->trimBlockCache();
+				$this->trimmedCopyBlockCache();
 			}
 		}
 
@@ -2046,7 +2049,8 @@ class World implements ChunkManager{
 		unset($this->blockCollisionBoxCache[$chunkHash][$relativeBlockHash]);
 		//blocks like fences have collision boxes that reach into neighbouring blocks, so we need to invalidate the
 		//caches for those blocks as well
-		foreach(Facing::OFFSET as [$offsetX, $offsetY, $offsetZ]){
+		foreach(Facing::cases() as $face){
+			[$offsetX, $offsetY, $offsetZ] = $face->offset();
 			$sideChunkPosHash = World::chunkHash(($x + $offsetX) >> Chunk::COORD_BIT_SIZE, ($z + $offsetZ) >> Chunk::COORD_BIT_SIZE);
 			$sideChunkBlockHash = World::chunkBlockHash($x + $offsetX, $y + $offsetY, $z + $offsetZ);
 			unset($this->blockCollisionBoxCache[$sideChunkPosHash][$sideChunkBlockHash]);
@@ -2218,7 +2222,7 @@ class World implements ChunkManager{
 	 * @param bool        $playSound      Whether to play a block-place sound if the block was placed successfully.
 	 * @param Item[]      &$returnedItems Items to be added to the target's inventory (or dropped if the inventory is full)
 	 */
-	public function useItemOn(Vector3 $vector, Item &$item, int $face, ?Vector3 $clickVector = null, ?Player $player = null, bool $playSound = false, array &$returnedItems = []) : bool{
+	public function useItemOn(Vector3 $vector, Item &$item, Facing $face, ?Vector3 $clickVector = null, ?Player $player = null, bool $playSound = false, array &$returnedItems = []) : bool{
 		$blockClicked = $this->getBlock($vector);
 		$blockReplace = $blockClicked->getSide($face);
 

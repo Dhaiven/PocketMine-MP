@@ -34,13 +34,15 @@ use pocketmine\utils\BinaryStream;
  */
 final class BlockIdMetaUpgrader{
 	/**
-	 * @param BlockStateData[][] $mappingTable
+	 * @param BlockStateData[][]                                $mappingTable
+	 *
 	 * @phpstan-param array<string, array<int, BlockStateData>> $mappingTable
 	 */
 	public function __construct(
 		private array $mappingTable,
 		private LegacyBlockIdToStringIdMap $legacyNumericIdMap
-	){}
+	){
+	}
 
 	/**
 	 * @throws BlockStateDeserializeException

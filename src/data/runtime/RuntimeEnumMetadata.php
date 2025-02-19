@@ -50,7 +50,8 @@ final class RuntimeEnumMetadata{
 	private readonly array $enumToInt;
 
 	/**
-	 * @param \UnitEnum[] $members
+	 * @param \UnitEnum[]     $members
+	 *
 	 * @phpstan-param list<T> $members
 	 */
 	public function __construct(

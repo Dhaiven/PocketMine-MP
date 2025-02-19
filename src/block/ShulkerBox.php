@@ -28,6 +28,7 @@ use pocketmine\block\utils\AnyFacingTrait;
 use pocketmine\block\utils\SupportType;
 use pocketmine\data\runtime\RuntimeDataDescriber;
 use pocketmine\item\Item;
+use pocketmine\math\Facing;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 use pocketmine\world\BlockTransaction;
@@ -61,7 +62,7 @@ class ShulkerBox extends Opaque{
 		return 1;
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
 		$this->facing = $face;
 
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
@@ -93,7 +94,7 @@ class ShulkerBox extends Opaque{
 		return $result;
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
+	public function onInteract(Item $item, Facing $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
 		if($player instanceof Player){
 
 			$shulker = $this->position->getWorld()->getTile($this->position);
@@ -112,7 +113,7 @@ class ShulkerBox extends Opaque{
 		return true;
 	}
 
-	public function getSupportType(int $facing) : SupportType{
+	public function getSupportType(Facing $facing) : SupportType{
 		return SupportType::NONE;
 	}
 }

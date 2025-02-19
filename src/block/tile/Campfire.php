@@ -81,7 +81,8 @@ class Campfire extends Spawnable implements Container{
 	}
 
 	/**
-	 * @param int[] $cookingTimes
+	 * @param int[]                   $cookingTimes
+	 *
 	 * @phpstan-param array<int, int> $cookingTimes
 	 */
 	public function setCookingTimes(array $cookingTimes) : void{

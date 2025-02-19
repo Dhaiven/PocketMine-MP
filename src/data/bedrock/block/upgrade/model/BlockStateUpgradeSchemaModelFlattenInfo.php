@@ -41,7 +41,8 @@ final class BlockStateUpgradeSchemaModelFlattenInfo implements \JsonSerializable
 	public array $flattenedValueRemaps;
 
 	/**
-	 * @param string[] $flattenedValueRemaps
+	 * @param string[]                      $flattenedValueRemaps
+	 *
 	 * @phpstan-param array<string, string> $flattenedValueRemaps
 	 */
 	public function __construct(string $prefix, string $flattenedProperty, string $suffix, array $flattenedValueRemaps, ?string $flattenedPropertyType = null){

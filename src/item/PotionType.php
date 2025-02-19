@@ -82,7 +82,7 @@ enum PotionType{
 		/** @phpstan-var array<int, TMetadata> $cache */
 		static $cache = [];
 
-		return $cache[spl_object_id($this)] ??= match($this){
+		return $cache[spl_object_id($this)] ??= match ($this) {
 			self::WATER => ["Water", fn() => []],
 			self::MUNDANE => ["Mundane", fn() => []],
 			self::LONG_MUNDANE => ["Long Mundane", fn() => []],

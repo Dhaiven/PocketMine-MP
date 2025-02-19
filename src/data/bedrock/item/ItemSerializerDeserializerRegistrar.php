@@ -110,7 +110,8 @@ final class ItemSerializerDeserializerRegistrar{
 	}
 
 	/**
-	 * @param Item[] $items
+	 * @param Item[]                   $items
+	 *
 	 * @phpstan-param array<int, Item> $items
 	 */
 	public function map1ToNItem(string $id, array $items) : void{
@@ -561,7 +562,7 @@ final class ItemSerializerDeserializerRegistrar{
 	 */
 	private function registerMiscBlockMappings() : void{
 		$copperDoorStateIdMap = [];
-		foreach ([
+		foreach([
 			[Ids::COPPER_DOOR, CopperOxidation::NONE, false],
 			[Ids::EXPOSED_COPPER_DOOR, CopperOxidation::EXPOSED, false],
 			[Ids::WEATHERED_COPPER_DOOR, CopperOxidation::WEATHERED, false],
@@ -570,7 +571,7 @@ final class ItemSerializerDeserializerRegistrar{
 			[Ids::WAXED_EXPOSED_COPPER_DOOR, CopperOxidation::EXPOSED, true],
 			[Ids::WAXED_WEATHERED_COPPER_DOOR, CopperOxidation::WEATHERED, true],
 			[Ids::WAXED_OXIDIZED_COPPER_DOOR, CopperOxidation::OXIDIZED, true]
-		] as [$id, $oxidation, $waxed]) {
+		] as [$id, $oxidation, $waxed]){
 			$copperDoorStateIdMap[$oxidation->value][$waxed ? 1 : 0] = $id;
 			$this->deserializer?->mapBlock($id, fn() => Blocks::COPPER_DOOR()->setOxidation($oxidation)->setWaxed($waxed));
 		}

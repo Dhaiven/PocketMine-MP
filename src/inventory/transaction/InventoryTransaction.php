@@ -190,7 +190,7 @@ class InventoryTransaction{
 	 * to be in the correct order (slot splitting in the crafting grid for example, causes the actions to be sent in the
 	 * wrong order), so this method also tries to chain them into order.
 	 */
-	protected function squashDuplicateSlotChanges() : void{
+	protected function squashedCopyDuplicateSlotChanges() : void{
 		$slotChanges = [];
 		$inventories = [];
 		$slots = [];
@@ -274,7 +274,7 @@ class InventoryTransaction{
 	 * @throws TransactionValidationException
 	 */
 	public function validate() : void{
-		$this->squashDuplicateSlotChanges();
+		$this->squashedCopyDuplicateSlotChanges();
 
 		$haveItems = [];
 		$needItems = [];

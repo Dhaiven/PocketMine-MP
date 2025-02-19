@@ -32,7 +32,8 @@ final class BlockDataUpgrader{
 	public function __construct(
 		private BlockIdMetaUpgrader $blockIdMetaUpgrader,
 		private BlockStateUpgrader $blockStateUpgrader
-	){}
+	){
+	}
 
 	/**
 	 * @throws BlockStateDeserializeException

@@ -37,7 +37,7 @@ enum WoodType{
 	case PALE_OAK;
 
 	public function getDisplayName() : string{
-		return match($this){
+		return match ($this) {
 			self::OAK => "Oak",
 			self::SPRUCE => "Spruce",
 			self::BIRCH => "Birch",

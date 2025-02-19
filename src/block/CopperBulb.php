@@ -33,7 +33,7 @@ use pocketmine\data\runtime\RuntimeDataDescriber;
 class CopperBulb extends Opaque implements CopperMaterial{
 	use CopperTrait;
 	use PoweredByRedstoneTrait;
-	use LightableTrait{
+	use LightableTrait {
 		describeBlockOnlyState as encodeLitState;
 	}
 
@@ -47,7 +47,7 @@ class CopperBulb extends Opaque implements CopperMaterial{
 		if($powered === $this->powered){
 			return $this;
 		}
-		if ($powered) {
+		if($powered){
 			$this->setLit(!$this->lit);
 		}
 		$this->setPowered($powered);
@@ -55,8 +55,8 @@ class CopperBulb extends Opaque implements CopperMaterial{
 	}
 
 	public function getLightLevel() : int{
-		if ($this->lit) {
-			return match($this->oxidation){
+		if($this->lit){
+			return match ($this->oxidation) {
 				CopperOxidation::NONE => 15,
 				CopperOxidation::EXPOSED => 12,
 				CopperOxidation::WEATHERED => 8,

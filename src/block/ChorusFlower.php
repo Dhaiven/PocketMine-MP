@@ -105,7 +105,7 @@ final class ChorusFlower extends Flowable{
 		return [$stemHeight, $endStoneBelow];
 	}
 
-	private function allHorizontalBlocksEmpty(World $world, Vector3 $position, ?int $except) : bool{
+	private function allHorizontalBlocksEmpty(World $world, Vector3 $position, ?Facing $except) : bool{
 		foreach($position->sidesAroundAxis(Axis::Y) as $facing => $sidePosition){
 			if($facing === $except){
 				continue;
@@ -148,7 +148,7 @@ final class ChorusFlower extends Flowable{
 		return $this->allHorizontalBlocksEmpty($world, $up, null);
 	}
 
-	private function grow(int $facing, int $ageChange, ?BlockTransaction $tx) : BlockTransaction{
+	private function grow(Facing $facing, int $ageChange, ?BlockTransaction $tx) : BlockTransaction{
 		if($tx === null){
 			$tx = new BlockTransaction($this->position->getWorld());
 		}
@@ -175,16 +175,16 @@ final class ChorusFlower extends Flowable{
 			$facingVisited = [];
 			for($attempts = 0, $maxAttempts = mt_rand(0, $endStoneBelow ? 4 : 3); $attempts < $maxAttempts; $attempts++){
 				$facing = Facing::HORIZONTAL[array_rand(Facing::HORIZONTAL)];
-				if(isset($facingVisited[$facing])){
+				if(isset($facingVisited[$facing->name])){
 					continue;
 				}
-				$facingVisited[$facing] = true;
+				$facingVisited[$facing->name] = true;
 
 				$sidePosition = $this->position->getSide($facing);
 				if(
 					$world->getBlock($sidePosition)->getTypeId() === BlockTypeIds::AIR &&
 					$world->getBlock($sidePosition->down())->getTypeId() === BlockTypeIds::AIR &&
-					$this->allHorizontalBlocksEmpty($world, $sidePosition, Facing::opposite($facing))
+					$this->allHorizontalBlocksEmpty($world, $sidePosition, $facing->opposite())
 				){
 					$tx = $this->grow($facing, 1, $tx);
 				}

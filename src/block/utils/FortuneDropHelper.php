@@ -39,8 +39,8 @@ final class FortuneDropHelper{
 	 * Otherwise, returns a random amount of the item between the minimum and original maximum.
 	 *
 	 * @param Item $usedItem The item used to break the block
-	 * @param int  $min      Minimum amount
-	 * @param int  $maxBase  Maximum amount, as if fortune level was 0
+	 * @param int  $min Minimum amount
+	 * @param int  $maxBase Maximum amount, as if fortune level was 0
 	 *
 	 * @return int the number of items to drop
 	 */
@@ -64,8 +64,8 @@ final class FortuneDropHelper{
 	 *
 	 * As many as maxBase+level items can be dropped. This applies even if the fortune level is 0.
 	 *
-	 * @param float $chance   The chance of adding 1 to the amount for each roll, must be in the range 0-1
-	 * @param int   $min      Minimum amount
+	 * @param float $chance The chance of adding 1 to the amount for each roll, must be in the range 0-1
+	 * @param int   $min Minimum amount
 	 * @param int   $minRolls Number of rolls if fortune level is 0, added to fortune level to calculate total rolls
 	 *
 	 * @return int the number of items to drop
@@ -105,7 +105,7 @@ final class FortuneDropHelper{
 	 * Calculates a chance of getting an extra bonus drop by reducing the chance divisor by a given amount per fortune
 	 * level.
 	 *
-	 * @param int $divisorBase             The number to divide 1 by to get the chance, as if the fortune level was 0
+	 * @param int $divisorBase The number to divide 1 by to get the chance, as if the fortune level was 0
 	 * @param int $divisorSubtractPerLevel The amount to subtract from the divisor for each level of fortune
 	 *
 	 * @return bool whether the bonus drop should be added
@@ -118,7 +118,7 @@ final class FortuneDropHelper{
 	/**
 	 * Calculates a chance of getting an extra bonus drop by increasing the chance by a fixed amount per fortune level.
 	 *
-	 * @param float $chanceBase          The base chance of getting a bonus drop, as if the fortune level was 0
+	 * @param float $chanceBase The base chance of getting a bonus drop, as if the fortune level was 0
 	 * @param float $addedChancePerLevel The amount to add to the chance for each level of fortune
 	 */
 	public static function bonusChanceFixed(Item $usedItem, float $chanceBase, float $addedChancePerLevel) : bool{

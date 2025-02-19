@@ -729,7 +729,7 @@ abstract class Living extends Entity{
 					!$block instanceof Water ||
 					!$block->isSource() ||
 					$world->getBlockAt($x, $y + 1, $z)->getTypeId() !== BlockTypeIds::AIR ||
-					count($world->getNearbyEntities(AxisAlignedBB::one()->offset($x, $y, $z))) !== 0
+					count($world->getNearbyEntities(AxisAlignedBB::one()->offsetCopy($x, $y, $z))) !== 0
 				){
 					continue;
 				}

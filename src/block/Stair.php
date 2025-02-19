@@ -28,7 +28,6 @@ use pocketmine\block\utils\StairShape;
 use pocketmine\block\utils\SupportType;
 use pocketmine\data\runtime\RuntimeDataDescriber;
 use pocketmine\item\Item;
-use pocketmine\math\Axis;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\math\Facing;
 use pocketmine\math\Vector3;
@@ -51,7 +50,7 @@ class Stair extends Transparent{
 
 		$this->collisionBoxes = null;
 
-		$clockwise = Facing::rotateY($this->facing, true);
+		$clockwise = $this->facing->rotateY(true);
 		if(($backFacing = $this->getPossibleCornerFacing(false)) !== null){
 			$this->shape = $backFacing === $clockwise ? StairShape::OUTER_RIGHT : StairShape::OUTER_LEFT;
 		}elseif(($frontFacing = $this->getPossibleCornerFacing(true)) !== null){
@@ -82,21 +81,21 @@ class Stair extends Transparent{
 	protected function recalculateCollisionBoxes() : array{
 		$topStepFace = $this->upsideDown ? Facing::DOWN : Facing::UP;
 		$bbs = [
-			AxisAlignedBB::one()->trim($topStepFace, 0.5)
+			AxisAlignedBB::one()->trimmedCopy($topStepFace, 0.5)
 		];
 
 		$topStep = AxisAlignedBB::one()
-			->trim(Facing::opposite($topStepFace), 0.5)
-			->trim(Facing::opposite($this->facing), 0.5);
+			->trimmedCopy($topStepFace->opposite(), 0.5)
+			->trimmedCopy($this->facing->opposite(), 0.5);
 
 		if($this->shape === StairShape::OUTER_LEFT || $this->shape === StairShape::OUTER_RIGHT){
-			$topStep->trim(Facing::rotateY($this->facing, $this->shape === StairShape::OUTER_LEFT), 0.5);
+			$topStep->trimmedCopy($this->facing->rotateY($this->shape === StairShape::OUTER_LEFT), 0.5);
 		}elseif($this->shape === StairShape::INNER_LEFT || $this->shape === StairShape::INNER_RIGHT){
 			//add an extra cube
 			$bbs[] = AxisAlignedBB::one()
-				->trim(Facing::opposite($topStepFace), 0.5)
-				->trim($this->facing, 0.5) //avoid overlapping with main step
-				->trim(Facing::rotateY($this->facing, $this->shape === StairShape::INNER_LEFT), 0.5);
+				->trimmedCopy($topStepFace->opposite(), 0.5)
+				->trimmedCopy($this->facing, 0.5) //avoid overlapping with main step
+				->trimmedCopy($this->facing->rotateY($this->shape === StairShape::INNER_LEFT), 0.5);
 		}
 
 		$bbs[] = $topStep;
@@ -104,29 +103,29 @@ class Stair extends Transparent{
 		return $bbs;
 	}
 
-	public function getSupportType(int $facing) : SupportType{
+	public function getSupportType(Facing $facing) : SupportType{
 		if(
 			$facing === Facing::UP && $this->upsideDown ||
 			$facing === Facing::DOWN && !$this->upsideDown ||
 			($facing === $this->facing && $this->shape !== StairShape::OUTER_LEFT && $this->shape !== StairShape::OUTER_RIGHT) ||
-			($facing === Facing::rotate($this->facing, Axis::Y, false) && $this->shape === StairShape::INNER_LEFT) ||
-			($facing === Facing::rotate($this->facing, Axis::Y, true) && $this->shape === StairShape::INNER_RIGHT)
+			($facing === $this->facing->rotateY(false) && $this->shape === StairShape::INNER_LEFT) ||
+			($facing === $this->facing->rotateY(true) && $this->shape === StairShape::INNER_RIGHT)
 		){
 			return SupportType::FULL;
 		}
 		return SupportType::NONE;
 	}
 
-	private function getPossibleCornerFacing(bool $oppositeFacing) : ?int{
-		$side = $this->getSide($oppositeFacing ? Facing::opposite($this->facing) : $this->facing);
+	private function getPossibleCornerFacing(bool $oppositeFacing) : ?Facing{
+		$side = $this->getSide($oppositeFacing ? $this->facing->opposite() : $this->facing);
 		return (
 			$side instanceof Stair &&
 			$side->upsideDown === $this->upsideDown &&
-			Facing::axis($side->facing) !== Facing::axis($this->facing) //perpendicular
+			$side->facing->axis() !== $this->facing->axis() //perpendicular
 		) ? $side->facing : null;
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
 		if($player !== null){
 			$this->facing = $player->getHorizontalFacing();
 		}

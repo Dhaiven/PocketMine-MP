@@ -40,9 +40,9 @@ final class WallCoralFan extends BaseCoral{
 		$w->horizontalFacing($this->facing);
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
-		$axis = Facing::axis($face);
-		if(($axis !== Axis::X && $axis !== Axis::Z) || !$this->canBeSupportedAt($blockReplace, Facing::opposite($face))){
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
+		$axis = $face->axis();
+		if(($axis !== Axis::X && $axis !== Axis::Z) || !$this->canBeSupportedAt($blockReplace, $face->opposite())){
 			return false;
 		}
 		$this->facing = $face;
@@ -54,14 +54,14 @@ final class WallCoralFan extends BaseCoral{
 
 	public function onNearbyBlockChange() : void{
 		$world = $this->position->getWorld();
-		if(!$this->canBeSupportedAt($this, Facing::opposite($this->facing))){
+		if(!$this->canBeSupportedAt($this, $this->facing->opposite())){
 			$world->useBreakOn($this->position);
 		}else{
 			parent::onNearbyBlockChange();
 		}
 	}
 
-	private function canBeSupportedAt(Block $block, int $face) : bool{
+	private function canBeSupportedAt(Block $block, Facing $face) : bool{
 		return $block->getAdjacentSupportType($face)->hasCenterSupport();
 	}
 

@@ -48,7 +48,8 @@ final class BlockStateUpgrader{
 	private int $outputVersion = 0;
 
 	/**
-	 * @param BlockStateUpgradeSchema[] $upgradeSchemas
+	 * @param BlockStateUpgradeSchema[]                   $upgradeSchemas
+	 *
 	 * @phpstan-param array<int, BlockStateUpgradeSchema> $upgradeSchemas
 	 */
 	public function __construct(array $upgradeSchemas){
@@ -158,7 +159,7 @@ final class BlockStateUpgrader{
 					$newName = $remap->newName;
 				}else{
 					//discard flatten modifications to state - the remap newState and copiedState will take care of it
-					[$newName, ] = $this->applyPropertyFlattened($remap->newName, $oldName, $oldState);
+					[$newName,] = $this->applyPropertyFlattened($remap->newName, $oldName, $oldState);
 				}
 
 				$newState = $remap->newState;
@@ -176,7 +177,8 @@ final class BlockStateUpgrader{
 	}
 
 	/**
-	 * @param Tag[] $states
+	 * @param Tag[]                      $states
+	 *
 	 * @phpstan-param array<string, Tag> $states
 	 *
 	 * @return Tag[]
@@ -196,7 +198,8 @@ final class BlockStateUpgrader{
 	}
 
 	/**
-	 * @param Tag[] $states
+	 * @param Tag[]                      $states
+	 *
 	 * @phpstan-param array<string, Tag> $states
 	 *
 	 * @return Tag[]
@@ -228,7 +231,8 @@ final class BlockStateUpgrader{
 	}
 
 	/**
-	 * @param Tag[] $states
+	 * @param Tag[]                      $states
+	 *
 	 * @phpstan-param array<string, Tag> $states
 	 *
 	 * @return Tag[]
@@ -254,7 +258,8 @@ final class BlockStateUpgrader{
 	}
 
 	/**
-	 * @param Tag[] $states
+	 * @param Tag[]                      $states
+	 *
 	 * @phpstan-param array<string, Tag> $states
 	 *
 	 * @return Tag[]
@@ -278,7 +283,8 @@ final class BlockStateUpgrader{
 	}
 
 	/**
-	 * @param Tag[] $states
+	 * @param Tag[]                      $states
+	 *
 	 * @phpstan-param array<string, Tag> $states
 	 *
 	 * @return (string|Tag[])[]
@@ -291,7 +297,7 @@ final class BlockStateUpgrader{
 			//flattened property is not of the expected type, so this transformation is not applicable
 			return [$oldName, $states];
 		}
-		$embedKey = match(get_class($flattenedValue)){
+		$embedKey = match (get_class($flattenedValue)) {
 			StringTag::class => $flattenedValue->getValue(),
 			ByteTag::class => (string) $flattenedValue->getValue(),
 			IntTag::class => (string) $flattenedValue->getValue(),

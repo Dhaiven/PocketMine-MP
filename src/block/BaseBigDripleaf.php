@@ -56,13 +56,13 @@ abstract class BaseBigDripleaf extends Transparent{
 		}
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, Facing $face, Vector3 $clickVector, ?Player $player = null) : bool{
 		$block = $blockReplace->getSide(Facing::DOWN);
 		if(!$this->canBeSupportedBy($block, true)){
 			return false;
 		}
 		if($player !== null){
-			$this->facing = Facing::opposite($player->getHorizontalFacing());
+			$this->facing = $player->getHorizontalFacing()->opposite();
 		}
 		if($block instanceof BaseBigDripleaf){
 			$this->facing = $block->facing;
@@ -71,7 +71,7 @@ abstract class BaseBigDripleaf extends Transparent{
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
+	public function onInteract(Item $item, Facing $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []) : bool{
 		if($item instanceof Fertilizer && $this->grow($player)){
 			$item->pop();
 			return true;
@@ -130,7 +130,7 @@ abstract class BaseBigDripleaf extends Transparent{
 		return 100;
 	}
 
-	public function getSupportType(int $facing) : SupportType{
+	public function getSupportType(Facing $facing) : SupportType{
 		return SupportType::NONE;
 	}
 }

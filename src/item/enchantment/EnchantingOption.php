@@ -36,7 +36,8 @@ class EnchantingOption{
 		private int $requiredXpLevel,
 		private string $displayName,
 		private array $enchantments
-	){}
+	){
+	}
 
 	/**
 	 * Returns the minimum amount of XP levels required to select this enchantment option.

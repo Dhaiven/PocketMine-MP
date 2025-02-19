@@ -43,7 +43,7 @@ enum SuspiciousStewType{
 	 * @phpstan-return list<EffectInstance>
 	 */
 	public function getEffects() : array{
-		return match($this){
+		return match ($this) {
 			self::POPPY => [new EffectInstance(VanillaEffects::NIGHT_VISION(), 80)],
 			self::CORNFLOWER => [new EffectInstance(VanillaEffects::JUMP_BOOST(), 80)],
 			self::TULIP => [new EffectInstance(VanillaEffects::WEAKNESS(), 140)],

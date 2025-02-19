@@ -85,7 +85,8 @@ final class LegacyStringToItemParser{
 	public function __construct(
 		private ItemDataUpgrader $itemDataUpgrader,
 		private ItemDeserializer $itemDeserializer
-	){}
+	){
+	}
 
 	public function addMapping(string $alias, string $id) : void{
 		$this->map[$alias] = $id;

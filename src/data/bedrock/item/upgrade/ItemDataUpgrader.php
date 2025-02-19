@@ -50,7 +50,8 @@ final class ItemDataUpgrader{
 		private BlockDataUpgrader $blockDataUpgrader,
 		private BlockItemIdMap $blockItemIdMap,
 		private BlockStateDictionary $blockStateDictionary
-	){}
+	){
+	}
 
 	/**
 	 * This function replaces the legacy ItemFactory::get().

@@ -39,7 +39,8 @@ final class SavedItemData{
 		private int $meta = 0,
 		private ?BlockStateData $block = null,
 		private ?CompoundTag $tag = null
-	){}
+	){
+	}
 
 	public function getName() : string{ return $this->name; }
 
