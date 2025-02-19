@@ -86,7 +86,7 @@ abstract class PressurePlate extends Transparent{
 			->squashedCopy(Axis::X, 1 / 8)
 			->squashedCopy(Axis::Z, 1 / 8)
 			->trimmedCopy(Facing::UP, 3 / 4)
-			->offset($this->position->x, $this->position->y, $this->position->z);
+			->offsetCopy($this->position->x, $this->position->y, $this->position->z);
 	}
 
 	/**

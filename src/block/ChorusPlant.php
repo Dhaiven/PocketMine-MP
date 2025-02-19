@@ -43,7 +43,7 @@ final class ChorusPlant extends Flowable{
 	protected function recalculateCollisionBoxes() : array{
 		$bb = AxisAlignedBB::one();
 		foreach(Facing::cases() as $facing){
-			if(!isset($this->connections[$facing->name)){
+			if(!isset($this->connections[$facing->name])){
 				$bb->trimmedCopy($facing, 2 / 16);
 			}
 		}

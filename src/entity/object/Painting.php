@@ -58,10 +58,10 @@ class Painting extends Entity{
 		3 => Facing::EAST
 	];
 	private const FACING_TO_DATA = [
-		Facing::SOUTH => 0,
-		Facing::WEST => 1,
-		Facing::NORTH => 2,
-		Facing::EAST => 3
+		Facing::SOUTH->name => 0,
+		Facing::WEST->name => 1,
+		Facing::NORTH->name => 2,
+		Facing::EAST->name => 3
 	];
 
 	protected Vector3 $blockIn;
@@ -96,8 +96,8 @@ class Painting extends Entity{
 		$nbt->setInt(self::TAG_TILE_Y, (int) $this->blockIn->y);
 		$nbt->setInt(self::TAG_TILE_Z, (int) $this->blockIn->z);
 
-		$nbt->setByte(self::TAG_FACING_JE, self::FACING_TO_DATA[$this->facing]);
-		$nbt->setByte(self::TAG_DIRECTION_BE, self::FACING_TO_DATA[$this->facing]); //Save both for full compatibility
+		$nbt->setByte(self::TAG_FACING_JE, self::FACING_TO_DATA[$this->facing->name]);
+		$nbt->setByte(self::TAG_DIRECTION_BE, self::FACING_TO_DATA[$this->facing->name]); //Save both for full compatibility
 
 		$nbt->setString(self::TAG_MOTIVE, $this->motive->getName());
 
@@ -161,7 +161,7 @@ class Painting extends Entity{
 				($this->boundingBox->minY + $this->boundingBox->maxY) / 2,
 				($this->boundingBox->minZ + $this->boundingBox->maxZ) / 2
 			),
-			self::FACING_TO_DATA[$this->facing],
+			self::FACING_TO_DATA[$this->facing->name],
 			$this->motive->getName()
 		));
 	}
@@ -177,7 +177,7 @@ class Painting extends Entity{
 		return $this->motive;
 	}
 
-	public function getFacing() : int{
+	public function getFacing() : Facing{
 		return $this->facing;
 	}
 
@@ -193,8 +193,8 @@ class Painting extends Entity{
 
 		return AxisAlignedBB::one()
 			->trimmedCopy($facing, 15 / 16)
-			->extendedCopy(Facing::rotateY($facing, true), $horizontalStart)
-			->extendedCopy(Facing::rotateY($facing, false), -$horizontalStart + $width - 1)
+			->extendedCopy($facing->rotateY(true), $horizontalStart)
+			->extendedCopy($facing->rotateY(false), -$horizontalStart + $width - 1)
 			->extendedCopy(Facing::DOWN, $verticalStart)
 			->extendedCopy(Facing::UP, -$verticalStart + $height - 1);
 	}
@@ -209,7 +209,7 @@ class Painting extends Entity{
 		$horizontalStart = (int) (ceil($width / 2) - 1);
 		$verticalStart = (int) (ceil($height / 2) - 1);
 
-		$rotatedFace = Facing::rotateY($facing, false);
+		$rotatedFace = $facing->rotateY(false);
 
 		$oppositeSide = $facing->opposite();
 
@@ -227,7 +227,7 @@ class Painting extends Entity{
 		}
 
 		if($checkOverlap){
-			$bb = self::getPaintingBB($facing, $motive)->offsetCopyCopy($blockIn->x, $blockIn->y, $blockIn->z);
+			$bb = self::getPaintingBB($facing, $motive)->offsetCopy($blockIn->x, $blockIn->y, $blockIn->z);
 
 			foreach($world->getNearbyEntities($bb) as $entity){
 				if($entity instanceof self){

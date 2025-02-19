@@ -110,8 +110,8 @@ class MobHead extends Flowable{
 			->trimmedCopy(Facing::UP, 0.5);
 		if($this->facing !== Facing::UP){
 			$collisionBox = $collisionBox
-				->offsetTowards($this->facing->opposite(), 0.25)
-				->offsetTowards(Facing::UP, 0.25);
+				->offsetTowardsCopy($this->facing->opposite(), 0.25)
+				->offsetTowardsCopy(Facing::UP, 0.25);
 		}
 		return [$collisionBox];
 	}

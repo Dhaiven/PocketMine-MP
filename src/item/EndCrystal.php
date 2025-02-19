@@ -40,7 +40,7 @@ class EndCrystal extends Item{
 			$pos = $blockClicked->getPosition();
 			$world = $pos->getWorld();
 			$bb = AxisAlignedBB::one()
-				->offset($pos->getX(), $pos->getY(), $pos->getZ())
+				->offsetCopy($pos->getX(), $pos->getY(), $pos->getZ())
 				->extendedCopy(Facing::UP, 1);
 			if(
 				count($world->getNearbyEntities($bb)) === 0 &&

@@ -50,13 +50,27 @@ class ShulkerBox extends Spawnable implements Container, Nameable{
 	public function readSaveData(CompoundTag $nbt) : void{
 		$this->loadName($nbt);
 		$this->loadItems($nbt);
-		$this->facing = $nbt->getByte(self::TAG_FACING, $this->facing);
+		$this->facing = match ($nbt->getByte(self::TAG_FACING, 2)) {
+			0 => Facing::DOWN,
+			1 => Facing::UP,
+			2 => Facing::NORTH,
+			3 => Facing::SOUTH,
+			4 => Facing::WEST,
+			5 => Facing::EAST,
+		};
 	}
 
 	protected function writeSaveData(CompoundTag $nbt) : void{
 		$this->saveName($nbt);
 		$this->saveItems($nbt);
-		$nbt->setByte(self::TAG_FACING, $this->facing);
+		$nbt->setByte(self::TAG_FACING, match ($this->facing) {
+			Facing::DOWN => 0,
+			Facing::UP => 1,
+			Facing::NORTH => 2,
+			Facing::SOUTH => 3,
+			Facing::WEST => 4,
+			Facing::EAST => 5,
+		});
 	}
 
 	public function copyDataFromItem(Item $item) : void{
@@ -85,7 +99,7 @@ class ShulkerBox extends Spawnable implements Container, Nameable{
 		return $nbt;
 	}
 
-	public function getFacing() : int{
+	public function getFacing() : Facing{
 		return $this->facing;
 	}
 
@@ -106,7 +120,14 @@ class ShulkerBox extends Spawnable implements Container, Nameable{
 	}
 
 	protected function addAdditionalSpawnData(CompoundTag $nbt) : void{
-		$nbt->setByte(self::TAG_FACING, $this->facing);
+		$nbt->setByte(self::TAG_FACING, match ($this->facing) {
+			Facing::DOWN => 0,
+			Facing::UP => 1,
+			Facing::NORTH => 2,
+			Facing::SOUTH => 3,
+			Facing::WEST => 4,
+			Facing::EAST => 5,
+		});
 		$this->addNameSpawnData($nbt);
 	}
 }
